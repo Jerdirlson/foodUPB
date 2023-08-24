@@ -9,6 +9,7 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+mysql-connector-j-8.1.0/
 
 # Package Files #
 *.jar
