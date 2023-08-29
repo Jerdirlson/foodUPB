@@ -1,4 +1,4 @@
-package app;
+package view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -6,7 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.*;
 import model.User;
 
-public class Main extends JFrame{
+public class Dashboad extends JFrame{
 
     public void inicializar(User user){
         /*Info panel */

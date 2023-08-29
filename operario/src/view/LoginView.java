@@ -1,22 +1,21 @@
-package login;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.*;
+package view;
 
-import database.Conection;
-import app.Main;
+import java.awt.*;
 
 import javax.swing.*;
 
-import model.User;
-
-public class LoginForm  extends JFrame{
-
-    final private Font mainFont = new Font("Segoe print", Font.BOLD, 18);
-    JTextField tfEmail;
-    JPasswordField pfPassword; 
+public class LoginView extends JFrame{
     
+    final private Font mainFont = new Font("Segoe print", Font.BOLD, 18);
+    public JTextField tfEmail;
+    public JPasswordField pfPassword;
+    public JButton btnLogin = new JButton("Login");
+    
+    public LoginView(){
+        
+    }
     public void inicializar(){
+        System.out.println("Inicializando");
         /* Este es el FORM PANEL */
 
         JLabel lbLoginForm = new JLabel("Login", SwingConstants.CENTER);
@@ -47,37 +46,43 @@ public class LoginForm  extends JFrame{
 
         /*Seteo de los botones  */
 
-        JButton btnLogin = new JButton("Login");
         btnLogin.setFont(mainFont);
-        btnLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String email = tfEmail.getText();
-                String password = String.valueOf(pfPassword.getPassword());
 
-                User user = getAuthenticatedUser(email, password);
+
+        // SE SUPONE QUE ESTO ES LO QUE DEBE IR EN EL CONTROLADOR
+
+
+        // btnLogin.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         String email = tfEmail.getText();
+        //         String password = String.valueOf(pfPassword.getPassword());
+
+        //         User user = getAuthenticatedUser(email, password);
                 
 
-                if(user.email != null){
-                    Main mainFrame = new Main();
-                    mainFrame.inicializar(user);
-                    dispose();
-                }else{
-                    JOptionPane.showMessageDialog(LoginForm.this, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+        //         if(user.email != null){
+        //             Main mainFrame = new Main();
+        //             mainFrame.inicializar(user);
+        //             dispose();
+        //         }else{
+        //             JOptionPane.showMessageDialog(LoginForm.this, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
+        //         }
 
 
-            }
-        });
+        //     }
+        // });
+
+        
 
         JButton btnCancel = new JButton("Cancel");
         btnCancel.setFont(mainFont);
-        btnCancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        // btnCancel.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         dispose();
+        //     }
+        // });
 
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new GridLayout(1, 2, 10, 0));
@@ -97,25 +102,5 @@ public class LoginForm  extends JFrame{
         setMinimumSize(new Dimension(400, 500));
         setLocationRelativeTo(null);
         setVisible(true);
-    }
-
-
-
-    public static User getAuthenticatedUser(String email, String password){
-        
-        User user = null;
-
-        try {
-            user = Conection.getUser(email, password);
-        } catch (Exception e) {
-            System.out.println("Error" + e.getMessage());
-        }
-
-        return user;
-    }
-
-    public static void main(String[] args) {
-        LoginForm loginForm = new LoginForm();
-        loginForm.inicializar();
     }
 }
