@@ -12,6 +12,14 @@ import model.User;
 public class Conection {
     private static Connection c;
     private static CallableStatement cstm;
+    
+    /** 
+     * Este es el metodo que genera la conexion con la base de datos
+     * @return Connection
+     * @throws SQLException
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     // private static ResultSet rs;
 
     
@@ -43,6 +51,13 @@ public class Conection {
     }
 
 
+    
+    /** 
+     * Metodo para retornar usuario en especifico pasandole correo
+     * @param correo
+     * @param password
+     * @return User
+     */
     public static User getUser(String correo, String password){
         User user = new User();
         try {
