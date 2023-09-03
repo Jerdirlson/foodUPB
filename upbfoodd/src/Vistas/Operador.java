@@ -1,31 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Vistas;
-
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
-/**
- *
- * @author 57314
- */
-public class Operador extends JFrame{
-         public Operador(){
-             setTitle("Login");
+public class Operador extends JFrame {
+    public Operador() {
+        setTitle("Login");
         setSize(580, 420);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -60,18 +41,35 @@ public class Operador extends JFrame{
         JButton loginButton = new JButton("Iniciar sesión");
         contentPanel.add(loginButton);
 
+        // Agrega un ActionListener para el botón "Iniciar sesión"
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String username = nameTextField.getText();
                 String password = new String(passwordField.getPassword());
-                JOptionPane.showMessageDialog(null, "Nombre: " + username + "\nContraseña: " + password  + "\n REGISTRO EXITOSO");
+
+                if (username.equals("usuario") && password.equals("contrasena")) {
+                    // Cerrar la ventana actual
+                    dispose();
+
+                    // Abrir la ventana BuscarCliente
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            BuscarCliente buscarCliente = new BuscarCliente();
+                            buscarCliente.setVisible(true);
+                        }
+                    });
+                } else {
+                    JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos", "Error de autenticación", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
         // Establece el panel principal como el contenido del JFrame
         this.setContentPane(mainPanel);
     }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
