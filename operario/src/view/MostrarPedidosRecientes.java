@@ -4,7 +4,6 @@ package view;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,9 +14,11 @@ import java.util.List;
 public class MostrarPedidosRecientes extends JFrame {
     private final JPanel contentPane;
     private final String phoneNumber;
+    private final MenuApp menuApp; // Referencia a la instancia de MenuApp
 
-    public MostrarPedidosRecientes(String phoneNumber) {
+    public MostrarPedidosRecientes(String phoneNumber, MenuApp menuApp) { // Recibe una instancia de MenuApp
         this.phoneNumber = phoneNumber;
+        this.menuApp = menuApp;
 
         // Configurar el título del frame
         setTitle("Pedidos Recientes para " + phoneNumber);
@@ -74,7 +75,6 @@ public class MostrarPedidosRecientes extends JFrame {
         realizarPedidoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MenuApp menuApp = new MenuApp();
                 menuApp.setVisible(true);
                 dispose(); // Cierra la ventana actual
             }
@@ -84,9 +84,6 @@ public class MostrarPedidosRecientes extends JFrame {
     }
 
     private List<String> obtenerPedidosRecientesDelCliente(String phoneNumber) {
-        // Aquí puedes implementar la lógica para obtener los pedidos recientes del cliente
-        // Esto podría incluir consultas a una base de datos o la obtención de datos de algún otro origen.
-        // Por ahora, simplemente devolvemos una lista de pedidos ficticios.
         List<String> pedidos = new ArrayList<>();
         pedidos.add("Pedido 1: Pizza");
         pedidos.add("Pedido 2: Hamburguesa");
@@ -96,10 +93,16 @@ public class MostrarPedidosRecientes extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            // Crear y mostrar la ventana
-            MostrarPedidosRecientes ventana = new MostrarPedidosRecientes("Número de Teléfono");
+            Fogones fogones = new Fogones(4); // Crear una instancia de Fogones con 4 fogones
+            MenuApp tiendaFrame = new MenuApp(fogones);
+
+            // Agregar una persona de prueba al sistema
+            Persona personaPrueba = new Persona("Juan Perez", "1234", "Calle 123, Barrio ABC");
+            tiendaFrame.getListaPersonasRegistradas().add(personaPrueba);
+
+            // Crear y mostrar la ventana de MostrarPedidosRecientes
+            MostrarPedidosRecientes ventana = new MostrarPedidosRecientes("Número de Teléfono", tiendaFrame);
             ventana.setVisible(true);
         });
     }
 }
-

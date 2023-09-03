@@ -1,29 +1,31 @@
 package view;
 import javax.swing.*;
-
-import model.CompraProducto;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-public class MenuApp extends JFrame {
 
-     private ArrayList<CompraProducto> ListaProductos = new ArrayList<>();
-     int recibo=0;
-     private DecimalFormat decimalFormat = new DecimalFormat("#.00");
-     
-     
-    public MenuApp() {
+
+public class MenuApp extends JFrame {
+    private ArrayList<CompraProducto> listaProductos = new ArrayList<>();
+    private int recibo = 0;
+    private DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    private Fogones fogones;
+    private ArrayList<Persona> listaPersonasRegistradas = new ArrayList<>(); // Lista de personas registradas
+
+    public MenuApp(Fogones fogones) {
         
+        this.fogones = fogones;
         setTitle("Tienda Online");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        
 
         // Crear el panel superior con el menú
         JPanel menuPanel = new JPanel();
+        menuPanel.setBackground(Color.BLACK);
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Menu");
         JMenuItem exitMenuItem = new JMenuItem("Salir");
@@ -31,7 +33,7 @@ public class MenuApp extends JFrame {
         exitMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mostrarProductosComprados();
+                mostrarFactura();
                 System.exit(0);
             }
         });
@@ -40,64 +42,65 @@ public class MenuApp extends JFrame {
         menuBar.add(fileMenu);
         menuPanel.add(menuBar);
 
-
         add(menuPanel, BorderLayout.NORTH);
 
         // Crear el panel central con las imágenes y detalles de los productos
         JPanel productosPanel = new JPanel();
         productosPanel.setLayout(new GridLayout(3, 4)); // Varios productos en filas de 2
 
-        agregarProducto(productosPanel,"Mojarra:20000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Plato1.png", 20000,1,1);
-        agregarProducto(productosPanel, "Batido:10000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Batido.png",10000,1,2);
-        agregarProducto(productosPanel, " Mazamorra:10000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Maz.png",10000,1,3);
-        agregarProducto(productosPanel, "Papas fritas 50000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Papas.png",50000,1,4);
-        agregarProducto(productosPanel, "Carne: 15000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Carne.png",15000,2,1);
-        agregarProducto(productosPanel, "Pollo Asado:22000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Asado.png",22000,2,2);
-        agregarProducto(productosPanel, "Jugos:30000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Jugos.png",30000,2,3);
-        agregarProducto(productosPanel, "Pan:35000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Bread.png",35000,2,4);
-        agregarProducto(productosPanel, "Pollo frito", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Pollo.png", 40000,3,1);
-        agregarProducto(productosPanel, "Cerveza", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Beer.png", 70000,3,2);
-        agregarProducto(productosPanel, "Galletas", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Cookies .png",200000,3,3);
-        agregarProducto(productosPanel, "Pure de papa", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Pure.png", 10000,3,3);
+        agregarProducto(productosPanel, "Mojarra:20000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Plato1.png", 20000, 1, 1);
+        agregarProducto(productosPanel, "Batido:10000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Batido.png", 10000, 1, 2);
+        agregarProducto(productosPanel, "Mazamorra:10000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Maz.png", 10000, 1, 3);
+        agregarProducto(productosPanel, "Papas fritas:50000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Papas.png", 50000, 1, 4);
+        agregarProducto(productosPanel, "Carne:15000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Carne.png", 15000, 2, 1);
+        agregarProducto(productosPanel, "Pollo Asado:22000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Asado.png", 22000, 2, 2);
+        agregarProducto(productosPanel, "Jugos:30000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Jugos.png", 30000, 2, 3);
+        agregarProducto(productosPanel, "Pan:35000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Bread.png", 35000, 2, 4);
+        agregarProducto(productosPanel, "Pollo frito:40000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Pollo.png", 40000, 3, 1);
+        agregarProducto(productosPanel, "Cerveza:70000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Beer.png", 70000, 3, 2);
+        agregarProducto(productosPanel, "Galletas:200000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Cookies .png", 200000, 3, 3);
+        agregarProducto(productosPanel, "Pure de papa:10000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Pure.png", 10000, 3, 4);
         add(productosPanel, BorderLayout.CENTER);
-        
-        JButton verComprasButton = new JButton("Ver Compras");
-        verComprasButton.addActionListener(new ActionListener() {
+
+        // Botón de búsqueda
+        JButton buscarButton = new JButton("Buscar por Número");
+        buscarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mostrarProductosComprados();
+                buscarPersona();
             }
         });
-        add(verComprasButton, BorderLayout.SOUTH);
+        menuPanel.add(buscarButton);
 
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
+        JButton realizarPedidoButton = new JButton("Realizar Pedido");
+        realizarPedidoButton.setPreferredSize(new Dimension(40, 40));
+        realizarPedidoButton.addActionListener(new ActionListener() {
             @Override
-            public void run() {
-                MenuApp tiendaFrame = new MenuApp();
-                tiendaFrame.setVisible(true);
+            public void actionPerformed(ActionEvent e) {
+                int numeroFogonAsignado = fogones.asignarFogonDisponible();
+                if (numeroFogonAsignado != -1) {
+                    fogones.actualizarFogones();
+                    mostrarFactura(); // Mostrar factura después de realizar un pedido
+                }
             }
         });
+        add(realizarPedidoButton, BorderLayout.SOUTH);
     }
-    
-    
 
-     private void mostrarProductosComprados() {
-        StringBuilder mensaje = new StringBuilder("Productos comprados:\n");
+    private void mostrarFactura() {
+        StringBuilder factura = new StringBuilder("Factura:\n");
 
-        for (CompraProducto compraProducto : ListaProductos) {
+        for (CompraProducto compraProducto : listaProductos) {
             double subtotal = compraProducto.getPrecio() * compraProducto.getCantidad();
-            mensaje.append("- ").append(compraProducto.getNombre()).append(" (")
-                    .append(compraProducto.getCantidad()).append("Unidad) - Precio:")
+            factura.append(compraProducto.getNombre()).append(" (")
+                    .append(compraProducto.getCantidad()).append(" Unidad) - Precio:")
                     .append(decimalFormat.format(subtotal)).append("\n");
             recibo += subtotal;
         }
 
-        mensaje.append("Recibo: $").append(decimalFormat.format(recibo));
+        factura.append("Total: $").append(decimalFormat.format(recibo));
 
-        JOptionPane.showMessageDialog(this, mensaje.toString(), "Productos Seleccionados", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, factura.toString(), "Factura", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void agregarProducto(JPanel panel, String nombre, String ruta, int precio, int row, int col) {
@@ -112,8 +115,10 @@ public class MenuApp extends JFrame {
         nombreJ.setHorizontalAlignment(JLabel.CENTER);
         ProductosdelPanel.add(nombreJ, BorderLayout.NORTH);
 
-        JSpinner cantidadSpinner = new JSpinner(new SpinnerNumberModel(0, 0,100, 1));
+        JSpinner cantidadSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
+        cantidadSpinner.setPreferredSize(new Dimension(80, 30)); // Ajusta el tamaño aquí
         ProductosdelPanel.add(cantidadSpinner, BorderLayout.SOUTH);
+
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = col;
@@ -125,10 +130,54 @@ public class MenuApp extends JFrame {
         cantidadSpinner.addChangeListener(e -> {
             int cantidad = (int) cantidadSpinner.getValue();
             CompraProducto compraProducto = new CompraProducto(nombre, cantidad, precio);
-            ListaProductos.add(compraProducto);
+            listaProductos.add(compraProducto);
         });
     }
 
-      
+    private void buscarPersona() {
+        String numeroBuscado = JOptionPane.showInputDialog("Ingrese el número a buscar:");
 
+        // Busca el número
+        boolean encontrado = false;
+        for (Persona persona : listaPersonasRegistradas) {
+            if (persona.getNumero().equals(numeroBuscado)) {
+                JOptionPane.showMessageDialog(null, "Número encontrado en el sistema.");
+                encontrado = true;
+                break;
+            }
+        }
+
+        // Si el número no encuentra, abre el formulario de registro
+        if (!encontrado) {
+            Formulario registroFrame = new Formulario(this); // Pasa la referencia de MenuApp
+            registroFrame.setVisible(true);
+        }
+    }
+    
+    public ArrayList<Persona> getListaPersonasRegistradas() {
+    return listaPersonasRegistradas;
 }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Fogones fogones = new Fogones(4); // Crear una instancia de Fogones con 4 fogones
+                MenuApp tiendaFrame = new MenuApp(fogones);
+
+                // Configurar Fogones como visible (opcional)
+                fogones.setVisible(true);
+
+                // Agregar una persona de prueba al sistema
+                Persona personaPrueba = new Persona("Juan Perez", "1234", "Calle 123, Barrio ABC");
+                tiendaFrame.getListaPersonasRegistradas().add(personaPrueba);
+
+                tiendaFrame.setVisible(true);
+            }
+        });
+    }
+}
+
+
+
+
+
