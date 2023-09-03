@@ -7,21 +7,23 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
+
+
 public class MenuApp extends JFrame {
     private ArrayList<CompraProducto> listaProductos = new ArrayList<>();
     private int recibo = 0;
     private DecimalFormat decimalFormat = new DecimalFormat("#.00");
     private Fogones fogones;
     private ArrayList<Persona> listaPersonasRegistradas = new ArrayList<>(); // Lista de personas registradas
+    private JTextArea pedidosRecientesTextArea; // TextArea para mostrar pedidos recientes
 
     public MenuApp(Fogones fogones) {
-        
+
         this.fogones = fogones;
         setTitle("Tienda Online");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        
 
         // Crear el panel superior con el menú
         JPanel menuPanel = new JPanel();
@@ -72,6 +74,14 @@ public class MenuApp extends JFrame {
         });
         menuPanel.add(buscarButton);
 
+        // TextArea para mostrar pedidos recientes
+        pedidosRecientesTextArea = new JTextArea("Pedidos Recientes:\n");
+        pedidosRecientesTextArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(pedidosRecientesTextArea);
+        scrollPane.setPreferredSize(new Dimension(250, 400)); // Ajusta el tamaño del JScrollPane
+
+        add(scrollPane, BorderLayout.EAST);
+
         JButton realizarPedidoButton = new JButton("Realizar Pedido");
         realizarPedidoButton.setPreferredSize(new Dimension(40, 40));
         realizarPedidoButton.addActionListener(new ActionListener() {
@@ -81,26 +91,44 @@ public class MenuApp extends JFrame {
                 if (numeroFogonAsignado != -1) {
                     fogones.actualizarFogones();
                     mostrarFactura(); // Mostrar factura después de realizar un pedido
+                    mostrarPedidosRecientes(); // Mostrar pedidos recientes
                 }
             }
         });
-        add(realizarPedidoButton, BorderLayout.SOUTH);
+        menuPanel.add(realizarPedidoButton);
     }
 
     private void mostrarFactura() {
-        StringBuilder factura = new StringBuilder("Factura:\n");
+    double total = 0.0; // Inicializa el total como double
+
+    StringBuilder factura = new StringBuilder("Factura:\n");
+
+    for (CompraProducto compraProducto : listaProductos) {
+        double subtotal = compraProducto.getPrecio() * compraProducto.getCantidad();
+        factura.append(compraProducto.getNombre()).append(" (")
+                .append(compraProducto.getCantidad()).append(" Unidad) - Precio Unitario: $")
+                .append(decimalFormat.format(compraProducto.getPrecio())).append(" - Subtotal: $")
+                .append(decimalFormat.format(subtotal)).append("\n");
+        total += subtotal; // Acumula el subtotal al total
+    }
+
+    factura.append("Total: $").append(decimalFormat.format(total));
+
+    JOptionPane.showMessageDialog(this, factura.toString(), "Factura", JOptionPane.INFORMATION_MESSAGE);
+}
+
+    private void mostrarPedidosRecientes() {
+        StringBuilder pedidosRecientes = new StringBuilder("Pedidos Recientes:\n");
 
         for (CompraProducto compraProducto : listaProductos) {
-            double subtotal = compraProducto.getPrecio() * compraProducto.getCantidad();
-            factura.append(compraProducto.getNombre()).append(" (")
-                    .append(compraProducto.getCantidad()).append(" Unidad) - Precio:")
-                    .append(decimalFormat.format(subtotal)).append("\n");
-            recibo += subtotal;
+            pedidosRecientes.append("Producto: ").append(compraProducto.getNombre()).append("\n");
+            pedidosRecientes.append("Cantidad: ").append(compraProducto.getCantidad()).append("\n");
+            pedidosRecientes.append("Precio Unitario: $").append(decimalFormat.format(compraProducto.getPrecio())).append("\n");
+            pedidosRecientes.append("Subtotal: $").append(decimalFormat.format(compraProducto.getPrecio() * compraProducto.getCantidad())).append("\n");
+            pedidosRecientes.append("\n");
         }
 
-        factura.append("Total: $").append(decimalFormat.format(recibo));
-
-        JOptionPane.showMessageDialog(this, factura.toString(), "Factura", JOptionPane.INFORMATION_MESSAGE);
+        pedidosRecientesTextArea.setText(pedidosRecientes.toString()); // Actualiza el texto del TextArea
     }
 
     private void agregarProducto(JPanel panel, String nombre, String ruta, int precio, int row, int col) {
@@ -119,7 +147,6 @@ public class MenuApp extends JFrame {
         cantidadSpinner.setPreferredSize(new Dimension(80, 30)); // Ajusta el tamaño aquí
         ProductosdelPanel.add(cantidadSpinner, BorderLayout.SOUTH);
 
-
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = col;
         gbc.gridy = row;
@@ -137,7 +164,6 @@ public class MenuApp extends JFrame {
     private void buscarPersona() {
         String numeroBuscado = JOptionPane.showInputDialog("Ingrese el número a buscar:");
 
-        // Busca el número
         boolean encontrado = false;
         for (Persona persona : listaPersonasRegistradas) {
             if (persona.getNumero().equals(numeroBuscado)) {
@@ -147,27 +173,25 @@ public class MenuApp extends JFrame {
             }
         }
 
-        // Si el número no encuentra, abre el formulario de registro
         if (!encontrado) {
-            Formulario registroFrame = new Formulario(this); // Pasa la referencia de MenuApp
+            Formulario registroFrame = new Formulario(this);
             registroFrame.setVisible(true);
         }
     }
-    
+
     public ArrayList<Persona> getListaPersonasRegistradas() {
-    return listaPersonasRegistradas;
-}
+        return listaPersonasRegistradas;
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                Fogones fogones = new Fogones(4); // Crear una instancia de Fogones con 4 fogones
+                Fogones fogones = new Fogones(4);
                 MenuApp tiendaFrame = new MenuApp(fogones);
 
-                // Configurar Fogones como visible (opcional)
                 fogones.setVisible(true);
 
-                // Agregar una persona de prueba al sistema
                 Persona personaPrueba = new Persona("Juan Perez", "1234", "Calle 123, Barrio ABC");
                 tiendaFrame.getListaPersonasRegistradas().add(personaPrueba);
 
@@ -176,8 +200,5 @@ public class MenuApp extends JFrame {
         });
     }
 }
-
-
-
 
 
