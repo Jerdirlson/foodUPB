@@ -10,5 +10,3 @@ de cada proyecto es abrir la carpeta javadoc desde el explorador de archivos
 y abrir el index.html y ahi lo re dirije a la pagina de la documentacion
 
 
-
-Falta vista cocina, 

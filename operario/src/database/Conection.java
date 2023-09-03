@@ -9,12 +9,15 @@ import java.util.logging.Logger;
 import model.User;
 // import java.sql.Connection;
 
+/**
+ * A class representing a connection for the database.
+ */
 public class Conection {
     private static Connection c;
     private static CallableStatement cstm;
     
     /** 
-     * Este es el metodo que genera la conexion con la base de datos
+     * This is the method that generates the connection to the database.
      * @return Connection
      * @throws SQLException
      * @throws FileNotFoundException
@@ -23,6 +26,14 @@ public class Conection {
     // private static ResultSet rs;
 
     
+    /**
+     * Retrieves a connection to the database.
+     *
+     * @return              the connection to the database
+     * @throws SQLException if an error occurs while connecting to the database
+     * @throws FileNotFoundException if the configuration file is not found
+     * @throws IOException   if an I/O error occurs while reading the configuration file
+     */
     public static Connection getConecction() throws SQLException, FileNotFoundException, IOException{
         // Properties config = new Properties();
         try  { //(FileInputStream file = new FileInputStream(new File("/U/Estructuras/proyecto/foodUPB/operario/src/config.properties")))

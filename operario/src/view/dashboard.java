@@ -5,7 +5,7 @@ import java.awt.*;
 import javax.swing.*; 
 
 /**
- * Este es la vista que vera el operario recien ingresa a la aplicacion
+ * A class representing view for the dashboard.
  * @author 
  */
 public class dashboard extends JFrame {
@@ -17,6 +17,12 @@ public class dashboard extends JFrame {
     public dashboard() {
     }
 
+    /**
+     * Initializes the function. Sets up the background image, title, size, location, layout, and visibility of the frame.
+     *
+     * @param  None
+     * @return None
+     */
     public void inicializar(){
         fondo = new Imagenes("operario/assets/Bienvenida.jpg");
 

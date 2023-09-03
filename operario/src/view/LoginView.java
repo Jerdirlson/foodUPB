@@ -4,6 +4,9 @@ import java.awt.*;
 
 import javax.swing.*; 
 
+/**
+ * A class representing a Login view.
+ */
 public class LoginView extends JFrame{
     
     final private Font mainFont = new Font("Segoe print", Font.BOLD, 18);
@@ -14,6 +17,12 @@ public class LoginView extends JFrame{
     public LoginView(){
         
     }
+    /**
+     * Initializes the login window.
+     *
+     * @param  None
+     * @return None
+     */
     public void inicializar(){
 
         setTitle("Login");
