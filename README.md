@@ -8,3 +8,7 @@ Comando para generar la documentacion
 Cada proyecto tiene su propio javadoc, la idea para ver la documentacion
 de cada proyecto es abrir la carpeta javadoc desde el explorador de archivos
 y abrir el index.html y ahi lo re dirije a la pagina de la documentacion
+
+
+
+Falta vista cocina, 

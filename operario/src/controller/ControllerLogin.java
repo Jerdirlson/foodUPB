@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import model.ModelLogin;
 import model.User;
-import view.Dashboad;
+import view.dashboadMainPage;
 import view.LoginView;
 
 public class ControllerLogin implements ActionListener {
@@ -17,20 +17,19 @@ public class ControllerLogin implements ActionListener {
     public ControllerLogin(LoginView view, ModelLogin model) {
         this.view = view;
         this.model = model;
-        System.out.println("Llega hasta aqui");
-        this.view.btnLogin.addActionListener(this);
+        this.view.loginButton.addActionListener(this);
         this.view.inicializar();
     }    
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
         
-        model.user.setCorreo(view.tfEmail.getText());
-        model.user.setPassword(String.valueOf(view.pfPassword.getPassword()));
+        model.user.setCorreo(view.nameTextField.getText());
+        model.user.setPassword(String.valueOf(view.passwordField.getPassword()));
         User usuario = ModelLogin.getAuthenticatedUser(model.user.email, model.user.password);
 
         if(usuario.email != null){
-            Dashboad mainFrame = new Dashboad();
+            dashboadMainPage mainFrame = new dashboadMainPage();
             mainFrame.inicializar(usuario);
             view.dispose();
         }else{

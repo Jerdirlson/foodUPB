@@ -1,11 +1,10 @@
 package app;
-import controller.ControllerLogin;
-import model.ModelLogin;
-import view.LoginView;
+import view.dashboard;
+import controller.ControllerDashboard;
 
 public class App {
-    public static void main(String[] args) throws Exception { 
+    public static void main(String[] args) throws Exception {
         System.out.println("Hello World!");
-        ControllerLogin controller = new ControllerLogin(new LoginView(), new ModelLogin());
+        ControllerDashboard dashboard = new ControllerDashboard(new dashboard());
     }
 }

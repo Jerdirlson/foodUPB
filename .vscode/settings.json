@@ -5,8 +5,8 @@
     ],
     "java.project.sourcePaths": [
         "upbfoodd/src",
+        "server/src/view",
         "operario/src",
-        "cocina/src",
-        "estructuras/src/main"
+        "cocina/src/view"
     ]
 }
