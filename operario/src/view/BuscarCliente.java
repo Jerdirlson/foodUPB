@@ -64,9 +64,9 @@ public class BuscarCliente extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String phoneNumber = phoneTextField.getText();
-                MostrarPedidosRecientes mostrarPedidos = new MostrarPedidosRecientes(phoneNumber);
+                MostrarPedidosRecientes mostrarPedidos = new MostrarPedidosRecientes(menuApp);
                 mostrarPedidos.setVisible(true);
-
+        
                 // Cerrar la ventana actual de BuscarCliente
                 dispose();
             }
