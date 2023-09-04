@@ -1,0 +1,12 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/home/jerdirlsons/U/Estructuras/proyecto/mysql-connector-j-8.1.0/mysql-connector-j-8.1.0.jar"
+    ],
+    "java.project.sourcePaths": [
+        "upbfoodd/src",
+        "server/src/view",
+        "operario/src",
+        "cocina/src/view"
+    ]
+}
