@@ -6,7 +6,6 @@ import controller.ControllerDashboard;
  * A class representing the entry point of the application.
  */
 public class App {
-
     /**
      * A description of the entire Java function.
      *

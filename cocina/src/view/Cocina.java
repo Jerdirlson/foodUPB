@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -19,12 +15,14 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 /**
- *
- * @author 57314
+ * The `Cocina` class represents a JFrame that represents a kitchen.
  */
 public class Cocina extends JFrame {
-    public Cocina(){
-         setTitle("Login");
+   /**
+   * Constructs a new `Cocina` object.
+   */
+    public Cocina() {
+        setTitle("Login");
         setSize(580, 420);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -34,7 +32,8 @@ public class Cocina extends JFrame {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Etiqueta de imagen de fondo
-        ImageIcon backgroundImage = new ImageIcon("C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Cocina.jpg");
+        ImageIcon backgroundImage = new ImageIcon(
+                "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Cocina.jpg");
         JLabel backgroundLabel = new JLabel(backgroundImage);
         mainPanel.add(backgroundLabel, BorderLayout.CENTER);
 
@@ -64,15 +63,16 @@ public class Cocina extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String username = nameTextField.getText();
                 String password = new String(passwordField.getPassword());
-                JOptionPane.showMessageDialog(null, "Nombre: " + username + "\nContraseña: " + password + "\n REGISTRO EXITOSO");
+                JOptionPane.showMessageDialog(null,
+                        "Nombre: " + username + "\nContraseña: " + password + "\n REGISTRO EXITOSO");
             }
         });
 
         // Establece el panel principal como el contenido del JFrame
         this.setContentPane(mainPanel);
     }
-    
-     public static void main(String[] args) {
+
+    public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

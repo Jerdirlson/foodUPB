@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"<Unnamed>","l":"App"},{"p":"rmiserver","l":"Server"},{"p":"rmiserver","l":"ServiceLogin"},{"p":"rmiserver","l":"SkeletonLogin"}];updateSearchResults();
+typeSearchIndex = [{"p":"<Unnamed>","l":"Administrador"},{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"<Unnamed>","l":"App"},{"p":"<Unnamed>","l":"Registro"},{"p":"rmiserver","l":"Server"},{"p":"rmiserver","l":"ServiceLogin"},{"p":"rmiserver","l":"SkeletonLogin"}];updateSearchResults();

@@ -4,20 +4,20 @@
  */
 
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
++ * The `Registro` class represents a JFrame for an administrator.
++ *
++ * @author 57314
++ */
 public class Registro extends JFrame {
 
+        /**
+        * Constructs a new `Registro` object.
+        */
         public Registro() {
             setTitle("Formulario de Registro");
         setSize(400, 300);

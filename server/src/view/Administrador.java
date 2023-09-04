@@ -19,11 +19,16 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+
 /**
- *
- * @author 57314
- */
++ * The `Administrador` class represents a JFrame for an administrator.
++ *
++ * @author 57314
++ */
 public class Administrador extends JFrame {
+    /**
+    * Constructs a new `Administrador` object.
+    */
     public Administrador(){
         setTitle("Login");
         setSize(580, 420);
