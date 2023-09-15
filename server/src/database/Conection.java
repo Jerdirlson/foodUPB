@@ -1,12 +1,15 @@
 package database;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import model.User;
+import entidades.*;
 // import java.sql.Connection;
 
 /**
@@ -36,7 +39,7 @@ public class Conection {
      */
     public static Connection getConecction() throws SQLException, FileNotFoundException, IOException{
         // Properties config = new Properties();
-        try  { //(FileInputStream file = new FileInputStream(new File("/U/Estructuras/proyecto/foodUPB/operario/src/config.properties")))
+        try  { //(FileInputStream file = new FileInputStream(new File("/config.properties"))) 
             // config.load(file);
             String host = "127.0.0.1";
             String user = "root";

@@ -3,9 +3,8 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+import entidades.User;
 import model.ModelLogin;
-import model.User;
 import view.dashboadMainPage;
 import view.LoginView;
 

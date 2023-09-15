@@ -1,6 +1,8 @@
-package model;
+package entidades;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
     public String name;
     public String email;
     public Long phone;
@@ -16,7 +18,7 @@ public class User {
     * @param  address   the address of the user
     * @param  password  the password of the user
     */
-    public User(String name, String email, Long phone, String adress, String password) {
+    public User(String name, String email, Long phone, String adress, String password){
         this.name = name;
         this.email = email;
         this.phone = phone;

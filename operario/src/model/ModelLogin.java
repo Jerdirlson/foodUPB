@@ -1,7 +1,8 @@
 package model;
 //Aqui va la conexion a la base de datos 
 
-import database.Conection;
+import client.Client;
+import entidades.User;
 
 /**
  * A class representing a model for the Login view.
@@ -21,8 +22,10 @@ public class ModelLogin {
         
         User user = null;
 
+        Client cliente = new Client("localhost", "5000", "servicioOperario");
+
         try {
-            user = Conection.getUser(email, password);
+            user = cliente.login(email, password);
         } catch (Exception e) {
             System.out.println("Error" + e.getMessage());
         }

@@ -1,7 +1,9 @@
-package rmiserver;
+package server;
 
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
+
+import interfaces.SkeletonOperario;
 
 public class Server {
     
@@ -18,11 +20,11 @@ public class Server {
      * @param serviceName the name of the service
      * @param uri          the URI of the service
      */
-    public Server(String ip, String port, String serviceName, String uri) {
+    public Server(String ip, String port, String serviceName) {
         this.ip = ip;
         this.port = port;
         this.serviceName = serviceName;
-        this.uri = String.format("//%s:%s/$s", this.ip, this.port, this.serviceName);
+        this.uri = String.format("//%s:%s/%s", this.ip, this.port, this.serviceName);
     }
 
     /**
@@ -32,15 +34,17 @@ public class Server {
      * @return  true if the service is deployed successfully, false otherwise
      */
     public boolean deploy() {
+        boolean bool = false;
         try {
+                if (ip == null | port == null | serviceName == null) return bool;
             System.setProperty("java.rmi.server.hostname", ip);
-            SkeletonLogin service = new ServiceLogin();
+            SkeletonOperario service = new ServiceOperario();
             LocateRegistry.createRegistry(Integer.parseInt(port));
             Naming.rebind(uri, service);
-            return true;
+            bool = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return bool;
     }
 }

@@ -4,7 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 import javax.swing.*;
-import model.User;
+
+import entidades.User;
 
 public class dashboadMainPage extends JFrame{
 
