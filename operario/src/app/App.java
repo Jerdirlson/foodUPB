@@ -19,7 +19,7 @@ public class App {
     public static void main(String[] args) throws Exception {
 
         Client client = new Client("localhost", "5000", "servicioOperario");
-        System.out.println(client.isConnected());
+        System.out.println("El cliente esta conectado? " + client.isConnected());
         ControllerDashboard dashboard = new ControllerDashboard(new dashboard());
     }
 }
