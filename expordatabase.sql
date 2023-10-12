@@ -19,7 +19,7 @@
 -- Table structure for table `tbl_cliente`
 --
 
-CREATE DATABASE IF NOT EXISTS `estructuras-database`;
+CREATE DATABASE `estructuras-database`;
 USE `estructuras-database`;
 
 DROP TABLE IF EXISTS `tbl_cliente`;

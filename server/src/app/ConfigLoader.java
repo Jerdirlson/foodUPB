@@ -9,7 +9,7 @@ public class ConfigLoader {
     private static Properties config = new Properties();
 
     static {
-        try (FileInputStream file = new FileInputStream("/home/jerdirlsons/U/estructuras/proyecto/foodUPB/server/config.properties")) {
+        try (FileInputStream file = new FileInputStream("C:\\Users\\57314\\Documents\\Estructuras\\foodUPB\\server\\config.properties")) {
             config.load(file);
         } catch (IOException e) {
             e.printStackTrace();
