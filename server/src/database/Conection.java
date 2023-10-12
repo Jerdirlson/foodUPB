@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import app.ConfigLoader;
 
 import entidades.*;
 // import java.sql.Connection;
@@ -40,14 +41,12 @@ public class Conection {
      * @throws IOException   if an I/O error occurs while reading the configuration file
      */
     public static Connection getConecction() throws SQLException, FileNotFoundException, IOException{
-        Properties config = new Properties();
-        try(FileInputStream file = new FileInputStream(new File("/home/jerdirlsons/U/estructuras/proyecto/foodUPB/server/config.properties"))) { 
-            config.load(file);
-            String host = (String)config.getProperty("HOST");
-            String user = (String)config.getProperty("USER");
-            String password = (String)config.getProperty("PASSWORD");
+        try{ 
+            String host = ConfigLoader.getProperty("HOST");
+            String user = ConfigLoader.getProperty("USER");
+            String password = ConfigLoader.getProperty("PASSWORD");
             // int port = 3306;
-            String database = (String)config.getProperty("DATABASE");
+            String database = ConfigLoader.getProperty("DATABASE");
             boolean ssl = false;
             
             try {

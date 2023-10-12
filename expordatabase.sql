@@ -19,7 +19,8 @@
 -- Table structure for table `tbl_cliente`
 --
 
-CREATE DATABASE IF NOT EXISTS estructuras-database;
+CREATE DATABASE IF NOT EXISTS `estructuras-database`;
+USE `estructuras-database`;
 
 DROP TABLE IF EXISTS `tbl_cliente`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
