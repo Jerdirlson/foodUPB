@@ -19,7 +19,7 @@ public class ControllerFactura {
         this.facturaModel = facturaModel;
         this.facturaView = facturaView;
 
-        facturaView.getFacturaTextArea().append("NombreDeTuEmpresa\n");
+        facturaView.getFacturaTextArea().append("FoodUpb\n");
         Persona cliente = facturaModel.getCliente();
         facturaView.getFacturaTextArea().append("Cliente: " + cliente.getNombre() + "\n");
         facturaView.getFacturaTextArea().append("Dirección: " + cliente.getDireccion() + "\n");
