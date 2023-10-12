@@ -6,9 +6,9 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-public class InformacionCliente extends JFrame {
+public class RegistrarClienteSirve extends JFrame {
 
-    public InformacionCliente() {
+    public RegistrarClienteSirve() {
         getContentPane().setBackground(Color.BLACK);
 
         setTitle("Información");
@@ -94,7 +94,7 @@ public class InformacionCliente extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                InformacionCliente informacionCliente = new InformacionCliente();
+                RegistrarClienteSirve informacionCliente = new RegistrarClienteSirve();
                 informacionCliente.setVisible(true);
             }
         });

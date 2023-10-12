@@ -6,7 +6,9 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import database.Conection;
-import entidades.User;;
+import entidades.Producto;
+import entidades.User;
+import entidades.UserClient;;
 public class ServiceOperario extends UnicastRemoteObject implements SkeletonOperario{
 
     protected ServiceOperario() throws RemoteException {
@@ -25,6 +27,30 @@ public class ServiceOperario extends UnicastRemoteObject implements SkeletonOper
         }
 
         return user;
+    }
+
+    @Override
+    public UserClient getUserClient(String numCliente) throws RemoteException {
+        UserClient userClient = null;
+
+        try {
+            userClient = Conection.getUserClient(numCliente);
+        } catch (Exception e) {
+            System.out.println("Error" + e.getMessage());
+        }
+
+        return userClient;
+    }
+
+    @Override
+    public Producto[] getProductos() throws RemoteException {
+        Producto[] productos = null;
+        try {
+            productos = Conection.getProductos();
+        } catch (Exception e) {
+            System.out.println("Error" + e.getMessage());
+        }
+        return productos;
     }
 
     

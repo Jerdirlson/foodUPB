@@ -4,8 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import entidades.User;
+import model.ModelDashboard;
 import model.ModelLogin;
-import view.dashboadMainPage;
+import view.dashboadMainPageView;
 import view.LoginView;
 
 /**
@@ -43,8 +44,7 @@ public class ControllerLogin implements ActionListener {
         User usuario = ModelLogin.getAuthenticatedUser(model.user.email, model.user.password);
 
         if(usuario.email != null){
-            dashboadMainPage mainFrame = new dashboadMainPage();
-            mainFrame.inicializar(usuario);
+            ControllerDashboardMain controller = new ControllerDashboardMain(new dashboadMainPageView(), new ModelDashboard(), usuario);
             view.dispose();
         }else{
             System.out.println("Error");

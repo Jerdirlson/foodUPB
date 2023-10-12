@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,14 +40,14 @@ public class Conection {
      * @throws IOException   if an I/O error occurs while reading the configuration file
      */
     public static Connection getConecction() throws SQLException, FileNotFoundException, IOException{
-        // Properties config = new Properties();
-        try  { //(FileInputStream file = new FileInputStream(new File("/config.properties"))) 
-            // config.load(file);
-            String host = "127.0.0.1";
-            String user = "root";
-            String password = "20011308Aron*";
+        Properties config = new Properties();
+        try(FileInputStream file = new FileInputStream(new File("/home/jerdirlsons/U/estructuras/proyecto/foodUPB/server/config.properties"))) { 
+            config.load(file);
+            String host = (String)config.getProperty("HOST");
+            String user = (String)config.getProperty("USER");
+            String password = (String)config.getProperty("PASSWORD");
             // int port = 3306;
-            String database = "estructuras-database";
+            String database = (String)config.getProperty("DATABASE");
             boolean ssl = false;
             
             try {
@@ -99,5 +101,73 @@ public class Conection {
         }
 
         return user;
+    }
+
+    public static UserClient getUserClient(String numClient){
+        UserClient userClient = new UserClient();
+        try {
+            c = getConecction();
+            cstm = c.prepareCall("SELECT tbl_cliente.nombre_cliente, tbl_cliente.numero_cliente, tbl_cliente.vip, tbl_direccion.barrio, tbl_direccion.calle, tbl_direccion.numero, tbl_direccion.casa, tbl_direccion.municipio\n" + //
+                    "FROM tbl_cliente\n" + //
+                    "INNER JOIN tbl_direccion ON tbl_cliente.direccion_cliente = tbl_direccion.idtbl_direccion\n" + //
+                    "WHERE tbl_cliente.numero_cliente = ?;");
+            cstm.setString(1, numClient);
+            ResultSet rs = cstm.executeQuery();
+
+            if (rs.next()) {
+                userClient.setNombre_client(rs.getString("nombre_cliente"));
+                userClient.setNumero_cliente(rs.getLong("numero_cliente"));
+                userClient.setVip(rs.getBoolean("vip"));
+                userClient.setBarrio(rs.getString("barrio"));
+                userClient.setCalle(rs.getString("calle"));
+                userClient.setNumero(rs.getString("numero"));
+                userClient.setCasa(rs.getBoolean("casa"));
+                userClient.setMunicipio(rs.getString("municipio"));
+
+            }
+    
+            rs.close(); 
+            cstm.close();
+            c.close(); 
+
+            
+        } catch (Exception e) {
+            System.out.println("Error en obtener el usuario " + e.getMessage());
+        }
+
+        return userClient;
+    }
+
+    public static Producto[] getProductos(){
+        Producto[] productos = null;
+        try {
+            c = getConecction();
+        cstm = c.prepareCall("SELECT * FROM tbl_producto");
+        ResultSet rs = cstm.executeQuery();
+
+        //Esta lista se debe cambiar por una doblemente enlazada
+        List<Producto> listaProductos = new ArrayList<>();
+
+        while (rs.next()) {
+            Producto producto = new Producto();
+            producto.setNombre_producto(rs.getString("nombre_producto"));
+            producto.setUri_img(rs.getString("uri_img")); 
+            producto.setPrecio_unitario(rs.getLong("precio_unitario"));
+            listaProductos.add(producto);
+        }
+
+        // Convierte la lista de productos en un array
+        productos = listaProductos.toArray(new Producto[0]);
+
+        rs.close();
+        cstm.close();
+        c.close();
+
+            
+        } catch (Exception e) {
+            System.out.println("Error en obtener los productos " + e.getMessage());
+        }
+
+        return productos;
     }
 }

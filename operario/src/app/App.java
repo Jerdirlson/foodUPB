@@ -1,7 +1,6 @@
 package app;
 import view.dashboard;
 
-import java.rmi.Naming;
 
 import client.Client;
 import controller.ControllerDashboard;
@@ -17,9 +16,16 @@ public class App {
      * @throws Exception  if an error occurs during execution
      */
     public static void main(String[] args) throws Exception {
+        try {
+            String IP = ConfigLoader.getProperty("IP");
+            String PORT = ConfigLoader.getProperty("PORT");
+            String SERVICENAMEOPERARIO = ConfigLoader.getProperty("SERVICENAMEOPERARIO");
 
-        Client client = new Client("localhost", "5000", "servicioOperario");
-        System.out.println("El cliente esta conectado? " + client.isConnected());
-        ControllerDashboard dashboard = new ControllerDashboard(new dashboard());
+            Client client = new Client(IP,PORT,SERVICENAMEOPERARIO);
+            System.out.println("El cliente esta conectado? " + client.isConnected());
+            ControllerDashboard dashboard = new ControllerDashboard(new dashboard());
+        } catch (Exception e) {
+            System.out.println("Error en la conexion con el cliente" + e.getMessage());
+        }
     }
 }

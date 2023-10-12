@@ -7,7 +7,9 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import entidades.Producto;
 import entidades.User;
+import entidades.UserClient;
 import interfaces.SkeletonOperario;
 
 public class Client implements SkeletonOperario{
@@ -38,6 +40,18 @@ public class Client implements SkeletonOperario{
         }
     }
 
+        @Override
+    public UserClient getUserClient(String numCliente) throws RemoteException {
+        UserClient userClient = new UserClient();
+        try{
+            service = (SkeletonOperario) Naming.lookup(url);
+            return service.getUserClient(numCliente);
+        } catch (MalformedURLException | RemoteException | NotBoundException e) {
+            e.printStackTrace();
+            return userClient;
+        }
+    }
+
     public boolean isConnected() throws RemoteException{
         try{
             System.out.println(url);
@@ -46,6 +60,17 @@ public class Client implements SkeletonOperario{
         } catch (MalformedURLException | RemoteException | NotBoundException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public Producto[] getProductos() throws RemoteException {
+        try{
+            service = (SkeletonOperario) Naming.lookup(url);
+            return service.getProductos();
+        } catch (MalformedURLException | RemoteException | NotBoundException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
