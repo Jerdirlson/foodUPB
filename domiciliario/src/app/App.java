@@ -1,4 +1,3 @@
-package app;
 import javax.swing.SwingUtilities;
 
 import controller.ControllerFactura;

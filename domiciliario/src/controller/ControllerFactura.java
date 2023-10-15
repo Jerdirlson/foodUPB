@@ -65,9 +65,7 @@ public class ControllerFactura {
             customFont = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(rutaFuente)).deriveFont(tamano);
         } catch (Exception e) {
             e.printStackTrace();
-            // Manejar errores relacionados con la carga de la fuente personalizada
-            // Esto podría incluir mostrar un mensaje de error o usar una fuente
-            // predeterminada
+        
         }
         return customFont;
     }
