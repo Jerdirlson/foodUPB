@@ -1,7 +1,9 @@
 package model;
 
+import app.ConfigLoader;
 import client.Client;
 import entidades.UserClient;
+import entidades.Pedido;
 import entidades.Producto;
 
 public class ModelDashboard {
@@ -37,5 +39,20 @@ public class ModelDashboard {
         return productos;
     }
 
+    public static void enviarPedido(Pedido pedido){
+
+        String IP = ConfigLoader.getProperty("IP");
+        String PORT = ConfigLoader.getProperty("PORT");
+        String SERVICENAMEOPERARIO = ConfigLoader.getProperty("SERVICENAMEOPERARIO");
+
+        Client cliente = new Client(IP, PORT, SERVICENAMEOPERARIO);
+
+        try {
+            cliente.enviarPedido(pedido);
+        } catch (Exception e) {
+            System.out.println("Error" + e.getMessage());
+        }
+
+    }
 
 }

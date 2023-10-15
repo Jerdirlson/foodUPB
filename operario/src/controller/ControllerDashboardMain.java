@@ -2,23 +2,25 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Locale;
 import java.awt.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import view.dashboadMainPageView;
-import view.dashboard;
 import model.ModelDashboard;
+import entidades.Pedido;
 import entidades.Producto;
 import entidades.User;
 import entidades.UserClient;
+import entidades.estructuras.doublee.linked.DoubleLinkedList;
+import entidades.estructuras.nodes.DoubleLinkedNode;
 
 public class ControllerDashboardMain implements ActionListener{
     
@@ -27,7 +29,8 @@ public class ControllerDashboardMain implements ActionListener{
     public static UserClient cliente;
     public Producto[] productos;
     public User operario;
-    public ArrayList<Producto> pedido = new ArrayList<>();
+    public DoubleLinkedList<Producto> productosElegidos = new DoubleLinkedList<>();
+    public Pedido pedido;
     /**
      * Constructs a new ControllerDashboard object with the specified view.
      *
@@ -46,10 +49,13 @@ public class ControllerDashboardMain implements ActionListener{
         
         this.view.inicializar(usuario);
         
+        //Pintar los productos que estan en la base de datos
         for (Producto product : productos) {
             JPanel productPanel = createProductComponent(product);
             view.productContainer.add(productPanel);
         }
+
+        //Observable para filtrar los productos 
         view.jTextField2.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -69,15 +75,18 @@ public class ControllerDashboardMain implements ActionListener{
         this.view.jButton1.addActionListener(this);
     }
     
+    
+    /** 
+     * @return UserClient
+     */
     public static UserClient getUsuario(){
         return cliente;
-        
     }
-
+    
     private void filterProducts() {
         String filtro = view.jTextField2.getText().toLowerCase(Locale.getDefault());
 
-        ArrayList<Producto> productosFiltrados = new ArrayList<>();
+        DoubleLinkedList<Producto> productosFiltrados = new DoubleLinkedList<>();
 
         for (Producto product : productos) {
             String nombreProducto = product.getNombre_producto().toLowerCase(Locale.getDefault());
@@ -85,14 +94,16 @@ public class ControllerDashboardMain implements ActionListener{
                 productosFiltrados.add(product);
             }
         }
-
         view.productContainer.removeAll();
 
-        for (Producto product : productosFiltrados) {
+
+        DoubleLinkedNode<Producto> currentNode = productosFiltrados.getHead();
+        while (currentNode != null) {
+            Producto product = currentNode.getObject();
             JPanel productPanel = createProductComponent(product);
             view.productContainer.add(productPanel);
+            currentNode = currentNode.getNext();
         }
-
         view.productContainer.revalidate();
         view.productContainer.repaint();
     }
@@ -119,7 +130,11 @@ public class ControllerDashboardMain implements ActionListener{
         return productPanel;
     }
 
-    
+    /**
+     * Method to create a new product panel
+     * @param productPanel
+     * @return product
+     */
     private JPanel createProductComponent(Producto product) {
         JPanel productPanel = new JPanel();
         productPanel.setLayout(new BorderLayout());
@@ -156,21 +171,40 @@ public class ControllerDashboardMain implements ActionListener{
 
             String numeroCliente = view.jTextField1.getText();
 
-            UserClient usuario = model.getUserClient(numeroCliente);
+            this.cliente = model.getUserClient(numeroCliente);
 
-
-            view.actualizarCamposUsuario(usuario);
+            if(this.cliente.nombre_client != null) {
+                view.actualizarCamposUsuario(this.cliente);
+                System.out.println("Se actualizo el cliente");
+            }else{
+                JOptionPane.showMessageDialog(null, "El usuario no está registrado ", "Mensaje", JOptionPane.ERROR_MESSAGE);
+            }
         }
 
         
     }
-    
+    /**
+     * method to display a message dialog with addProduct
+     * @param product
+     */
     public void addProduct(Producto product) {
-        pedido.add(product);
+        productosElegidos.add(product);
         JPanel productPanelPedido = createProductComponentPedido(product);
         view.selectedProductsPanel.add(productPanelPedido);
         view.jScrollPane1.setViewportView(view.selectedProductsPanel);
         view.jScrollPane1.revalidate();
+    }
+
+    public void enviarPedido(){
+        System.out.println("se esta enviando el producto");
+        pedido = new Pedido();
+        pedido.setCliente(cliente);
+        pedido.setProductos(productosElegidos);
+
+        
+
+        model.enviarPedido(pedido);
+
     }
     
 }

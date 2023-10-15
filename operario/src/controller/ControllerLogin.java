@@ -3,6 +3,8 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
+
 import entidades.User;
 import model.ModelDashboard;
 import model.ModelLogin;
@@ -47,7 +49,7 @@ public class ControllerLogin implements ActionListener {
             ControllerDashboardMain controller = new ControllerDashboardMain(new dashboadMainPageView(), new ModelDashboard(), usuario);
             view.dispose();
         }else{
-            System.out.println("Error");
+            JOptionPane.showMessageDialog(null, "El operador no esta registrado, usuario o contraseña incorrecto.", "Mensaje", JOptionPane.ERROR_MESSAGE);
         }
     }
     

@@ -1,13 +1,10 @@
 package database;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import app.ConfigLoader;
@@ -67,12 +64,7 @@ public class Conection {
 
 
     
-    /** 
-     * Metodo para retornar usuario en especifico pasandole correo
-     * @param correo
-     * @param password
-     * @return User
-     */
+    
     public static User getUser(String correo, String password){
         User user = new User();
         try {

@@ -7,6 +7,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import entidades.Pedido;
 import entidades.Producto;
 import entidades.User;
 import entidades.UserClient;
@@ -72,5 +73,18 @@ public class Client implements SkeletonOperario{
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void enviarPedido(Pedido pedido) throws RemoteException {
+
+        try {
+            service = (SkeletonOperario) Naming.lookup(url);
+            service.enviarPedido(pedido);
+        } catch (Exception e) {
+            System.err.println("Error en enviar el pedido");
+            e.printStackTrace();
+        }
+        
     }
 }

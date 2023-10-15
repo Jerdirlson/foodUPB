@@ -1,3 +1,4 @@
+package app;
 import javax.swing.SwingUtilities;
 
 import controller.ControllerFactura;
@@ -5,7 +6,6 @@ import model.FacturaModel;
 import model.Persona;
 import model.Producto;
 import view.FacturaView;
-
 import java.util.List;
 
 public class App {
