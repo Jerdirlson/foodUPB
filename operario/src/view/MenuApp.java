@@ -50,18 +50,18 @@ public class MenuApp extends JFrame {
         JPanel productosPanel = new JPanel();
         productosPanel.setLayout(new GridLayout(3, 4)); // Varios productos en filas de 2
 
-        agregarProducto(productosPanel, "Mojarra:20000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Plato1.png", 20000, 1, 1);
-        agregarProducto(productosPanel, "Batido:10000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Batido.png", 10000, 1, 2);
-        agregarProducto(productosPanel, "Mazamorra:10000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Maz.png", 10000, 1, 3);
-        agregarProducto(productosPanel, "Papas fritas:50000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Papas.png", 50000, 1, 4);
-        agregarProducto(productosPanel, "Carne:15000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Carne.png", 15000, 2, 1);
-        agregarProducto(productosPanel, "Pollo Asado:22000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Asado.png", 22000, 2, 2);
-        agregarProducto(productosPanel, "Jugos:30000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Jugos.png", 30000, 2, 3);
-        agregarProducto(productosPanel, "Pan:35000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Bread.png", 35000, 2, 4);
-        agregarProducto(productosPanel, "Pollo frito:40000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Pollo.png", 40000, 3, 1);
-        agregarProducto(productosPanel, "Cerveza:70000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Beer.png", 70000, 3, 2);
-        agregarProducto(productosPanel, "Galletas:200000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Cookies .png", 200000, 3, 3);
-        agregarProducto(productosPanel, "Pure de papa:10000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Pure.png", 10000, 3, 4);
+        agregarProducto(productosPanel, "Mojarra:20000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Plato1.png", 20000, 1, 1,15);
+        agregarProducto(productosPanel, "Batido:10000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Batido.png", 10000, 1, 2,5);
+        agregarProducto(productosPanel, "Mazamorra:10000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Maz.png", 10000, 1, 3,20);
+        agregarProducto(productosPanel, "Papas fritas:50000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Papas.png", 50000, 1, 4,25);
+        agregarProducto(productosPanel, "Carne:15000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Carne.png", 15000, 2, 1,10);
+        agregarProducto(productosPanel, "Pollo Asado:22000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Asado.png", 22000, 2, 2,30);
+        agregarProducto(productosPanel, "Jugos:30000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Jugos.png", 30000, 2, 3,5);
+        agregarProducto(productosPanel, "Pan:35000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Bread.png", 35000, 2, 4,2);
+        agregarProducto(productosPanel, "Pollo frito:40000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Pollo.png", 40000, 3, 1,15);
+        agregarProducto(productosPanel, "Cerveza:70000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Beer.png", 70000, 3, 2,0);
+        agregarProducto(productosPanel, "Galletas:200000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Cookies .png", 200000, 3, 3,5);
+        agregarProducto(productosPanel, "Pure de papa:10000", "C:\\Users\\57314\\Documents\\NetBeansProjects\\Disenoapp\\src\\disenoapp\\Imagenes\\Pure.png", 10000, 3, 4,10);
         add(productosPanel, BorderLayout.CENTER);
 
         // Botón de búsqueda
@@ -131,7 +131,7 @@ public class MenuApp extends JFrame {
         pedidosRecientesTextArea.setText(pedidosRecientes.toString()); // Actualiza el texto del TextArea
     }
 
-    private void agregarProducto(JPanel panel, String nombre, String ruta, int precio, int row, int col) {
+    private void agregarProducto(JPanel panel, String nombre, String ruta, int precio, int row, int col,int tiempoDeCocion) {
         JPanel ProductosdelPanel = new JPanel(new BorderLayout());
         ProductosdelPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
@@ -156,7 +156,7 @@ public class MenuApp extends JFrame {
 
         cantidadSpinner.addChangeListener(e -> {
             int cantidad = (int) cantidadSpinner.getValue();
-            CompraProducto compraProducto = new CompraProducto(nombre, cantidad, precio);
+            CompraProducto compraProducto = new CompraProducto(nombre, cantidad, precio,tiempoDeCocion);
             listaProductos.add(compraProducto);
         });
     }

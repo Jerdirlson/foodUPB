@@ -12,11 +12,13 @@ public class CompraProducto {
     private String nombre;
     private int precio;
     private int cantidad;
+    private int tiempoDeCocion;
 
-    public CompraProducto(String nombre, int precio, int cantidad) {
+    public CompraProducto(String nombre, int precio, int cantidad, int tiempoDeCocion) {
         this.nombre = nombre;
         this.precio = precio;
         this.cantidad = cantidad;
+        this.tiempoDeCocion=tiempoDeCocion;
     }
 
     public String getNombre() {
@@ -33,6 +35,9 @@ public class CompraProducto {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+    public int getTiempoDeCocion(){
+        return tiempoDeCocion;
     }
 }
 
