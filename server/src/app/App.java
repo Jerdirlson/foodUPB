@@ -1,4 +1,7 @@
 package app;
+import controller.ControllerLogin;
+import model.ModelLogin;
+import view.LoginView;
 import server.Server;
 
 public class App {
@@ -10,6 +13,8 @@ public class App {
             Server server = new Server( IP,PORT,SERVICENAMEOPERARIO);
             server.deploy();
             System.out.println("Servicio en linea");
+
+            ControllerLogin loginController = new ControllerLogin(new LoginView(), new ModelLogin());
             
         } catch (Exception e) {
             System.out.println("Error al intentar conectar el servidor "+ e.getMessage());

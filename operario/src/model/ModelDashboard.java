@@ -7,6 +7,11 @@ import entidades.Pedido;
 import entidades.Producto;
 
 public class ModelDashboard {
+    
+    public static String IP = ConfigLoader.getProperty("IP");
+    public static String PORT = ConfigLoader.getProperty("PORT");
+    public static String SERVICENAMEOPERARIO = ConfigLoader.getProperty("SERVICENAMEOPERARIO");
+
 
     public UserClient client = new UserClient();
 
@@ -14,7 +19,7 @@ public class ModelDashboard {
     public static UserClient getUserClient(String numUser){
         UserClient client = null;
 
-        Client cliente = new Client("localhost", "5000", "servicioOperario");
+        Client cliente = new Client(IP, PORT, SERVICENAMEOPERARIO);
 
         try {
             client = cliente.getUserClient(numUser);
@@ -28,7 +33,7 @@ public class ModelDashboard {
     public static Producto[] getProductos(){
         Producto[] productos = null;
 
-        Client cliente = new Client("localhost", "5000", "servicioOperario");
+        Client cliente = new Client(IP,PORT,SERVICENAMEOPERARIO);
 
         try {
             productos = cliente.getProductos();
@@ -41,10 +46,6 @@ public class ModelDashboard {
 
     public static void enviarPedido(Pedido pedido){
 
-        String IP = ConfigLoader.getProperty("IP");
-        String PORT = ConfigLoader.getProperty("PORT");
-        String SERVICENAMEOPERARIO = ConfigLoader.getProperty("SERVICENAMEOPERARIO");
-
         Client cliente = new Client(IP, PORT, SERVICENAMEOPERARIO);
 
         try {
@@ -53,6 +54,18 @@ public class ModelDashboard {
             System.out.println("Error" + e.getMessage());
         }
 
+    }
+
+    public static boolean insertarCliente(UserClient client){
+
+        Client cliente = new Client(IP, PORT, SERVICENAMEOPERARIO);
+
+        try {
+            return cliente.insertarCliente(client);
+        } catch (Exception e) {
+            System.out.println("Error" + e.getMessage());
+            return false;
+        }
     }
 
 }

@@ -1,6 +1,5 @@
 package client;
 
-import java.io.Serializable;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -81,10 +80,23 @@ public class Client implements SkeletonOperario{
         try {
             service = (SkeletonOperario) Naming.lookup(url);
             service.enviarPedido(pedido);
-        } catch (Exception e) {
+        } catch (MalformedURLException | RemoteException | NotBoundException e) {
             System.err.println("Error en enviar el pedido");
             e.printStackTrace();
         }
         
+    }
+
+    @Override
+    public boolean insertarCliente(UserClient client) throws RemoteException {
+        try {
+            service = (SkeletonOperario) Naming.lookup(url);
+            return service.insertarCliente(client);
+            
+        } catch (MalformedURLException | RemoteException | NotBoundException e) {
+            System.err.println("Error en enviar el pedido");
+            e.printStackTrace();
+            return false;
+        }
     }
 }

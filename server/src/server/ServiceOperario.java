@@ -4,6 +4,8 @@ import interfaces.SkeletonOperario;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Iterator;
+import entidades.estructuras.nodes.DoubleLinkedNode;
 
 import database.Conection;
 import entidades.Pedido;
@@ -12,7 +14,7 @@ import entidades.User;
 import entidades.UserClient;
 public class ServiceOperario extends UnicastRemoteObject implements SkeletonOperario{
 
-    Pedido pedidoService = new Pedido();
+    public Pedido pedidoService = new Pedido();
 
     protected ServiceOperario() throws RemoteException {
         super();
@@ -63,18 +65,30 @@ public class ServiceOperario extends UnicastRemoteObject implements SkeletonOper
 
             // ColaPrioridadCocina.cola.add(pedido.getCliente().vip ?1:0, pedido);
 
+
             System.out.println(pedidoService.getCliente().nombre_client);
 
-            System.out.println(((Producto)pedidoService.getProductos().pop()).getNombre_producto());
-            // Iterator iterator = pedidoService.getProductos().iterator();
+            Iterator iterator = pedidoService.getProductos().iterator();
             
-            // while (iterator.hasNext()){
-            //     Producto producto = (Producto) ((DoubleLinkedNode) iterator.next()).getObject();
-            //     System.out.println(producto.nombre_producto + " " + producto.precio_unitario);
-            // }
+            while (iterator.hasNext()){
+                Producto producto = (Producto) ((DoubleLinkedNode) iterator.next()).getObject();
+                System.out.println(producto.nombre_producto + " " + producto.precio_unitario);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean insertarCliente(UserClient client) throws RemoteException {
+        try {
+            return Conection.insertarCliente(client);
+
+        } catch (Exception e) {
+            System.out.println("Error, no se pudo insertar el cliente en la base de datos" + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
 

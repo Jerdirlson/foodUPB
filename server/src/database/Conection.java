@@ -133,8 +133,8 @@ public class Conection {
         Producto[] productos = null;
         try {
             c = getConecction();
-        cstm = c.prepareCall("SELECT * FROM tbl_producto");
-        ResultSet rs = cstm.executeQuery();
+            cstm = c.prepareCall("SELECT * FROM tbl_producto");
+            ResultSet rs = cstm.executeQuery();
 
         //Esta lista se debe cambiar por una doblemente enlazada
         List<Producto> listaProductos = new ArrayList<>();
@@ -160,5 +160,58 @@ public class Conection {
         }
 
         return productos;
+    }
+
+    public static boolean insertarCliente(UserClient cliente){
+        boolean result = false;
+                
+        try {
+             c = getConecction();
+            
+            // Primero, inserta la dirección en la tabla tbl_direccion
+            String insertDireccionSQL = "INSERT INTO tbl_direccion (calle, numero, barrio, municipio, casa) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement direccionPS = c.prepareStatement(insertDireccionSQL, Statement.RETURN_GENERATED_KEYS)) {
+                direccionPS.setString(1, cliente.calle);
+                direccionPS.setString(2, cliente.numero);
+                direccionPS.setString(3, cliente.barrio);
+                direccionPS.setString(4, cliente.municipio);
+                direccionPS.setBoolean(5, cliente.casa);
+
+                int rowsAffected = direccionPS.executeUpdate();
+                if (rowsAffected == 1) {
+                    // La inserción en tbl_direccion fue exitosa, obten el ID generado
+                    ResultSet generatedKeys = direccionPS.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        int idDireccion = generatedKeys.getInt(1);
+
+                        // Luego, inserta el usuario en la tabla tbl_cliente con el ID de dirección
+                        String insertClienteSQL = "INSERT INTO tbl_cliente (nombre_cliente, numero_cliente, vip, direccion_cliente) VALUES (?, ?, ?, ?)";
+                        try (PreparedStatement clientePS = c.prepareStatement(insertClienteSQL)) {
+                            clientePS.setString(1, cliente.nombre_client);
+                            clientePS.setLong(2, cliente.numero_cliente);
+                            clientePS.setBoolean(3, cliente.vip);
+                            clientePS.setInt(4, idDireccion);
+
+                            rowsAffected = clientePS.executeUpdate();
+                            if (rowsAffected == 1) {
+                                System.out.println("Inserción exitosa en tbl_cliente");
+                                result = true;
+                            } else {
+                                System.out.println("No se pudo insertar el registro en tbl_cliente");
+                            }
+                        }
+                    } else {
+                        System.out.println("No se pudo obtener el ID de dirección generado.");
+                    }
+                } else {
+                    System.out.println("No se pudo insertar la dirección en tbl_direccion");
+                }
+            }
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+        
+
+        return result;
     }
 }

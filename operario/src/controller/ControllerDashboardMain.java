@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import view.ClienteInputDialog;
 import view.dashboadMainPageView;
 import model.ModelDashboard;
 import entidades.Pedido;
@@ -31,6 +32,8 @@ public class ControllerDashboardMain implements ActionListener{
     public User operario;
     public DoubleLinkedList<Producto> productosElegidos = new DoubleLinkedList<>();
     public Pedido pedido;
+    boolean registroClienteExitoso = false;
+
     /**
      * Constructs a new ControllerDashboard object with the specified view.
      *
@@ -73,6 +76,14 @@ public class ControllerDashboardMain implements ActionListener{
             }
         });
         this.view.jButton1.addActionListener(this);
+
+        //Acciones para el jButton2, que es el boton de enviar pedido
+        view.jButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                enviarPedido();
+            }
+        });
     }
     
     
@@ -122,6 +133,18 @@ public class ControllerDashboardMain implements ActionListener{
 
         JLabel priceLabel = new JLabel("Precio: $" + producto.getPrecio_unitario());
         innerPanel.add(priceLabel, BorderLayout.SOUTH);
+
+        JButton deleteButton = new JButton("Eliminar");
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                productosElegidos.remove(producto);
+                view.selectedProductsPanel.remove(productPanel);
+                view.jScrollPane1.setViewportView(view.selectedProductsPanel);
+                view.jScrollPane1.revalidate();
+            }
+        });
+        innerPanel.add(deleteButton, BorderLayout.EAST);
 
         productPanel.add(innerPanel, BorderLayout.CENTER);
         
@@ -196,15 +219,24 @@ public class ControllerDashboardMain implements ActionListener{
     }
 
     public void enviarPedido(){
-        System.out.println("se esta enviando el producto");
-        pedido = new Pedido();
-        pedido.setCliente(cliente);
-        pedido.setProductos(productosElegidos);
-
-        
-
-        model.enviarPedido(pedido);
-
+        if (!productosElegidos.isEmpty()) {
+            if (cliente.getNombre_client() == null) {
+                System.out.println("Aquí llegar");
+                ClienteInputDialog dialog = new ClienteInputDialog();
+                UserClient clienteData = dialog.showDialog();
+                if (clienteData != null) {
+                    cliente = clienteData;
+                    view.actualizarCamposUsuario(cliente);
+                    model.insertarCliente(cliente);
+                }
+            }
+                System.out.println("Se está enviando el producto");
+                pedido = new Pedido();
+                pedido.setCliente(cliente);
+                pedido.setProductos(productosElegidos);
+                model.enviarPedido(pedido);
+        }else
+        JOptionPane.showMessageDialog(null, "Debe agregar productos antes de continuar.", "Error", JOptionPane.ERROR_MESSAGE);
     }
     
 }

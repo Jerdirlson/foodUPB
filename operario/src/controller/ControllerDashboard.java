@@ -7,7 +7,6 @@ import view.LoginView;
 import view.dashboard;
 
 // Este import es para llamara al controlador del login
-import controller.ControllerLogin;
 import model.ModelLogin;
 
 /**
