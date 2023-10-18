@@ -1,6 +1,7 @@
 package model;
 //Aqui va la conexion a la base de datos 
 
+import app.ConfigLoader;
 import client.Client;
 import entidades.User;
 
@@ -19,10 +20,14 @@ public class ModelLogin {
      * @return           the authenticated user
      */
     public static User getAuthenticatedUser(String email, String password){
+
+        String IP = ConfigLoader.getProperty("IP");
+        String PORT = ConfigLoader.getProperty("PORT");
+        String SERVICENAMEOPERARIO = ConfigLoader.getProperty("SERVICENAMEOPERARIO");
         
         User user = null;
 
-        Client cliente = new Client("localhost", "5000", "servicioOperario");
+        Client cliente = new Client(IP, PORT, SERVICENAMEOPERARIO);
 
         try {
             user = cliente.login(email, password);

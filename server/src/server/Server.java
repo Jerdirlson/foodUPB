@@ -10,7 +10,7 @@ public class Server {
     private String ip;
     private String port;
     private String serviceName;
-    private String uri;
+    public String uri;
 
         /**
      * Constructs a new instance of the Server class with the specified IP address, port number, service name, and URI.

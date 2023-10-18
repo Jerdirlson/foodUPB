@@ -1,6 +1,5 @@
 package Client;
 
-import java.io.Serializable;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -10,11 +9,9 @@ import java.rmi.RemoteException;
 import entidades.Pedido;
 import entidades.Producto;
 import entidades.Stove;
-import entidades.User;
-import entidades.UserClient;
 import Interfaces.SkeletonCocina;
 
-public class ClientCocina implements SkeletonCocina{
+public class Client implements SkeletonCocina{
 
     private SkeletonCocina service;
     private String ip;
@@ -22,7 +19,7 @@ public class ClientCocina implements SkeletonCocina{
     private String serviceName;
     private String url;
 
-    public ClientCocina(String ip, String port, String serviceName){
+    public Client(String ip, String port, String serviceName){
         this.service = null;
         this.ip = ip;
         this.port = port;
@@ -30,6 +27,7 @@ public class ClientCocina implements SkeletonCocina{
         this.url = "rmi://" + ip + ":" + port + "/" + serviceName;
     }
 
+    
     @Override
     public void addOrder(Pedido order) throws RemoteException {
 
@@ -110,10 +108,5 @@ public class ClientCocina implements SkeletonCocina{
         }
     }
 
-   
 
-   
-
-
-    
 }
