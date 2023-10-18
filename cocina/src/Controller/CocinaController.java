@@ -1,6 +1,6 @@
-/*package Controller;
+package Controller;
 
-
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 
@@ -15,38 +15,41 @@ public class CocinaController {
         this.modelo = modelo;
         this.vista = vista;
 
-        // Agrega los controladores de eventos a los botones aquí
-        for (int i = 1; i <= 16; i++) {
+        for (int i = 0; i < 16; i++) {
             final int fogonNumero = i;
-        
-            // ActionListener para el botón "Iniciar" en la vista
-            vista.getIniciarButton(fogonNumero).addActionListener(e -> iniciarPedido(fogonNumero));
-        
-            // ActionListener para el botón "Terminar" en la vista
-            vista.getTerminarButton(fogonNumero).addActionListener(e -> terminarPedido(fogonNumero));
-        
-            // ActionListener para el botón "Mostrar Pedido" en la vista
-            vista.getMostrarPedidoButton(fogonNumero).addActionListener(e -> mostrarPedido(fogonNumero));
+
+            iniciarButtons[i].addActionListener(e -> {
+                try {
+                    iniciarPedido(fogonNumero);
+                } catch (RemoteException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            });
+            terminarButtons[i].addActionListener(e -> {
+                try {
+                    terminarPedido(fogonNumero);
+                } catch (RemoteException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            });
+            mostrarPedidoButtons[i].addActionListener(e -> mostrarPedido(fogonNumero));
         }
     }
 
-    // Implementa los controladores de eventos aquí
-    // Puedes llamar a métodos del modelo y la vista según sea necesario
-
-    public void iniciarPedido(int fogonNumero) {
+    public void iniciarPedido(int fogonNumero) throws RemoteException{
         vista.setEstadoLabel(fogonNumero, "Cocinando pedido");
-        modelo.prepararPedido();
+        int i= fogonNumero;
+         modelo.finishCooking(modelo.getStove(fogonNumero));
     }
 
-    public void terminarPedido(int fogonNumero) {
+    public void terminarPedido(int fogonNumero) throws RemoteException {
         vista.setEstadoLabel(fogonNumero, "Fogon " + fogonNumero);
-        modelo.finishCooking();
+        modelo.finishCooking(modelo.getStove(fogonNumero));
     }
 
     public void mostrarPedido(int fogonNumero) {
-        // Implementa la lógica para mostrar el pedido en el fogón deseado
-        // Utiliza fogonNumero para identificar el fogón y obtener el pedido correspondiente.
-        // Por ejemplo: cocinaModel.mostrarPedido(fogonNumero);
+        // Agregar la lógica para mostrar el pedido en función del fogonNumero si es necesario.
     }
 }
-*/

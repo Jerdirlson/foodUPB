@@ -2,85 +2,114 @@ package View;
 
 import javax.swing.*;
 import Model.CocinaModel;
+import Controller.CocinaController;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class VistaCocina extends JFrame {
     private CocinaModel cocinaModel;
+    private CocinaController controller;
+
+    // Agregar botones y etiquetas necesarios para la interfaz 
+    private JButton[] iniciarButtons;
+    private JButton[] terminarButtons;
+    private JButton[] mostrarPedidoButtons;
+    private JLabel[] estadoLabels;
 
     public VistaCocina() {
-        // Configura la ventana principal
+        // Inicializa los arreglos antes de crear el controlador
+        iniciarButtons = new JButton[16];
+        terminarButtons = new JButton[16];
+        mostrarPedidoButtons = new JButton[16];
+        estadoLabels = new JLabel[16];
+
+        cocinaModel = new CocinaModel();
+
         setTitle("Cocina");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        cocinaModel = new CocinaModel();
 
-        // Crea un panel principal con GridLayout
+        // Configuración del panel principal con GridLayout
         JPanel panelPrincipal = new JPanel(new GridLayout(4, 4));
 
-        // Crea y agrega los botones de fogones
-        for (int i = 1; i <= 16; i++) {
+        for (int i = 0; i < 16; i++) {
             JPanel fogonPanel = new JPanel(new BorderLayout());
-            JButton fogonButton = new JButton("Fogon " + i);
-            JButton iniciarButton = new JButton("Iniciar");
-            JButton terminarButton = new JButton("Terminar");
-            JButton mostrarPedidoButton = new JButton("Mostrar Pedido"); // Botón para mostrar el pedido
-            JLabel estadoLabel = new JLabel("Fogon " + i);
+            iniciarButtons[i] = new JButton("Iniciar");
+            terminarButtons[i] = new JButton("Terminar");
+            mostrarPedidoButtons[i] = new JButton("Mostrar Pedido");
+            estadoLabels[i] = new JLabel("Fogon " + (i + 1));
 
-            fogonPanel.add(estadoLabel, BorderLayout.NORTH);
-            fogonPanel.add(fogonButton, BorderLayout.CENTER);
-            fogonPanel.add(iniciarButton, BorderLayout.WEST);
-            fogonPanel.add(terminarButton, BorderLayout.EAST);
-            fogonPanel.add(mostrarPedidoButton, BorderLayout.SOUTH); // Agrega el botón "Mostrar Pedido" en la parte inferior
+            fogonPanel.add(estadoLabels[i], BorderLayout.NORTH);
+            fogonPanel.add(iniciarButtons[i], BorderLayout.WEST);
+            fogonPanel.add(terminarButtons[i], BorderLayout.EAST);
+            fogonPanel.add(mostrarPedidoButtons[i], BorderLayout.SOUTH);
 
             panelPrincipal.add(fogonPanel);
-
-            // Agrega un ActionListener para los botones de inicio y finalización
-            int fogonNumero = i;
-
-            // ActionListener para el botón "Iniciar" en la vista
-            iniciarButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    
-                    estadoLabel.setText("Cocinando pedido");
-                    cocinaModel.prepararPedido();
-                }
-            });
-
-            // ActionListener para el botón "Terminar" en la vista
-            terminarButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    estadoLabel.setText("Fogon " + fogonNumero);
-                    cocinaModel.finishCooking();
-                }
-            });
-
-            // ActionListener para el botón "Mostrar Pedido" en la vista
-           /*  mostrarPedidoButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    cocinaModel.imprimirPedido(order);
-                    mostrarPedido(fogonNumero);
-                }
-            });*/
         }
 
         // Agrega el panel principal a la ventana
         add(panelPrincipal);
+        setVisible(true);
 
-        // Hacer visible la ventana
+        // Crea el controlador con los arreglos
+        controller = new CocinaController(cocinaModel, this, iniciarButtons, terminarButtons, mostrarPedidoButtons);
+
+        // Asigna controladores de eventos
+        for (int i = 0; i < 16; i++) {
+            final int fogonNumero = i + 1;
+
+            iniciarButtons[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        controller.iniciarPedido(fogonNumero);
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
+
+            terminarButtons[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        controller.terminarPedido(fogonNumero);
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
+
+            mostrarPedidoButtons[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    controller.mostrarPedido(fogonNumero);
+                }
+            });
+        }
+    
+        // Agrega el panel principal a la ventana
+        add(panelPrincipal);
         setVisible(true);
     }
 
-    // Método para mostrar el pedido en un fogón específico
-    private void mostrarPedido(int fogonNumero) {
-        // Implementa la lógica para mostrar el pedido en el fogón deseado
-        // Puedes usar fogonNumero para identificar el fogón y obtener el pedido correspondiente.
-        // Por ejemplo, cocinaModel.mostrarPedido(fogonNumero);
-        // Asegúrate de implementar la lógica adecuada en CocinaModel para mostrar el pedido en un fogón específico.
+    // Métodos para acceder a botones y etiquetas desde el controlador
+    public JButton getIniciarButton(int fogonNumero) {
+        return iniciarButtons[fogonNumero - 1];
+    }
+
+    public JButton getTerminarButton(int fogonNumero) {
+        return terminarButtons[fogonNumero - 1];
+    }
+
+    public JButton getMostrarPedidoButton(int fogonNumero) {
+        return mostrarPedidoButtons[fogonNumero - 1];
+    }
+
+    public void setEstadoLabel(int fogonNumero, String text) {
+        estadoLabels[fogonNumero - 1].setText(text);
     }
 
     public static void main(String[] args) {

@@ -2,12 +2,13 @@
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
         "/home/jerdirlsons/U/Estructuras/proyecto/mysql-connector-j-8.1.0/mysql-connector-j-8.1.0.jar",
-        "c:\\Users\\57314\\Documents\\Estructuras\\mysql-connector-j-8.1.0 (1)\\mysql-connector-j-8.1.0\\mysql-connector-j-8.1.0.jar"
+        "c:\\Users\\dafel\\Downloads\\mysql-connector-j-8.1.0 (1)\\mysql-connector-j-8.1.0\\mysql-connector-j-8.1.0.jar"
     ],
     "java.project.sourcePaths": [
-        "upbfoodd/src",
-        "server/src/view",
-        "operario/src",
-        "cocina/src/view"
+        "cocina\\src\\Model",
+        "cocina\\src\\View",
+        "domiciliario",
+        "operario\\src",
+        "server\\src\\view"
     ]
 }
