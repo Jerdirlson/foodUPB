@@ -17,6 +17,7 @@ public class VistaCocina extends JFrame {
     private JButton[] terminarButtons;
     private JButton[] mostrarPedidoButtons;
     private JLabel[] estadoLabels;
+    private JButton cocinarPedidoButton;
 
     public VistaCocina() {
         // Inicializa los arreglos antes de crear el controlador
@@ -24,6 +25,8 @@ public class VistaCocina extends JFrame {
         terminarButtons = new JButton[16];
         mostrarPedidoButtons = new JButton[16];
         estadoLabels = new JLabel[16];
+        cocinarPedidoButton = new JButton("Cocinar Pedido");
+        add(cocinarPedidoButton, BorderLayout.SOUTH);
 
         cocinaModel = new CocinaModel();
 
@@ -56,6 +59,22 @@ public class VistaCocina extends JFrame {
         // Crea el controlador con los arreglos
         controller = new CocinaController(cocinaModel, this, iniciarButtons, terminarButtons, mostrarPedidoButtons);
 
+
+        cocinarPedidoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    // Llamar al método CocinarPedido
+                    cocinaModel.CocinarPedido(CocinaModel.getPedidoACocinar()); // Asegúrate de obtener el pedido de alguna manera
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
+        // ...
+
+    
         // Asigna controladores de eventos
         for (int i = 0; i < 16; i++) {
             final int fogonNumero = i + 1;

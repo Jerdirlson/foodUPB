@@ -47,6 +47,7 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
             asignarFogon(iterador.next().getObject());
         }
     }
+    
 
 
     public void asignarFogon( Producto producto) throws RemoteException{
@@ -87,6 +88,17 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
     public void mostrarPedido(entidades.Stove stove) throws RemoteException{
         stove.getPedidoPreparandose();
     }
+
+    public static Pedido getPedidoACocinar() throws RemoteException{
+        Pedido pedidoActual;
+        if(!ClientesVIP.isEmpty()){
+            pedidoActual=ClientesVIP.pop();
+        }else{
+            pedidoActual=ClientesNormales.pop();
+        }
+        return pedidoActual;
+    }
+    
 }
 
 

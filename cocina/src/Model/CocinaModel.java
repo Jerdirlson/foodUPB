@@ -42,6 +42,16 @@ public class CocinaModel implements SkeletonCocina{
         ClientCocina clienteCocina= new ClientCocina("localhost", "5000", "serviceCocina");
         clienteCocina.addOrder(order);
     }
+
+    public static Pedido getPedidoACocinar(){
+        Pedido pedidoActual;
+        if(!ClientesVIP.isEmpty()){
+            pedidoActual=ClientesVIP.pop();
+        }else{
+            pedidoActual=ClientesNormales.pop();
+        }
+        return pedidoActual;
+    }
     @Override
     public void CocinarPedido(Pedido order) throws RemoteException{
          ClientCocina clienteCocina= new ClientCocina("localhost", "5000", "serviceCocina");

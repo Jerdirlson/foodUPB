@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 import entidades.estructuras.nodes.DoubleLinkedNode;
+import interfaces.SkeletonCocina;
 
 import database.Conection;
 import entidades.Pedido;
@@ -62,9 +63,7 @@ public class ServiceOperario extends UnicastRemoteObject implements SkeletonOper
     public void enviarPedido(Pedido pedido) throws RemoteException {
         try {
             pedidoService = pedido;
-
-            // ColaPrioridadCocina.cola.add(pedido.getCliente().vip ?1:0, pedido);
-
+             //ServiceCocina.addOrder(pedidoService);
 
             System.out.println(pedidoService.getCliente().nombre_client);
 
