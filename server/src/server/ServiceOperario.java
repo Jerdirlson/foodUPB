@@ -74,6 +74,8 @@ public class ServiceOperario extends UnicastRemoteObject implements SkeletonOper
                 System.out.println(producto.nombre_producto + " " + producto.precio_unitario);
             }
 
+            ServiceCocina.addOrder(pedido);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
