@@ -21,8 +21,8 @@ public class ModelLogin {
      */
     public static User getAuthenticatedUser(String email, String password){
 
-        String IP = ConfigLoader.getProperty("IP");
-        String PORT = ConfigLoader.getProperty("PORT");
+        String IP = ConfigLoader.getProperty("IP_OPERARIO");
+        String PORT = ConfigLoader.getProperty("PORT_OPERARIO");
         String SERVICENAMEOPERARIO = ConfigLoader.getProperty("SERVICENAMEOPERARIO");
         
         User user = null;

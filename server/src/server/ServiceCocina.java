@@ -18,21 +18,31 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
     private static QueueList<Pedido> ClientesVIP;
     static Stove[] stoves;
     protected static Object estadoLabel;
+    private static int fogonNumero;
 
     protected ServiceCocina() throws RemoteException {
         super();
-        //TODO Auto-generated constructor stub
+        stoves = new Stove[16];
+        ClientesNormales = new QueueList<>(); // Inicializa ClientesNormales
+        ClientesVIP = new QueueList<>(); // Inicializa ClientesVIP
 
-        ClientesVIP = new QueueList<Pedido>();
-        ClientesNormales = new QueueList<Pedido>();
+        for (int i = 0; i < 16; i++) {
+            if (i < 4) {
+                stoves[i] = new Stove("Cocción Lenta",(fogonNumero=i));
+               
+            } else {
+                stoves[i] = new Stove("Cocción Rápida",fogonNumero=i);
+        
+            }
+        }
     }
 
     @Override
     public void addOrder(Pedido order) throws RemoteException {
+        System.out.println("ESTO ES LO QUE LLEGA EN VIP " + order.getCliente().getVip());
          if (order.getCliente().getVip() == true) {
             System.out.println("LLEGAA HASTA AQUIIIIIII");
             ClientesVIP.push(order);
-            ClientesNormales.push(order);
         } else  {
             ClientesNormales.push(order);
         }

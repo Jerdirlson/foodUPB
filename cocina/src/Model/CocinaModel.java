@@ -111,5 +111,11 @@ public class CocinaModel implements SkeletonCocina{
         return CocinaModel.stoves[fogonNumero];
     }
 
+    public void mostrarPedidosPendientes() {
+        
+        ClientesVIP.iterateStack();
+        ClientesNormales.iterateStack();
+    }
+
 }
 

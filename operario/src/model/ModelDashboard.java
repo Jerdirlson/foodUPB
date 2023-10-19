@@ -8,8 +8,8 @@ import entidades.Producto;
 
 public class ModelDashboard {
     
-    public static String IP = ConfigLoader.getProperty("IP");
-    public static String PORT = ConfigLoader.getProperty("PORT");
+    public static String IP = ConfigLoader.getProperty("IP_OPERARIO");
+    public static String PORT = ConfigLoader.getProperty("PORT_OPERARIO");
     public static String SERVICENAMEOPERARIO = ConfigLoader.getProperty("SERVICENAMEOPERARIO");
 
 
