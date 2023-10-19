@@ -79,7 +79,7 @@ public class Registro extends JFrame {
             }
         });
 
-        // Agrega el panel principal al panel de fondo con imagen
+        // Se agrega el panel principal al panel de fondo con imagen
         backgroundPanel.add(mainPanel, BorderLayout.WEST);
 
         this.setContentPane(backgroundPanel);

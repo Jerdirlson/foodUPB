@@ -2,79 +2,89 @@ package server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
-import database.Conection;
+import entidades.Pedido;
 import entidades.Producto;
+import entidades.UserClient;
+import entidades.estructuras.doublee.linked.DoubleLinkedList;
+import entidades.estructuras.nodes.DoubleLinkedNode;
+import entidades.estructuras.queue.QueueList;
 import interfaces.SkeletonDomicilio;
 
 public class ServiceDomicilio extends UnicastRemoteObject implements SkeletonDomicilio {
+    private QueueList<Pedido> pedidos = new QueueList<>();
+    private double totalMonto = 0.0;
+
     public ServiceDomicilio() throws RemoteException {
+        super();
     }
 
-    public String registrarPedido(String datos) throws RemoteException {
-        try (Connection connection = Conection.getConecction();
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement("INSERT INTO pedidos (datos) VALUES (?)")) {
-            preparedStatement.setString(1, datos);
-
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                return "Pedido registrado con éxito";
-            } else {
-                return "Error al registrar el pedido";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error al registrar el pedido: " + e.getMessage();
+    public double calcularTotalPorPedido(Pedido pedido) throws RemoteException {
+        DoubleLinkedList<Producto> productos = pedido.getProductos();
+        double totalPedido = 0.0;
+        for (DoubleLinkedNode<Producto> node = productos.getHead(); node != null; node = node.getNext()) {
+            Producto producto = node.getObject();
+            totalPedido += producto.getPrecio_unitario() ;
         }
+
+        return totalPedido;
     }
 
-    public String consultarEstadoPedido(int numeroPedido) throws RemoteException {
-        try (Connection connection = Conection.getConecction();
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement("SELECT estado FROM pedidos WHERE numeroPedido = ?")) {
-            preparedStatement.setInt(1, numeroPedido);
+    public void generarFactura(Pedido pedido) throws RemoteException {
+        double totalPedido = calcularTotalPorPedido(pedido);
+        System.out.println("=== Factura ===");
+        System.out.println("Total: " + totalPedido);
+    }
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    String estado = resultSet.getString("estado");
-                    return "Estado del pedido: " + estado;
-                } else {
-                    return "Pedido no encontrado";
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error al consultar el estado del pedido: " + e.getMessage();
+    @Override
+    public void addPedido(UserClient cliente) throws RemoteException {
+        Pedido pedido = new Pedido();
+        pedido.setCliente(cliente);
+        pedidos.push(pedido);
+        double costoPedido = calcularTotalPorPedido(pedido);
+        totalMonto += costoPedido;
+        System.out.println("Pedido agregado para el cliente: " + cliente.getNombre_client());
+        System.out.println("Costo del pedido: " + costoPedido);
+        System.out.println("Monto total actual: " + totalMonto);
+    }
+
+    @Override
+    public void addProductoToPedido(Producto producto, Pedido pedido) throws RemoteException {
+        pedido.getProductos().add(producto);
+        totalMonto += producto.getPrecio_unitario();
+        System.out.println("Producto agregado al pedido: " + producto.getNombre_producto());
+        System.out.println("Monto total actual: " + totalMonto);
+    }
+
+    @Override
+    public double getMontoTotal() throws RemoteException {
+        return totalMonto;
+    }
+
+    
+
+    @Override
+    public int getCostoDomicilio(UserClient user) throws RemoteException {
+        String municipio = user.getMunicipio();
+
+        if (municipio.equalsIgnoreCase("Piedecuesta")) {
+            return 15000;
+        } else if (municipio.equalsIgnoreCase("Bucaramanga")) {
+            return 13000;
+        } else if (municipio.equalsIgnoreCase("Florida")) {
+            return 9000;
+        } else if (municipio.equalsIgnoreCase("Girón")) {
+            return 10000;
         }
+        return -1;
     }
 
-    public Producto obtenerPedido(int numeroPedido) throws RemoteException {
-        try (Connection connection = Conection.getConecction();
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement("SELECT numero_pedido, descripcion FROM pedidos WHERE numero_pedido = ?")) {
-            preparedStatement.setInt(1, numeroPedido);
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    int numeroPedidoDB = resultSet.getInt("numero_pedido");
-                    String descripcion = resultSet.getString("descripcion");
-
-                    Producto producto = new Producto();
-                    producto.setNombre_producto(descripcion);
-                    producto.setPrecio_unitario((long) numeroPedidoDB);
-                    producto.setUri_img(""); // Agregar la imagen del producto
-
-                    return producto;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Override
+    public UserClient getCurrentUser() throws RemoteException {
+        return getCurrentUser();
     }
+
+
+    
+
 }

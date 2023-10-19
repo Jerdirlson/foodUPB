@@ -13,8 +13,7 @@ public class UserClient implements Serializable{
     public String municipio;
 
 
-    public UserClient(String nombre_client, Long numero_cliente, Boolean vip, String barrio, String calle, String numero,
-            Boolean casa, String municipio) {
+    public UserClient(String nombre_client, Long numero_cliente, Boolean vip, String barrio, String calle, String numero,Boolean casa, String municipio) {
         this.nombre_client = nombre_client;
         this.numero_cliente = numero_cliente;
         this.vip = vip;

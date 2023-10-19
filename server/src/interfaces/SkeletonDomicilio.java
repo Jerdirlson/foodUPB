@@ -3,10 +3,25 @@ package interfaces;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import entidades.Pedido;
 import entidades.Producto;
-import entidades.User;
+import entidades.UserClient;
+import entidades.estructuras.nodes.DoubleLinkedNode;
 
 public interface SkeletonDomicilio extends Remote {
-    String registrarPedido(String datos) throws RemoteException;
-    String consultarEstadoPedido(int numeroPedido) throws RemoteException;
+
+    void addPedido(UserClient cliente) throws RemoteException;
+
+    void addProductoToPedido(Producto producto, Pedido pedido) throws RemoteException;
+
+    double calcularTotalPorPedido(Pedido pedido) throws RemoteException;
+
+    void generarFactura(Pedido pedido) throws RemoteException;
+
+    double getMontoTotal() throws RemoteException;
+
+    public  int getCostoDomicilio(UserClient user)throws RemoteException;
+
+    public UserClient getCurrentUser() throws RemoteException;
+
 }

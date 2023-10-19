@@ -4,9 +4,6 @@ import interfaces.SkeletonOperario;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Iterator;
-import entidades.estructuras.nodes.DoubleLinkedNode;
-import interfaces.SkeletonCocina;
 
 import database.Conection;
 import entidades.Pedido;
@@ -15,11 +12,10 @@ import entidades.User;
 import entidades.UserClient;
 public class ServiceOperario extends UnicastRemoteObject implements SkeletonOperario{
 
-    public Pedido pedidoService = new Pedido();
+    Pedido pedidoService = new Pedido();
 
     protected ServiceOperario() throws RemoteException {
         super();
-        //TODO Auto-generated constructor stub
     }
 
     @Override
@@ -63,16 +59,18 @@ public class ServiceOperario extends UnicastRemoteObject implements SkeletonOper
     public void enviarPedido(Pedido pedido) throws RemoteException {
         try {
             pedidoService = pedido;
-             //ServiceCocina.addOrder(pedidoService);
+
+            // ColaPrioridadCocina.cola.add(pedido.getCliente().vip ?1:0, pedido);
 
             System.out.println(pedidoService.getCliente().nombre_client);
 
-            Iterator iterator = pedidoService.getProductos().iterator();
+            System.out.println(((Producto)pedidoService.getProductos().pop()).getNombre_producto());
+            // Iterator iterator = pedidoService.getProductos().iterator();
             
-            while (iterator.hasNext()){
-                Producto producto = (Producto) ((DoubleLinkedNode) iterator.next()).getObject();
-                System.out.println(producto.nombre_producto + " " + producto.precio_unitario);
-            }
+            // while (iterator.hasNext()){
+            //     Producto producto = (Producto) ((DoubleLinkedNode) iterator.next()).getObject();
+            //     System.out.println(producto.nombre_producto + " " + producto.precio_unitario);
+            // }
 
             ServiceCocina cocinaService = new ServiceCocina();
             cocinaService.addOrder(pedido);
@@ -84,14 +82,8 @@ public class ServiceOperario extends UnicastRemoteObject implements SkeletonOper
 
     @Override
     public boolean insertarCliente(UserClient client) throws RemoteException {
-        try {
-            return Conection.insertarCliente(client);
-
-        } catch (Exception e) {
-            System.out.println("Error, no se pudo insertar el cliente en la base de datos" + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'insertarCliente'");
     }
 
     

@@ -4,22 +4,24 @@ import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
 import interfaces.SkeletonCocina;
+import interfaces.SkeletonDomicilio;
 import interfaces.SkeletonOperario;
 
 public class Server {
-    
+
     private String ip;
     private String port;
     private String serviceName;
     public String uri;
 
-        /**
-     * Constructs a new instance of the Server class with the specified IP address, port number, service name, and URI.
+    /**
+     * Constructs a new instance of the Server class with the specified IP address,
+     * port number, service name, and URI.
      *
-     * @param ip           the IP address of the server
-     * @param port         the port number of the server
+     * @param ip          the IP address of the server
+     * @param port        the port number of the server
      * @param serviceName the name of the service
-     * @param uri          the URI of the service
+     * @param uri         the URI of the service
      */
     public Server(String ip, String port, String serviceName) {
         this.ip = ip;
@@ -29,10 +31,12 @@ public class Server {
     }
 
     /**
-     * Deploys the service by setting the "java.rmi.server.hostname" system property to the specified IP address,
-     * creating a registry on the specified port, and binding the service to the specified URI.
+     * Deploys the service by setting the "java.rmi.server.hostname" system property
+     * to the specified IP address,
+     * creating a registry on the specified port, and binding the service to the
+     * specified URI.
      *
-     * @return  true if the service is deployed successfully, false otherwise
+     * @return true if the service is deployed successfully, false otherwise
      */
     public boolean deploy(boolean isOperario) {
     boolean bool = false;
