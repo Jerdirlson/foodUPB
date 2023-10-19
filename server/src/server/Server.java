@@ -3,6 +3,7 @@ package server;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
+import interfaces.SkeletonCocina;
 import interfaces.SkeletonOperario;
 
 public class Server {
@@ -33,18 +34,29 @@ public class Server {
      *
      * @return  true if the service is deployed successfully, false otherwise
      */
-    public boolean deploy() {
-        boolean bool = false;
-        try {
-                if (ip == null | port == null | serviceName == null) return bool;
-            System.setProperty("java.rmi.server.hostname", ip);
+    public boolean deploy(boolean isOperario) {
+    boolean bool = false;
+    try {
+        if (ip == null || port == null || serviceName == null) {
+            return bool;
+        }
+        
+        System.setProperty("java.rmi.server.hostname", ip);
+        
+        if (isOperario) {
             SkeletonOperario service = new ServiceOperario();
             LocateRegistry.createRegistry(Integer.parseInt(port));
             Naming.rebind(uri, service);
-            bool = true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            SkeletonCocina service = new ServiceCocina();
+            LocateRegistry.createRegistry(Integer.parseInt(port));
+            Naming.rebind(uri, service);
         }
-        return bool;
+        
+        bool = true;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    return bool;
+}
 }

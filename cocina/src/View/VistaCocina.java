@@ -65,6 +65,8 @@ public class VistaCocina extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     // Llamar al método CocinarPedido
+                    cocinaModel.getClientesVip();
+                    cocinaModel.getClientesNoVip();
                     cocinaModel.CocinarPedido(CocinaModel.getPedidoACocinar()); // Asegúrate de obtener el pedido de alguna manera
                 } catch (RemoteException e1) {
                     e1.printStackTrace();

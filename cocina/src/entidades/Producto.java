@@ -7,16 +7,19 @@ public class Producto implements Serializable{
     public String nombre_producto;
     public Long precio_unitario;
     public String uri_img;
-    public int tiempoDeCocion;
+    public int  tiempoDeCocion;
+    public int  numeroFogonDondeSeEstaCocinando;
 
     public Producto(){
 
     }
 
-    public Producto(String nombre_producto, Long precio_unitario, String uri_img) {
+    public Producto(String nombre_producto, Long precio_unitario, String uri_img, int tiempoDeCocion) {
         this.nombre_producto = nombre_producto;
         this.precio_unitario = precio_unitario;
         this.uri_img = uri_img;
+        this.tiempoDeCocion=tiempoDeCocion;
+        this.numeroFogonDondeSeEstaCocinando=17; 
     }
 
 
@@ -44,14 +47,21 @@ public class Producto implements Serializable{
     public void setUri_img(String uri_img) {
         this.uri_img = uri_img;
     }
+   
+     public int getTiempoDeCocion(){
+        return this.tiempoDeCocion;
+     }
 
-    public int getTiempoDeCocion(){
-        return tiempoDeCocion;
-    }
-    public void setTiempoDeCocion(int tiempoDeCocion){
+     public void setTiempoDeCocion(int tiempoDeCocion){
         this.tiempoDeCocion=tiempoDeCocion;
-    }
+     }
+     public int getNumeroFogonDondeSeEstaCocinando(){
+        return this.numeroFogonDondeSeEstaCocinando;
+     }
 
+     public void setNumeroFogonDondeSeEstaCocinando(int numeroFogonDondeSeEstaCocinando){
+        this.numeroFogonDondeSeEstaCocinando= numeroFogonDondeSeEstaCocinando;
+     }
     
 
 

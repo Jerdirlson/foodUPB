@@ -1,16 +1,10 @@
 package server;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
-import java.util.concurrent.Semaphore;
 
-import javax.swing.JOptionPane;
 
-import app.ConfigLoader;
 import entidades.Pedido;
 import entidades.Producto;
 import entidades.estructuras.interfaces.node.NodeInterface;
@@ -28,23 +22,31 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
     protected ServiceCocina() throws RemoteException {
         super();
         //TODO Auto-generated constructor stub
+
+        ClientesVIP = new QueueList<Pedido>();
+        ClientesNormales = new QueueList<Pedido>();
     }
 
     @Override
     public void addOrder(Pedido order) throws RemoteException {
          if (order.getCliente().getVip() == true) {
+            System.out.println("LLEGAA HASTA AQUIIIIIII");
             ClientesVIP.push(order);
             ClientesNormales.push(order);
         } else  {
             ClientesNormales.push(order);
         }
-        throw new UnsupportedOperationException("Unimplemented method 'addOrder'");
     }
 
    public void CocinarPedido(Pedido order) throws RemoteException{
-        Iterator<NodeInterface<Producto>> iterador = order.getProductos().iterator();
-        while(iterador.hasNext()) {
-            asignarFogon(iterador.next().getObject());
+        try {
+            Iterator<NodeInterface<Producto>> iterador = order.getProductos().iterator();
+            while(iterador.hasNext()) {
+                asignarFogon(iterador.next().getObject());
+            }
+            
+        } catch (Exception e) {
+            System.out.println("El error esta en CocinarPedido " + e.getMessage());
         }
     }
     
@@ -72,11 +74,11 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
     }
 
 
+    //Preguntarle a anagie porque esto no esta igual que en la cocina
     @Override
-    public void finishCooking(Producto producto) throws RemoteException {
-        int i=producto.getNumeroFogonDondeSeEstaCocinando();
-        stoves[i].setAvailable(true);
-        
+    public void finishCooking(Stove producto) throws RemoteException {
+    //     int i=producto.getNumeroFogonDondeSeEstaCocinando();
+    //     stoves[i].setAvailable(true);
     }
 
     @Override
@@ -97,6 +99,26 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
             pedidoActual=ClientesNormales.pop();
         }
         return pedidoActual;
+    }
+
+    @Override
+    public QueueList getClientesVip() throws RemoteException {
+        try {
+            return ClientesVIP;
+        } catch (Exception e) {
+            System.out.println("Error en getCLientesVip serviceCocina: " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public QueueList getClientesNoVip() throws RemoteException {
+        try {
+            return ClientesNormales;
+        } catch (Exception e) {
+            System.out.println("Error en getCLientesVip serviceCocina: " + e.getMessage());
+            return null;
+        }
     }
     
 }

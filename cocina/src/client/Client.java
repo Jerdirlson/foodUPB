@@ -1,4 +1,4 @@
-package Client;
+package client;
 
 
 import java.net.MalformedURLException;
@@ -9,7 +9,8 @@ import java.rmi.RemoteException;
 import entidades.Pedido;
 import entidades.Producto;
 import entidades.Stove;
-import Interfaces.SkeletonCocina;
+import entidades.estructuras.queue.QueueList;
+import interfaces.SkeletonCocina;
 
 public class Client implements SkeletonCocina{
 
@@ -105,6 +106,32 @@ public class Client implements SkeletonCocina{
         } catch (MalformedURLException | RemoteException | NotBoundException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+
+    @Override
+    public QueueList getClientesVip() throws RemoteException {
+        try{
+            service = (SkeletonCocina) Naming.lookup(url);
+            return service.getClientesVip();
+        } catch (MalformedURLException | RemoteException | NotBoundException e) {
+            System.out.println("Error en getClientesVip() : " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    @Override
+    public QueueList getClientesNoVip() throws RemoteException {
+        try{
+            service = (SkeletonCocina) Naming.lookup(url);
+            return service.getClientesNoVip();
+        } catch (MalformedURLException | RemoteException | NotBoundException e) {
+            System.out.println("Error en getClientesNoVip() : " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
     }
 
