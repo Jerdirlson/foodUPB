@@ -1,36 +1,30 @@
-package controller;
+package client;
 
-import model.Persona;
-import model.Producto;
-import view.FacturaView;
-
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.List;
-
-import javax.swing.SwingUtilities;
 
 import entidades.Pedido;
+import entidades.Producto;
 import entidades.UserClient;
-import entidades.estructuras.doublee.circular.DoubleCircularList;
 import interfaces.SkeletonDomicilio;
 
-public class ControllerFactura implements SkeletonDomicilio {
+public class ClienteDomicilio implements SkeletonDomicilio {
+
     private SkeletonDomicilio service;
     private String ip;
     private String port;
     private String serviceName;
     private String url;
-    private UserClient currentUser;
 
-    public ControllerFactura(String ip, String port, String serviceName) {
+    public ClienteDomicilio(String ip, String port, String serviceName) {
         this.service = null;
         this.ip = ip;
         this.port = port;
         this.serviceName = serviceName;
         this.url = "rmi://" + ip + ":" + port + "/" + serviceName;
     }
-
 
     @Override
     public void addPedido(UserClient cliente) throws RemoteException {
@@ -44,32 +38,34 @@ public class ControllerFactura implements SkeletonDomicilio {
     }
 
     @Override
-    public void addProductoToPedido(entidades.Producto producto, Pedido pedido) throws RemoteException {
+
+    public void addProductoToPedido(Producto producto, Pedido pedido) throws RemoteException {
         try {
             service = (SkeletonDomicilio) Naming.lookup(url);
             service.addProductoToPedido(producto, pedido);
         } catch (Exception e) {
             System.err.println("Error en enviar el pedido");
             e.printStackTrace();
-            throw new UnsupportedOperationException("Unimplemented method 'addProductoToPedido'");
         }
-
     }
 
     @Override
     public double calcularTotalPorPedido(Pedido pedido) throws RemoteException {
+
         try {
             service = (SkeletonDomicilio) Naming.lookup(url);
             service.calcularTotalPorPedido(pedido);
         } catch (Exception e) {
             System.err.println("Error en enviar el pedido");
             e.printStackTrace();
-        } // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'calcularTotalPorPedido'");
+        }
+        return 0;
     }
 
     @Override
+
     public void generarFactura(Pedido pedido) throws RemoteException {
+
         try {
             service = (SkeletonDomicilio) Naming.lookup(url);
             service.generarFactura(pedido);
@@ -77,8 +73,6 @@ public class ControllerFactura implements SkeletonDomicilio {
             System.err.println("Error en enviar el pedido");
             e.printStackTrace();
         }
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'generarFactura'");
     }
 
     @Override
@@ -89,20 +83,21 @@ public class ControllerFactura implements SkeletonDomicilio {
         } catch (Exception e) {
             System.err.println("Error en enviar el pedido");
             e.printStackTrace();
-        } // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMontoTotal'");
+        }
+        return 0;
     }
 
     @Override
     public int getCostoDomicilio(UserClient user) throws RemoteException {
+
         try {
             service = (SkeletonDomicilio) Naming.lookup(url);
             service.getCostoDomicilio(user);
         } catch (Exception e) {
             System.err.println("Error en enviar el pedido");
             e.printStackTrace();
-        } // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCostoDomicilio'");
+        }
+        return 0;
     }
 
     @Override
@@ -114,8 +109,7 @@ public class ControllerFactura implements SkeletonDomicilio {
             System.err.println("Error en enviar el pedido");
             e.printStackTrace();
         }
-        {
-            return getCurrentUser();
-        }
+        throw new UnsupportedOperationException("Unimplemented method 'getCurrentUser'");
     }
+
 }
