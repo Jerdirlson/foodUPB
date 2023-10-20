@@ -1,19 +1,35 @@
 package interfaces;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import entidades.Pedido;
+import entidades.Producto;
+import entidades.UserClient;
 import entidades.estructuras.nodes.DoubleLinkedNode;
 import entidades.estructuras.priorityQueue.PriorityQueueList;
 
-public class SkeletonDomicilio  extends Remote{
+public interface SkeletonDomicilio  extends Remote{
     
     
-    public DoubleLinkedNode<Pedido> obtenerPedido(int numeroPedido) throws RemoteException;
+    void addPedido(UserClient cliente) throws RemoteException;
 
-    void marcarDomicilioEnCamino(int numeroPedido) throws RemoteException;
+    void addProductoToPedido(Producto producto, Pedido pedido) throws RemoteException;
 
-    public PriorityQueueList<Pedido> buscarPedidosEnZona(String zona) throws RemoteException;
+    double calcularTotalPorPedido(Pedido pedido) throws RemoteException;
 
+    void generarFactura(Pedido pedido) throws RemoteException;
+
+    double getMontoTotal() throws RemoteException;
+
+    public  int getCostoDomicilio(UserClient user)throws RemoteException;
+
+    public UserClient getCurrentUser() throws RemoteException;
+
+    void agregarPedido(Pedido pedido) throws RemoteException;
+
+    void entregarPedidos() throws RemoteException;
+
+    void entregarPedido(Pedido pedido);
     
 }

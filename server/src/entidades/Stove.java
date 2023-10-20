@@ -1,10 +1,11 @@
 package entidades;
 
+import java.io.Serializable;
 
 import entidades.estructuras.queue.QueueArray;
 
 
- public class Stove {
+ public class Stove implements Serializable{
     private String cookingType;
     private boolean available;
     private QueueArray<Producto> pedidosPreparandose;
@@ -45,6 +46,7 @@ import entidades.estructuras.queue.QueueArray;
 
     public void setPedidosPreparandose(Producto producto){
         this.pedidosPreparandose.push(producto);
+        System.out.println("Esta haciendo bien el push");
     }
 
     public int getFogonNumero(){

@@ -112,4 +112,51 @@ public class ClienteDomicilio implements SkeletonDomicilio {
         throw new UnsupportedOperationException("Unimplemented method 'getCurrentUser'");
     }
 
+    @Override
+    public void agregarPedido(Pedido pedido) throws RemoteException {
+        try {
+            service = (SkeletonDomicilio) Naming.lookup(url);
+            service.agregarPedido(pedido);
+        } catch (Exception e) {
+            System.err.println("Error en enviar el pedido");
+            e.printStackTrace();
+        }
+        throw new UnsupportedOperationException("Unimplemented method 'agregarPedido'");
+    }
+
+    @Override
+    public void entregarPedidos() throws RemoteException {
+       try {
+            service = (SkeletonDomicilio) Naming.lookup(url);
+            service.entregarPedidos();
+        } catch (Exception e) {
+            System.err.println("Error en enviar el pedido");
+            e.printStackTrace();
+        }
+        throw new UnsupportedOperationException("Unimplemented method 'entregarPedidos'");
+    }
+
+    @Override
+    public void entregarPedido(Pedido pedido) {
+       try {
+            service = (SkeletonDomicilio) Naming.lookup(url);
+            service.entregarPedido(pedido);
+        } catch (Exception e) {
+            System.err.println("Error en enviar el pedido");
+            e.printStackTrace();
+        }
+        throw new UnsupportedOperationException("Unimplemented method 'entregarPedido'");
+    }
+
+    public boolean isConnected() throws RemoteException{
+        try{
+            System.out.println(url);
+            service = (SkeletonDomicilio) Naming.lookup(url);
+            return true;
+        } catch (MalformedURLException | RemoteException | NotBoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

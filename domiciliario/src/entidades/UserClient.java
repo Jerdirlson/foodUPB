@@ -109,5 +109,7 @@ public class UserClient implements Serializable{
     public void setMunicipio(String municipio) {
         this.municipio = municipio;
     }
+
+
     
 }

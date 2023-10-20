@@ -73,6 +73,7 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
                 if(stoves[i].isAvailable()==true){
                     stoves[i].setPedidosPreparandose(producto);
                     producto.setNumeroFogonDondeSeEstaCocinando(i);
+                    System.out.println("Estoy poniendo el pedido donde debia");
                 }
             }
         }

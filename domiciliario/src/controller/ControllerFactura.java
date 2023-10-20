@@ -1,121 +1,103 @@
 package controller;
 
-import model.Persona;
-import model.Producto;
-import view.FacturaView;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
-import java.rmi.Naming;
-import java.rmi.RemoteException;
-import java.util.List;
-
-import javax.swing.SwingUtilities;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 
 import entidades.Pedido;
+import entidades.Producto;
 import entidades.UserClient;
-import entidades.estructuras.doublee.circular.DoubleCircularList;
+import entidades.estructuras.doublee.linked.DoubleLinkedList;
 import interfaces.SkeletonDomicilio;
 
-public class ControllerFactura implements SkeletonDomicilio {
-    private SkeletonDomicilio service;
-    private String ip;
-    private String port;
-    private String serviceName;
-    private String url;
-    private UserClient currentUser;
+public class ControllerFactura {
+    private SkeletonDomicilio skeletonDomicilio;
+    private DefaultListModel<Producto> facturaListModel;
+    private JList<Producto> facturaList;
+    private Pedido currentPedido;
 
-    public ControllerFactura(String ip, String port, String serviceName) {
-        this.service = null;
-        this.ip = ip;
-        this.port = port;
-        this.serviceName = serviceName;
-        this.url = "rmi://" + ip + ":" + port + "/" + serviceName;
+    public ControllerFactura(String serverIP, int serverPort, String serviceName,
+            DefaultListModel<Producto> facturaListModel, JList<Producto> facturaList) {
+        try {
+            Registry registry = LocateRegistry.getRegistry(serverIP, serverPort);
+            skeletonDomicilio = (SkeletonDomicilio) registry.lookup(serviceName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.facturaListModel = facturaListModel;
+        this.facturaList = facturaList;
     }
 
+    public UserClient getCurrentUser() {
+        UserClient currentUser = new UserClient();
+        currentUser.setNombre_client("Nombre del Cliente");
+        currentUser.setMunicipio("Municipio del Cliente");
 
-    @Override
-    public void addPedido(UserClient cliente) throws RemoteException {
+        return currentUser;
+    }
+
+    public void addPedido(UserClient cliente) {
         try {
-            service = (SkeletonDomicilio) Naming.lookup(url);
-            service.addPedido(cliente);
+            skeletonDomicilio.addPedido(cliente);
         } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void addProductoToPedido(entidades.Producto producto, Pedido pedido) throws RemoteException {
+    public void addProductoToPedido(Producto producto, Pedido pedido) {
         try {
-            service = (SkeletonDomicilio) Naming.lookup(url);
-            service.addProductoToPedido(producto, pedido);
+            skeletonDomicilio.addProductoToPedido(producto, pedido);
         } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
-            e.printStackTrace();
-            throw new UnsupportedOperationException("Unimplemented method 'addProductoToPedido'");
-        }
-
-    }
-
-    @Override
-    public double calcularTotalPorPedido(Pedido pedido) throws RemoteException {
-        try {
-            service = (SkeletonDomicilio) Naming.lookup(url);
-            service.calcularTotalPorPedido(pedido);
-        } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
-            e.printStackTrace();
-        } // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'calcularTotalPorPedido'");
-    }
-
-    @Override
-    public void generarFactura(Pedido pedido) throws RemoteException {
-        try {
-            service = (SkeletonDomicilio) Naming.lookup(url);
-            service.generarFactura(pedido);
-        } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
             e.printStackTrace();
         }
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'generarFactura'");
     }
 
-    @Override
-    public double getMontoTotal() throws RemoteException {
+    public double getCostoDomicilio(UserClient user) {
         try {
-            service = (SkeletonDomicilio) Naming.lookup(url);
-            service.getMontoTotal();
+            return skeletonDomicilio.getCostoDomicilio(user);
         } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
             e.printStackTrace();
-        } // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMontoTotal'");
-    }
-
-    @Override
-    public int getCostoDomicilio(UserClient user) throws RemoteException {
-        try {
-            service = (SkeletonDomicilio) Naming.lookup(url);
-            service.getCostoDomicilio(user);
-        } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
-            e.printStackTrace();
-        } // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCostoDomicilio'");
-    }
-
-    @Override
-    public UserClient getCurrentUser() throws RemoteException {
-        try {
-            service = (SkeletonDomicilio) Naming.lookup(url);
-            service.getCurrentUser();
-        } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
-            e.printStackTrace();
-        }
-        {
-            return getCurrentUser();
+            return 0.0;
         }
     }
+
+    public void deliverPedido() {
+        if (currentPedido != null) {
+            // Agrega la lógica para entregar el pedido, por ejemplo, a través de RMI
+            try {
+                skeletonDomicilio.entregarPedido(currentPedido);
+                currentPedido = null; // Marca el pedido como entregado
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public DoubleLinkedList<Producto> getSelectedProducts() {
+        DoubleLinkedList<Producto> productList = new DoubleLinkedList<>();
+
+        int[] selectedIndices = facturaList.getSelectedIndices();
+
+        for (int index : selectedIndices) {
+            if (index >= 0 && index < facturaListModel.size()) {
+                Producto selectedProduct = facturaListModel.getElementAt(index);
+                productList.add(selectedProduct);
+            }
+        }
+
+        return productList;
+    }
+
+    public DoubleLinkedList<Producto> getProductList() {
+        DoubleLinkedList<Producto> productList = new DoubleLinkedList<>();
+        return productList;
+    }
+
+    public Pedido getCurrentPedido() {
+        return currentPedido;
+    }
+
 }

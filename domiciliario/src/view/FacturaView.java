@@ -2,22 +2,23 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileInputStream;
-import java.rmi.RemoteException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import controller.ControllerFactura;
+import entidades.Pedido;
 import entidades.Producto;
 import entidades.UserClient;
 import entidades.estructuras.doublee.linked.DoubleLinkedList;
-import entidades.estructuras.nodes.DoubleLinkedNode;
 
 public class FacturaView extends JFrame {
     private ControllerFactura controller;
-    private DoubleLinkedList<Producto> facturaProductos;
-    private JList<String> facturaList;
+    private UserClient selectedClient;
+    private DefaultListModel<Producto> facturaListModel;
+    private JList<Producto> facturaList;
 
     public FacturaView(ControllerFactura controller) {
         this.controller = controller;
-        // Constructor de FacturaView
+        this.selectedClient = null;
 
         setTitle("Factura de Compra");
         int anchoVentana = 800;
@@ -38,11 +39,8 @@ public class FacturaView extends JFrame {
         tituloLabel.setForeground(Color.RED);
         tituloPanel.add(tituloLabel);
 
-        facturaProductos = new DoubleLinkedList<>();
-        facturaList = new JList<>();
-
-        Font fuentePersonalizada = cargarFuentePersonalizada("ruta_a_fuente/rainyhearts.ttf", 18.0f);
-        aplicarFuentePersonalizada(facturaList, fuentePersonalizada);
+        facturaListModel = new DefaultListModel<>();
+        facturaList = new JList<>(facturaListModel);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -56,78 +54,89 @@ public class FacturaView extends JFrame {
         gbc.weighty = 1.0;
         panelPrincipal.add(new JScrollPane(facturaList), gbc);
 
+        JButton agregarPedidoButton = new JButton("Agregar Pedido");
+        agregarPedidoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    selectedClient = controller.getCurrentUser();
+                    if (selectedClient != null) {
+                        Pedido pedido = new Pedido();
+                        controller.addPedido(selectedClient);
+                        refreshFactura();
+                    } else {
+                        JOptionPane.showMessageDialog(FacturaView.this, "No se ha seleccionado un cliente válido.");
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        JButton agregarProductoButton = new JButton("Agregar Producto a Pedido");
+        agregarProductoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedClient != null) {
+                    DoubleLinkedList<Producto> selectedProducts = controller.getSelectedProducts();
+                    if (selectedProducts != null) {
+                        Pedido pedido = new Pedido();
+                        pedido.setProductos(selectedProducts);
+                        refreshFactura();
+                    } else {
+                        JOptionPane.showMessageDialog(FacturaView.this, "Por favor, seleccione productos.");
+                    }
+                }
+            }
+        });
+
+        JButton entregarPedidosButton = new JButton("Entregar Pedidos");
+        entregarPedidosButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controller.deliverPedido();
+                    JOptionPane.showMessageDialog(FacturaView.this, "Los pedidos han sido entregados.");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        gbc.gridy = 2;
+        panelPrincipal.add(agregarPedidoButton, gbc);
+        gbc.gridy = 3;
+        panelPrincipal.add(agregarProductoButton, gbc);
+        gbc.gridy = 4;
+        panelPrincipal.add(entregarPedidosButton, gbc);
+
         setContentPane(panelPrincipal);
     }
 
-    public void agregarProductoALaFactura(Producto producto) {
-        facturaProductos.add(producto);
-        actualizarFactura();
-    }
-
-    public void actualizarFactura() {
-        DefaultListModel<String> facturaListModel = new DefaultListModel<>();
-
-        for (DoubleLinkedNode<Producto> current = facturaProductos.getHead(); current != null; current = current.getNext()) {
-            Producto producto = current.getObject();
-            facturaListModel.addElement(producto.getNombre_producto() + " - $" + producto.getPrecio_unitario());
+    private void refreshFactura() {
+        facturaListModel.clear();
+        if (selectedClient != null) {
+            DoubleLinkedList<Producto> productos = Pedido.getProductos();
+            if (productos != null) {
+                for (Producto producto : productos) {
+                    facturaListModel.addElement(producto);
+                }
+            }
         }
-
-        double subtotal = calcularSubtotal();
-        double impuestoFijo = 0.08;
-        double impuesto = subtotal * impuestoFijo;
-        double costoDomicilio = calcularCostoDomicilio();
-        double total = subtotal + impuesto + costoDomicilio;
-
-        facturaListModel.addElement("Subtotal: $" + String.format("%.2f", subtotal));
-        facturaListModel.addElement("Impuesto (8%): $" + String.format("%.2f", impuesto));
-        facturaListModel.addElement("Costo de Domicilio: $" + String.format("%.2f", costoDomicilio));
-        facturaListModel.addElement("Total: $" + String.format("%.2f", total));
-
-        facturaList.setModel(facturaListModel);
     }
-
-    private double calcularSubtotal() {
-        double subtotal = 0.0;
-
-        for (DoubleLinkedNode<Producto> current = facturaProductos.getHead(); current != null; current = current.getNext()) {
-            Producto producto = current.getObject();
-            subtotal += producto.getPrecio_unitario();
-        }
-
-        return subtotal;
-    }
-
-    private double calcularCostoDomicilio() {
-        double costoDomicilio = 0.0;
-
-        try {
-            UserClient user = controller.getCurrentUser();
-            costoDomicilio = controller.getCostoDomicilio(user);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-
-        return costoDomicilio;
-    }
-
-    private Font cargarFuentePersonalizada(String rutaFuente, float tamano) {
-        Font customFont = null;
-        try {
-            customFont = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(rutaFuente)).deriveFont(tamano);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return customFont;
-    }
-
-    private void aplicarFuentePersonalizada(JComponent componente, Font fuente) {
-        componente.setFont(fuente);
-    }
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            ControllerFactura controller = new ControllerFactura("ip", "port", "serviceName"); 
-            new FacturaView(controller);
+            String serverIP = "127.0.0.1"; // Reemplaza con la dirección IP del servidor
+            int serverPort = 1099; // Reemplaza con el puerto del servidor
+            String serviceName = "ServiceDomicilio"; // Reemplaza con el nombre del servicio
+    
+            DefaultListModel<Producto> facturaListModel = new DefaultListModel<>();
+            JList<Producto> facturaList = new JList<>(facturaListModel);
+    
+            ControllerFactura controller = new ControllerFactura(serverIP, serverPort, serviceName, facturaListModel, facturaList);
+            new FacturaView(controller).setVisible(true);
         });
     }
 }

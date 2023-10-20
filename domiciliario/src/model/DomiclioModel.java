@@ -8,12 +8,15 @@ import entidades.Pedido;
 import entidades.UserClient;
 import entidades.estructuras.doublee.linked.DoubleLinkedList;
 import entidades.estructuras.nodes.DoubleLinkedNode;
+import entidades.estructuras.queue.QueueList;
 import interfaces.SkeletonDomicilio;
 
 public class DomiclioModel implements SkeletonDomicilio {
     private Persona cliente;
     private String numeroFactura;
     private DoubleLinkedList<Pedido> productos;
+    private QueueList<Pedido> pedidosParaLlevar;
+    private Pedido currentPedido;
 
     private double impuestoFijo = 0.08;
 
@@ -149,6 +152,34 @@ public class DomiclioModel implements SkeletonDomicilio {
         cliente.getCurrentUser();
         throw new UnsupportedOperationException("Unimplemented method 'getCurrentUser'");
     }
+
+    @Override
+    public void agregarPedido(Pedido pedido) throws RemoteException {
+        pedidosParaLlevar.push(pedido);
+    }
+
+    @Override
+    public void entregarPedidos() throws RemoteException {
+        pedidosParaLlevar.clear();
+    }
+
+    @Override
+    public void entregarPedido(Pedido pedido) {
+        if (pedido != null) {
+            try {
+                
+                System.out.println("Pedido entregado: " + pedido);
+                
+                currentPedido = null;
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        throw new UnsupportedOperationException("Unimplemented method 'entregarPedido'");
+    }
+
+
     
 
 }
