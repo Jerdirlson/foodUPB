@@ -40,18 +40,5 @@ public class DoubleLinkedNode<T extends Serializable> extends Node<T> implements
     public void setPrevious(DoubleLinkedNode<T> previous) {
         this.previous = previous;
     }
-
-    public void add(T object) {
-        DoubleLinkedNode<T> newNode = new DoubleLinkedNode<>(object);
-
-        if (next == null) {
-            next = newNode;
-            previous = newNode;
-        } else {
-            previous.setNext(newNode);
-            newNode.setPrevious(previous);
-            next = newNode;
-        }
-    }
     
 }

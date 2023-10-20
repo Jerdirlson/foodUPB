@@ -1,14 +1,11 @@
 package entidades.estructuras.doublee.linked;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import entidades.Pedido;
-import entidades.Producto;
 import entidades.estructuras.interfaces.linkedlist.LinkedListInterface;
 import entidades.estructuras.interfaces.node.NodeInterface;
 import entidades.estructuras.nodes.DoubleLinkedNode;
@@ -606,7 +603,27 @@ public class DoubleLinkedList<T extends Serializable> implements LinkedListInter
         return head;
     }
 
+    @Override   //SIRVE
+    public Iterator<NodeInterface<T>> iterator() {
+        return new Iterator<NodeInterface<T>>() {
+        private DoubleLinkedNode<T> current = head; // Comenzar desde el inicio de la lista
 
+        @Override
+        public boolean hasNext() {
+            return current != null; // Hay un siguiente nodo si el nodo actual no es nulo
+        }
+
+        @Override
+        public NodeInterface<T> next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("No hay más elementos en la lista");
+            }
+            NodeInterface<T> nextNode = current; // Obtener el nodo actual
+            current = current.getNext(); // Mover al siguiente nodo
+            return nextNode;
+        }
+    };
+    }
 
     public Iterator<NodeInterface<T>> reverseIterator() {
         return new Iterator<NodeInterface<T>>() {
@@ -626,13 +643,5 @@ public class DoubleLinkedList<T extends Serializable> implements LinkedListInter
             }
         };
     }
-
-    public DoubleLinkedNode<Producto> getNext() {
-        return null;
-    }
-
-    public Object getObject() {
-        return null;
-    }
-
+    
 }

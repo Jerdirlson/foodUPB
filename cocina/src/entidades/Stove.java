@@ -1,10 +1,10 @@
 package entidades;
 
+
 import entidades.estructuras.queue.QueueArray;
-import java.io.Serializable;
 
 
- public class Stove implements Serializable{
+ public class Stove {
     private String cookingType;
     private boolean available;
     private QueueArray<Producto> pedidosPreparandose;

@@ -2,8 +2,6 @@ package entidades;
 
 import java.io.Serializable;
 
-import entidades.estructuras.doublee.linked.DoubleLinkedList;
-
 public class Producto implements Serializable{
 
     public String nombre_producto;
@@ -11,7 +9,6 @@ public class Producto implements Serializable{
     public String uri_img;
     public int  tiempoDeCocion;
     public int  numeroFogonDondeSeEstaCocinando;
-     private DoubleLinkedList<Producto> productos;
 
     public Producto(){
 
@@ -66,7 +63,6 @@ public class Producto implements Serializable{
         this.numeroFogonDondeSeEstaCocinando= numeroFogonDondeSeEstaCocinando;
      }
     
-     
 
 
 }

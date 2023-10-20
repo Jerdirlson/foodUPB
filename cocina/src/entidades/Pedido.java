@@ -10,7 +10,7 @@ public class Pedido implements Serializable{
     private UserClient cliente;
 
     public Pedido(){
-
+        
     }
 
     public DoubleLinkedList getProductos() {
@@ -28,7 +28,5 @@ public class Pedido implements Serializable{
     public void setCliente(UserClient cliente) {
         this.cliente = cliente;
     }
-
-    
 
 }

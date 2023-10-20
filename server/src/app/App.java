@@ -1,7 +1,4 @@
 package app;
-import controller.ControllerLogin;
-import model.ModelLogin;
-import view.LoginView;
 import server.Server;
 
 public class App {

@@ -7,7 +7,7 @@ import entidades.estructuras.interfaces.stack.StackInterface;
 import entidades.estructuras.nodes.DoubleLinkedNode;
 import entidades.estructuras.stack.StackList;
 
-public class QueueList<T extends Serializable> implements StackInterface<T>, Serializable{
+public class QueueList<T extends Serializable> implements StackInterface<T>{
 
     public DoubleLinkedList<T> list = new DoubleLinkedList<>();
     private int size;

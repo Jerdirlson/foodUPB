@@ -82,8 +82,14 @@ public class ServiceOperario extends UnicastRemoteObject implements SkeletonOper
 
     @Override
     public boolean insertarCliente(UserClient client) throws RemoteException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insertarCliente'");
+        try {
+            return Conection.insertarCliente(client);
+
+        } catch (Exception e) {
+            System.out.println("Error, no se pudo insertar el cliente en la base de datos" + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     
