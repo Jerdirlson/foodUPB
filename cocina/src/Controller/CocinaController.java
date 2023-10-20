@@ -3,6 +3,7 @@ package Controller;
 import java.rmi.RemoteException;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 import Model.CocinaModel;
 import View.VistaCocina;
@@ -50,6 +51,8 @@ public class CocinaController {
     }
 
     public void mostrarPedido(int fogonNumero) {
-        // Agregar la lógica para mostrar el pedido en función del fogonNumero si es necesario.
+
+          JOptionPane.showMessageDialog(null, "El pedido que se va a preparar en este fogon es :"+ modelo.getStove(fogonNumero).getPedidoPreparandose().nombre_producto);
+      
     }
 }

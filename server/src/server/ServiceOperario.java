@@ -13,6 +13,8 @@ import entidades.UserClient;
 public class ServiceOperario extends UnicastRemoteObject implements SkeletonOperario{
 
     Pedido pedidoService = new Pedido();
+    ServiceCocina cocinaService = new ServiceCocina();
+
 
     protected ServiceOperario() throws RemoteException {
         super();
@@ -64,7 +66,6 @@ public class ServiceOperario extends UnicastRemoteObject implements SkeletonOper
 
             System.out.println(pedidoService.getCliente().nombre_client);
 
-            System.out.println(((Producto)pedidoService.getProductos().pop()).getNombre_producto());
             // Iterator iterator = pedidoService.getProductos().iterator();
             
             // while (iterator.hasNext()){
@@ -72,7 +73,6 @@ public class ServiceOperario extends UnicastRemoteObject implements SkeletonOper
             //     System.out.println(producto.nombre_producto + " " + producto.precio_unitario);
             // }
 
-            ServiceCocina cocinaService = new ServiceCocina();
             cocinaService.addOrder(pedido);
 
         } catch (Exception e) {

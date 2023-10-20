@@ -8,6 +8,7 @@ import java.util.Iterator;
 import entidades.Pedido;
 import entidades.Producto;
 import entidades.estructuras.interfaces.node.NodeInterface;
+import entidades.estructuras.nodes.DoubleLinkedNode;
 import entidades.estructuras.queue.QueueList;
 import interfaces.SkeletonCocina;
 import entidades.Stove;
@@ -41,8 +42,9 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
     public void addOrder(Pedido order) throws RemoteException {
         System.out.println("ESTO ES LO QUE LLEGA EN VIP " + order.getCliente().getVip());
          if (order.getCliente().getVip() == true) {
-            System.out.println("LLEGAA HASTA AQUIIIIIII");
             ClientesVIP.push(order);
+            System.out.println(ClientesVIP.size());
+            System.out.println("SI HACE EL PUSH");        
         } else  {
             ClientesNormales.push(order);
         }
@@ -51,8 +53,11 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
    public void CocinarPedido(Pedido order) throws RemoteException{
         try {
             Iterator<NodeInterface<Producto>> iterador = order.getProductos().iterator();
+            DoubleLinkedNode<Producto> currentNode ;
             while(iterador.hasNext()) {
-                asignarFogon(iterador.next().getObject());
+                currentNode = (DoubleLinkedNode<Producto>) iterador.next();
+                asignarFogon(currentNode.getObject());
+                System.out.println("Entra aqui" + currentNode.getObject().getNombre_producto());
             }
             
         } catch (Exception e) {

@@ -39,9 +39,9 @@ import entidades.estructuras.queue.QueueArray;
         // Aquí puedes agregar lógica para finalizar la cocción si es necesario.
     }
 
-    public String getPedidoPreparandose(){
-         return pedidosPreparandose.toString();
-    }
+    public Producto getPedidoPreparandose(){
+        return pedidosPreparandose.peek();
+   }
 
     public void setPedidosPreparandose(Producto producto){
         this.pedidosPreparandose.push(producto);

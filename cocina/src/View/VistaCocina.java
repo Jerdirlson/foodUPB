@@ -2,11 +2,13 @@ package View;
 
 import javax.swing.*;
 import Model.CocinaModel;
+import entidades.Pedido;
 import Controller.CocinaController;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.Iterator;
 
 public class VistaCocina extends JFrame {
     private CocinaModel cocinaModel;
@@ -18,6 +20,7 @@ public class VistaCocina extends JFrame {
     private JButton[] mostrarPedidoButtons;
     private JLabel[] estadoLabels;
     private JButton cocinarPedidoButton;
+    private JButton mostrarPedidosPendientesButton;
 
     public VistaCocina() {
         // Inicializa los arreglos antes de crear el controlador
@@ -27,6 +30,9 @@ public class VistaCocina extends JFrame {
         estadoLabels = new JLabel[16];
         cocinarPedidoButton = new JButton("Cocinar Pedido");
         add(cocinarPedidoButton, BorderLayout.SOUTH);
+        mostrarPedidosPendientesButton = new JButton("Mostrar Pedidos Pendientes");
+        add(mostrarPedidosPendientesButton, BorderLayout.NORTH);
+
 
         cocinaModel = new CocinaModel();
 
@@ -64,13 +70,20 @@ public class VistaCocina extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    // Llamar al método CocinarPedido
                     cocinaModel.getClientesVip();
                     cocinaModel.getClientesNoVip();
                     cocinaModel.CocinarPedido(CocinaModel.getPedidoACocinar()); // Asegúrate de obtener el pedido de alguna manera
                 } catch (RemoteException e1) {
                     e1.printStackTrace();
                 }
+            }
+        });
+        mostrarPedidosPendientesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cocinaModel.getClientesVip();
+                cocinaModel.getClientesNoVip();
+                cocinaModel.mostrarPedidosPendientes();
             }
         });
 
@@ -115,6 +128,11 @@ public class VistaCocina extends JFrame {
         add(panelPrincipal);
         setVisible(true);
     }
+
+     
+    
+    
+    
 
     // Métodos para acceder a botones y etiquetas desde el controlador
     public JButton getIniciarButton(int fogonNumero) {

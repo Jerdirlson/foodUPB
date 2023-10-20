@@ -1,8 +1,11 @@
 package Model;
 
 import java.rmi.RemoteException;
+import java.util.Iterator;
 
+import javax.swing.JOptionPane;
 import client.Client;
+import entidades.estructuras.interfaces.node.NodeInterface;
 import entidades.estructuras.queue.*;
 import interfaces.SkeletonCocina;
 import entidades.Pedido;
@@ -48,7 +51,7 @@ public class CocinaModel implements SkeletonCocina{
         try {
             Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
             ClientesVIP = clienteCocina.getClientesVip();
-            System.out.println("Esto es lo que trae getClientesVIP" + ClientesVIP.pop().getCliente().nombre_client);
+            //System.out.println("Esto es lo que trae getClientesVIP" + ClientesVIP.pop().getCliente().nombre_client);
             return ClientesVIP;
         } catch (Exception e) {
             System.out.println("Error en el getClientesVip " + e.getMessage());
@@ -78,8 +81,17 @@ public class CocinaModel implements SkeletonCocina{
     }
     @Override
     public void CocinarPedido(Pedido order) throws RemoteException{
-         Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
+        
+        StringBuilder string1= new StringBuilder();
+        Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
         clienteCocina.CocinarPedido(order);
+        Iterator<NodeInterface<Producto>> iterador = order.getProductos().iterator();
+        while(iterador.hasNext()){
+            string1.append(iterador.next().getObject().nombre_producto+ "\n");
+        }
+
+        System.out.println("    El pedido llego hasta aqui" + order);
+          JOptionPane.showMessageDialog(null, "Pedido a cocinar: "+ string1);
     }
 
     @Override
@@ -110,12 +122,21 @@ public class CocinaModel implements SkeletonCocina{
     public Stove getStove(int fogonNumero){
         return CocinaModel.stoves[fogonNumero];
     }
+    
 
-    public void mostrarPedidosPendientes() {
+  public void mostrarPedidosPendientes(){
+
+        StringBuilder string1= new StringBuilder();
+        StringBuilder string2= new StringBuilder();
+
         
-        ClientesVIP.iterateStack();
-        ClientesNormales.iterateStack();
+        //ClientesVIP.iterateStack();
+        //ClientesNormales.iterateStack();
+
+
+        JOptionPane.showMessageDialog(null, "Clientes VIP pendientes: " + ClientesVIP.size() +
+                                            "\nClientes normales pendientes: " + ClientesNormales.size());
     }
 
-}
 
+}
