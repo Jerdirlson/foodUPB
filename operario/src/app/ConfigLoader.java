@@ -9,7 +9,7 @@ public class ConfigLoader {
     private static Properties config = new Properties();
 
     static {
-        try (FileInputStream file = new FileInputStream("C:\\Users\\dafel\\Downloads\\foodUPB\\server\\config.properties")) {
+        try (FileInputStream file = new FileInputStream("C:\\Users\\admin\\Desktop\\foodUPB\\server\\config.properties")) {
             config.load(file);
         } catch (IOException e) {
             e.printStackTrace();
