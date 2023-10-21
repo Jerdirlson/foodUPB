@@ -17,9 +17,10 @@ import app.ConfigLoader;
 public class CocinaModel implements SkeletonCocina{
     private static QueueList<Pedido> ClientesNormales;
     private static QueueList<Pedido> ClientesVIP;
-    static Stove[] stoves;
+    public static Stove[] stoves;
     protected static Object estadoLabel;
     private static int fogonNumero;
+    
 
     public CocinaModel() {
         stoves = new Stove[16];
@@ -90,8 +91,8 @@ public class CocinaModel implements SkeletonCocina{
             string1.append(iterador.next().getObject().nombre_producto+ "\n");
         }
 
-        System.out.println("    El pedido llego hasta aqui" + order);
-          JOptionPane.showMessageDialog(null, "Pedido a cocinar: "+ string1);
+        System.out.println("    El pedido llego hasta aqui" + order.getProductos().size());
+          JOptionPane.showMessageDialog(null, "Pedido a cocinar:\n "+ string1);
     }
 
     @Override
@@ -101,9 +102,9 @@ public class CocinaModel implements SkeletonCocina{
     }
 
     @Override
-    public void finishCooking(entidades.Stove stove) throws RemoteException {
+    public void finishCooking(int numeroFogonDondeSeEstaCocinando) throws RemoteException {
          Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
-         clienteCocina.finishCooking(stove);
+         clienteCocina.finishCooking(numeroFogonDondeSeEstaCocinando);
     }
         
     
@@ -137,6 +138,33 @@ public class CocinaModel implements SkeletonCocina{
         JOptionPane.showMessageDialog(null, "Clientes VIP pendientes: " + ClientesVIP.size() +
                                             "\nClientes normales pendientes: " + ClientesNormales.size());
     }
+
+    @Override
+    public Producto getPedidosPreparandose(int fogonNumero){
+        try {
+            Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
+             stoves[fogonNumero].setPedidosPreparandose(clienteCocina.getPedidosPreparandose(fogonNumero));
+             System.out.println(" ahora si se puso bien el pedido ");
+             return clienteCocina.getPedidosPreparandose(fogonNumero);
+        } catch (Exception e) {
+            System.out.println("Error en el getPedidosPreparandose" + e.getMessage());
+        return null;
+        }
+    }
+
+    @Override
+    public Stove[] getStoves() throws RemoteException {
+        try {
+            Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
+            stoves = clienteCocina.getStoves();
+            return stoves;
+
+        } catch (Exception e) {
+            System.out.println("Error en getStoves " + e.getMessage());
+            return null;
+        }
+    }
+
 
 
 }

@@ -61,6 +61,7 @@ public class Producto implements Serializable{
 
      public void setNumeroFogonDondeSeEstaCocinando(int numeroFogonDondeSeEstaCocinando){
         this.numeroFogonDondeSeEstaCocinando= numeroFogonDondeSeEstaCocinando;
+        
      }
     
 

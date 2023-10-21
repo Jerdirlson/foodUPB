@@ -1,10 +1,11 @@
 package entidades;
 
+import java.io.Serializable;
 
 import entidades.estructuras.queue.QueueArray;
 
 
- public class Stove {
+ public class Stove implements Serializable{
     private String cookingType;
     private boolean available;
     private QueueArray<Producto> pedidosPreparandose;
@@ -36,19 +37,19 @@ import entidades.estructuras.queue.QueueArray;
     }
 
     public void finishCooking() {
-        // Aquí puedes agregar lógica para finalizar la cocción si es necesario.
+        this.pedidosPreparandose.pop();
     }
 
     public Producto getPedidoPreparandose(){
-        return pedidosPreparandose.peek();
+        return pedidosPreparandose.peek()   ;
    }
 
     public void setPedidosPreparandose(Producto producto){
-        this.pedidosPreparandose.push(producto);
+        pedidosPreparandose.push(producto);
+        System.out.println("Esta haciendo bien el push");
     }
 
     public int getFogonNumero(){
         return this.fogonNumero;
     }
 }
-

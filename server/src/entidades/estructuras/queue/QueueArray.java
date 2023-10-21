@@ -8,7 +8,7 @@ import entidades.estructuras.interfaces.stack.StackInterface;
 import entidades.estructuras.stack.StackArray;
 
 
-public class QueueArray<T extends Serializable> implements StackInterface<T>{
+public class QueueArray<T extends Serializable> implements StackInterface<T>,Serializable{
 
     Object[] array;
     int size;

@@ -16,43 +16,36 @@ public class CocinaController {
         this.modelo = modelo;
         this.vista = vista;
 
-        for (int i = 0; i < 16; i++) {
-            final int fogonNumero = i;
-
-            iniciarButtons[i].addActionListener(e -> {
-                try {
-                    iniciarPedido(fogonNumero);
-                } catch (RemoteException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            });
-            terminarButtons[i].addActionListener(e -> {
-                try {
-                    terminarPedido(fogonNumero);
-                } catch (RemoteException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            });
-            mostrarPedidoButtons[i].addActionListener(e -> mostrarPedido(fogonNumero));
-        }
+      
+        
     }
 
     public void iniciarPedido(int fogonNumero) throws RemoteException{
         vista.setEstadoLabel(fogonNumero, "Cocinando pedido");
         int i= fogonNumero;
-         modelo.finishCooking(modelo.getStove(fogonNumero));
+         modelo.prepararPedido(modelo.getStove(fogonNumero).getPedidoPreparandose());
+         System.out.println("El pedido que se va a preparar es : "+modelo.getStove(fogonNumero).getPedidoPreparandose());
     }
 
     public void terminarPedido(int fogonNumero) throws RemoteException {
         vista.setEstadoLabel(fogonNumero, "Fogon " + fogonNumero);
-        modelo.finishCooking(modelo.getStove(fogonNumero));
+        modelo.finishCooking(fogonNumero);
     }
 
-    public void mostrarPedido(int fogonNumero) {
+    public void mostrarPedido(int fogonNumero) throws RemoteException {
+        try {
+            modelo.getStoves();
 
-          JOptionPane.showMessageDialog(null, "El pedido que se va a preparar en este fogon es :"+ modelo.getStove(fogonNumero).getPedidoPreparandose().nombre_producto);
-      
+            if (CocinaModel.stoves[fogonNumero].getPedidoPreparandose() != null) {
+                String string = CocinaModel.stoves[fogonNumero].getPedidoPreparandose().nombre_producto;
+                JOptionPane.showMessageDialog(null, "El pedido que se va a preparar en este fogon es :" + string);
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay pedido en preparación en este fogon.");
+            }
+            
+        } catch (Exception e) {
+            System.out.println("Error en mostar pedido Controller " + e.getMessage());
+        }
+         
     }
 }

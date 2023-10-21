@@ -11,6 +11,6 @@ public class App {
         ClienteDomicilio clienteDomicilio = new ClienteDomicilio(IP, PORT, SERVICEDOMICILIO);
         System.out.println("El cliente esta conectado? " +  clienteDomicilio.isConnected());
 
-        FacturaView.main(args);
+        // FacturaView.main(args);
     }
 }

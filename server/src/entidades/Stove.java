@@ -37,15 +37,15 @@ import entidades.estructuras.queue.QueueArray;
     }
 
     public void finishCooking() {
-        // Aquí puedes agregar lógica para finalizar la cocción si es necesario.
+        this.pedidosPreparandose.pop();
     }
 
     public Producto getPedidoPreparandose(){
-        return pedidosPreparandose.peek();
+        return pedidosPreparandose.peek()   ;
    }
 
     public void setPedidosPreparandose(Producto producto){
-        this.pedidosPreparandose.push(producto);
+        pedidosPreparandose.push(producto);
         System.out.println("Esta haciendo bien el push");
     }
 

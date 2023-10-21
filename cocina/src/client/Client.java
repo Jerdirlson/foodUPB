@@ -6,9 +6,11 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import Model.CocinaModel;
 import entidades.Pedido;
 import entidades.Producto;
 import entidades.Stove;
+import entidades.estructuras.queue.QueueArray;
 import entidades.estructuras.queue.QueueList;
 import interfaces.SkeletonCocina;
 

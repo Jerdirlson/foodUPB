@@ -23,11 +23,12 @@ public class VistaCocina extends JFrame {
     private JButton mostrarPedidosPendientesButton;
 
     public VistaCocina() {
+        int size = 16;
         // Inicializa los arreglos antes de crear el controlador
-        iniciarButtons = new JButton[16];
-        terminarButtons = new JButton[16];
-        mostrarPedidoButtons = new JButton[16];
-        estadoLabels = new JLabel[16];
+        iniciarButtons = new JButton[size];
+        terminarButtons = new JButton[size];
+        mostrarPedidoButtons = new JButton[size];
+        estadoLabels = new JLabel[size];
         cocinarPedidoButton = new JButton("Cocinar Pedido");
         add(cocinarPedidoButton, BorderLayout.SOUTH);
         mostrarPedidosPendientesButton = new JButton("Mostrar Pedidos Pendientes");
@@ -44,18 +45,7 @@ public class VistaCocina extends JFrame {
         JPanel panelPrincipal = new JPanel(new GridLayout(4, 4));
 
         for (int i = 0; i < 16; i++) {
-            JPanel fogonPanel = new JPanel(new BorderLayout());
-            iniciarButtons[i] = new JButton("Iniciar");
-            terminarButtons[i] = new JButton("Terminar");
-            mostrarPedidoButtons[i] = new JButton("Mostrar Pedido");
-            estadoLabels[i] = new JLabel("Fogon " + (i + 1));
-
-            fogonPanel.add(estadoLabels[i], BorderLayout.NORTH);
-            fogonPanel.add(iniciarButtons[i], BorderLayout.WEST);
-            fogonPanel.add(terminarButtons[i], BorderLayout.EAST);
-            fogonPanel.add(mostrarPedidoButtons[i], BorderLayout.SOUTH);
-
-            panelPrincipal.add(fogonPanel);
+            panelPrincipal.add(crearBotones(i));
         }
 
         // Agrega el panel principal a la ventana
@@ -86,47 +76,6 @@ public class VistaCocina extends JFrame {
                 cocinaModel.mostrarPedidosPendientes();
             }
         });
-
-        // ...
-
-    
-        // Asigna controladores de eventos
-        for (int i = 0; i < 16; i++) {
-            final int fogonNumero = i + 1;
-
-            iniciarButtons[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        controller.iniciarPedido(fogonNumero);
-                    } catch (RemoteException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            });
-
-            terminarButtons[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        controller.terminarPedido(fogonNumero);
-                    } catch (RemoteException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            });
-
-            mostrarPedidoButtons[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    controller.mostrarPedido(fogonNumero);
-                }
-            });
-        }
-    
-        // Agrega el panel principal a la ventana
-        add(panelPrincipal);
-        setVisible(true);
     }
 
      
@@ -159,4 +108,56 @@ public class VistaCocina extends JFrame {
             }
         });
     }
+
+    public JPanel crearBotones(int i){
+         JPanel fogonPanel = new JPanel(new BorderLayout());
+            iniciarButtons[i] = new JButton("Iniciar");
+            terminarButtons[i] = new JButton("Terminar");
+            mostrarPedidoButtons[i] = new JButton("Mostrar Pedido");
+            estadoLabels[i] = new JLabel("Fogon " + (i + 1));
+
+            fogonPanel.add(estadoLabels[i], BorderLayout.NORTH);
+            fogonPanel.add(iniciarButtons[i], BorderLayout.WEST);
+            fogonPanel.add(terminarButtons[i], BorderLayout.EAST);
+            fogonPanel.add(mostrarPedidoButtons[i], BorderLayout.SOUTH);
+
+            iniciarButtons[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        controller.iniciarPedido(i+1);
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
+
+            terminarButtons[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        controller.terminarPedido(i+1);
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
+
+            mostrarPedidoButtons[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        controller.mostrarPedido(i+1);
+                    } catch (RemoteException e1) {
+                        System.out.println("Error en el actionlistener del mostrarPedidoButtons");
+                        e1.printStackTrace();
+                    }
+                }
+            });
+        
+
+            return fogonPanel;
+    }
+
+
 }
