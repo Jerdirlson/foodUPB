@@ -82,7 +82,7 @@ public class CocinaModel implements SkeletonCocina{
     }
     @Override
     public void CocinarPedido(Pedido order) throws RemoteException{
-        
+        System.out.println(order.getCliente().getNombre_client());
         StringBuilder string1= new StringBuilder();
         Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
         clienteCocina.CocinarPedido(order);

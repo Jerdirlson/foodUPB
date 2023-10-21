@@ -4,7 +4,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
+import javax.swing.JOptionPane;
+
 
 import entidades.Pedido;
 import entidades.Producto;
@@ -46,14 +47,16 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
          if (order.getCliente().getVip() == true) {
             ClientesVIP.push(order);
             System.out.println(ClientesVIP.size());
-            System.out.println("SI HACE EL PUSH");        
+            System.out.println("SI HACE EL PUSH");      
+              
         } else  {
             ClientesNormales.push(order);
         }
     }
 
    public void CocinarPedido(Pedido order) throws RemoteException{
-        try {
+    System.out.println(order.getCliente().getNombre_client());
+            try {
             Iterator<NodeInterface<Producto>> iterador = order.getProductos().iterator();
             DoubleLinkedNode<Producto> currentNode ;
             int count = 0;
@@ -73,44 +76,47 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
             
         } catch (Exception e) {
             System.out.println("El error esta en CocinarPedido " + e.getMessage());
+            e.printStackTrace();
         }
     }
     
 
 
-    public void asignarFogon( Producto currentProducto) throws RemoteException{
+    public void asignarFogon(Producto currentProducto) throws RemoteException {
+        try {
         System.out.println("Antes de entrar al if");
-        if(currentProducto.getTiempoDeCocion()>=20){
+        if (currentProducto.tiempoDeCocion >= 20) {
             System.out.println("Entro al if");
-            for(int i=0; i<4 ;i++){
-                if(stoves[i].isAvailable()==true){
-                    System.out.println("ENTRA EN EL 1 FOR" +stoves[i].getPedidoPreparandose().nombre_producto);
-                   stoves[i].setPedidosPreparandose(currentProducto);
-                         currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
-                    break;
-                }
-            }
-        }
-        else{
-            System.out.println("ENTRA AL ELSE`");
-            for(int i=4; i < 16;i++){
-                System.out.println("ENTRA AL FOR DEL ELSE");
-                if(stoves[i].isAvailable()==true){
-                    System.out.println("ENTRA AL IF DEL FOR DEL ELSE");
+            for (int i = 1; i < 5; i++) {
+                if (i < stoves.length && stoves[i].isAvailable()) {
+                    System.out.println("ENTRA AL IF DEL PRIMER FOR");
                     stoves[i].setPedidosPreparandose(currentProducto);
                     stoves[i].setAvailable(false);
-                    System.out.println("El pedido se asigno en el fogon "+ i + getPedidosPreparandose(i).nombre_producto);
-                              currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
-                       break;
+                    System.out.println("El pedido se asigno en el fogon " + i + currentProducto.getNombre_producto());
+                    currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
+                    return;
                 }
             }
-
+        } else {
+            System.out.println("ENTRA AL ELSE");
+            for (int i = 5; i < 17; i++) {
+            System.out.println("ENTRA AL FOR DEL ELSE");
+            if (stoves[i] != null && stoves[i].isAvailable()) {
+                System.out.println("ENTRA AL IF DEL FOR DEL ELSE");
+                stoves[i].setPedidosPreparandose(currentProducto);
+                stoves[i].setAvailable(false);
+                System.out.println("El pedido se asigno en el fogon " + i + getPedidosPreparandose(i).nombre_producto);
+                currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
+                break;
+            }
         }
-
-
-    }
-
-
+         }
+        }catch(Exception e){
+             JOptionPane.showMessageDialog(null, "No hay fogones disponibles para cocinar el pedido, por favor espere hasta que se desocupe uno ");
+         }
+   }
+  
+  
     @Override
     public void finishCooking(int numeroFogonDondeSeEstaCocinando) throws RemoteException {
     
