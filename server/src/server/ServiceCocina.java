@@ -80,9 +80,9 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
 
     public void asignarFogon( Producto currentProducto) throws RemoteException{
         System.out.println("Antes de entrar al if");
-        if(currentProducto.tiempoDeCocion>=20){
+        if(currentProducto.getTiempoDeCocion()>=20){
             System.out.println("Entro al if");
-            for(int i=0; i < 4;i++){
+            for(int i=0; i<4 ;i++){
                 if(stoves[i].isAvailable()==true){
                     System.out.println("ENTRA EN EL 1 FOR" +stoves[i].getPedidoPreparandose().nombre_producto);
                    stoves[i].setPedidosPreparandose(currentProducto);
@@ -111,13 +111,12 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
     }
 
 
-    //Preguntarle a anagie porque esto no esta igual que en la cocina
     @Override
     public void finishCooking(int numeroFogonDondeSeEstaCocinando) throws RemoteException {
     
             stoves[numeroFogonDondeSeEstaCocinando].setAvailable(true);
             stoves[numeroFogonDondeSeEstaCocinando].finishCooking();
-    //     stoves[i].setAvailable(true);
+            System.out.println(" El estado de esta estufa es: "+  stoves[numeroFogonDondeSeEstaCocinando].isAvailable());
     }
 
     @Override
@@ -179,8 +178,3 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
         }
     }
 }
-
-    
-    
-    
-

@@ -50,18 +50,18 @@ public class Client implements SkeletonCocina{
             service = (SkeletonCocina) Naming.lookup(url);
             service.prepararPedido(producto);
         } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
+            System.err.println("Error en enviar el pedido2");
             e.printStackTrace();
         } 
     }
 
     @Override
-    public void finishCooking(Stove stove) throws RemoteException {
+    public void finishCooking(int numeroFogonDondeSeEstaCocinando) throws RemoteException {
         try {
             service = (SkeletonCocina) Naming.lookup(url);
-            service.finishCooking(stove);
+            service.finishCooking(numeroFogonDondeSeEstaCocinando);
         } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
+            System.err.println("Error en enviar el pedido3");
             e.printStackTrace();
         } 
     }
@@ -74,7 +74,7 @@ public class Client implements SkeletonCocina{
             service = (SkeletonCocina) Naming.lookup(url);
             service.CocinarPedido(order);
         } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
+            System.err.println("Error en enviar el pedido4");
             e.printStackTrace();
         } 
     }
@@ -85,7 +85,7 @@ public class Client implements SkeletonCocina{
             service = (SkeletonCocina) Naming.lookup(url);
             service.asignarFogon(producto);
         } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
+            System.err.println("Error en enviar el pedido5");
             e.printStackTrace();
         } 
     }
@@ -95,7 +95,7 @@ public class Client implements SkeletonCocina{
             service = (SkeletonCocina) Naming.lookup(url);
             service.mostrarPedido(stove);
         } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
+            System.err.println("Error en enviar el pedido6");
             e.printStackTrace();
         } 
     }
@@ -133,6 +133,30 @@ public class Client implements SkeletonCocina{
         } catch (MalformedURLException | RemoteException | NotBoundException e) {
             System.out.println("Error en getClientesNoVip() : " + e.getMessage());
             e.printStackTrace();
+            return null;
+        }
+    }
+      
+    @Override
+      public Producto getPedidosPreparandose(int fogonNumero) throws RemoteException {
+        try{
+            service = (SkeletonCocina) Naming.lookup(url);
+            return service.getPedidosPreparandose(fogonNumero);
+        } catch (MalformedURLException | RemoteException | NotBoundException e) {
+            System.out.println("Error en getClientesNoVip() : " + e.getMessage());
+            e.printStackTrace();
+                    return null;
+        }
+    }
+
+
+    @Override
+    public Stove[] getStoves() throws RemoteException {
+        try {
+            service = (SkeletonCocina) Naming.lookup(url);
+            return service.getStoves();
+        } catch (Exception e) {
+            System.out.println("Error en getStoves() : " + e.getMessage());
             return null;
         }
     }
