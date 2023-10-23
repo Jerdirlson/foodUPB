@@ -23,11 +23,11 @@ public class CocinaModel implements SkeletonCocina{
     
 
     public CocinaModel() {
-        stoves = new Stove[16];
+        stoves = new Stove[17];
         ClientesNormales = new QueueList<>(); // Inicializa ClientesNormales
         ClientesVIP = new QueueList<>(); // Inicializa ClientesVIP
 
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 17; i++) {
             if (i < 4) {
                 stoves[i] = new Stove("Cocción Lenta",(fogonNumero=i));
                
@@ -100,8 +100,12 @@ public class CocinaModel implements SkeletonCocina{
 
     @Override
     public void asignarFogon( Producto producto) throws RemoteException{
+        try{
          Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
         clienteCocina.asignarFogon(producto);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Todos los fogones estan llenos, por favor espere para poder cocinar el producto "+ producto );
+        }
     }
 
     @Override

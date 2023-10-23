@@ -23,7 +23,8 @@ public class VistaCocina extends JFrame {
     private JButton mostrarPedidosPendientesButton;
 
     public VistaCocina() {
-        int size = 16;
+        int size = 17
+        ;
         // Inicializa los arreglos antes de crear el controlador
         iniciarButtons = new JButton[size];
         terminarButtons = new JButton[size];

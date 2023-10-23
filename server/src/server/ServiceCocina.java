@@ -112,7 +112,7 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
         }
          }
         }catch(Exception e){
-             JOptionPane.showMessageDialog(null, "No hay fogones disponibles para cocinar el pedido, por favor espere hasta que se desocupe uno ");
+        
          }
    }
   
