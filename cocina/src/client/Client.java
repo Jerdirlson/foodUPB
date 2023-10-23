@@ -67,7 +67,7 @@ public class Client implements SkeletonCocina{
     }
 
     @Override
-    public void CocinarPedido(Pedido order) throws RemoteException {
+    public void CocinarPedido(Producto order) throws RemoteException {
         try {
         System.out.println(url);
             System.out.println("LLEGO HASTA AQUI");
@@ -80,14 +80,16 @@ public class Client implements SkeletonCocina{
     }
 
     @Override
-    public void asignarFogon(Producto producto) throws RemoteException {
+    public boolean asignarFogon(Producto producto) throws RemoteException {
         try {
             service = (SkeletonCocina) Naming.lookup(url);
             service.asignarFogon(producto);
+            return true;
         } catch (Exception e) {
             System.err.println("Error en enviar el pedido5");
             e.printStackTrace();
-        } 
+            return false; 
+        }
     }
 
     public void mostrarPedido(entidades.Stove stove){

@@ -94,7 +94,7 @@ public class VistaCocina extends JFrame {
     }
 
     public JButton getMostrarPedidoButton(int fogonNumero) {
-        return mostrarPedidoButtons[fogonNumero - 1];
+        return mostrarPedidoButtons[fogonNumero-1];
     }
 
     public void setEstadoLabel(int fogonNumero, String text) {

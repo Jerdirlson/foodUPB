@@ -15,8 +15,8 @@ import entidades.Stove;
 import app.ConfigLoader;
 
 public class CocinaModel implements SkeletonCocina{
-    private static QueueList<Pedido> ClientesNormales;
-    private static QueueList<Pedido> ClientesVIP;
+    private static QueueList<Producto> ClientesNormales;
+    private static QueueList<Producto> ClientesVIP;
     public static Stove[] stoves;
     protected static Object estadoLabel;
     private static int fogonNumero;
@@ -71,8 +71,8 @@ public class CocinaModel implements SkeletonCocina{
         }
     }
 
-    public static Pedido getPedidoACocinar(){
-        Pedido pedidoActual;
+    public static Producto getPedidoACocinar(){
+        Producto pedidoActual;
         if(!ClientesVIP.isEmpty()){
             pedidoActual=ClientesVIP.pop();
         }else{
@@ -81,30 +81,30 @@ public class CocinaModel implements SkeletonCocina{
         return pedidoActual;
     }
     @Override
-    public void CocinarPedido(Pedido order) throws RemoteException{
-        String clientName = order.getCliente().getNombre_client();
-        System.out.println(order.getCliente().getNombre_client());
-        StringBuilder string1= new StringBuilder();
-        Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
-        clienteCocina.CocinarPedido(order);
-        Iterator<NodeInterface<Producto>> iterador = order.getProductos().iterator();
-        while(iterador.hasNext()){
-            string1.append(iterador.next().getObject().nombre_producto+ "\n");
+    public void CocinarPedido(Producto order) throws RemoteException{
+        
+        String clientName = order.getUsuarioCliente().getNombre_client();
+        System.out.println(order.getUsuarioCliente().getNombre_client());
+        Client clienteCocina1= new Client(IP, PORT, SERVICENAMECOCINA);
+       
+        if(clienteCocina1.asignarFogon(order)==true){
+            clienteCocina1.CocinarPedido(order);
+            JOptionPane.showMessageDialog(null,"Cocinando pedido de: "+order.getUsuarioCliente().getNombre_client()+"'\n"+order.getNombre_producto());
+        }else{
+            JOptionPane.showMessageDialog(null, "Todos los fogones estan ocupados, por favor espere para poder cocinar el pedido"+ order.getNombre_producto()+" de "+order.getUsuarioCliente());
         }
 
-        String mensaje = "Pedido a cocinar del usuario " + clientName + ":\n" + string1.toString();
-
-        System.out.println("    El pedido llego hasta aqui" + order.getProductos().size());
-          JOptionPane.showMessageDialog(null,mensaje);
+        System.out.println("    El pedido llego hasta aqui" + order.getUsuarioCliente().getNombre_client()+order.getNombre_producto());
     }
 
     @Override
-    public void asignarFogon( Producto producto) throws RemoteException{
+    public boolean asignarFogon( Producto producto) throws RemoteException{
         try{
          Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
         clienteCocina.asignarFogon(producto);
+        return true;
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Todos los fogones estan llenos, por favor espere para poder cocinar el producto "+ producto );
+            return false;
         }
     }
 
