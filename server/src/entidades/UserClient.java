@@ -3,6 +3,7 @@ package entidades;
 import java.io.Serializable;
 
 public class UserClient implements Serializable{
+    public Long userId;
     public String nombre_client;
     public Long numero_cliente;
     public Boolean vip;
@@ -12,6 +13,19 @@ public class UserClient implements Serializable{
     public Boolean casa;
     public String municipio;
 
+
+    public UserClient(Long userId, String nombre_client, Long numero_cliente, Boolean vip, String barrio, String calle, String numero,
+            Boolean casa, String municipio) {
+        this.userId = userId;
+        this.nombre_client = nombre_client;
+        this.numero_cliente = numero_cliente;
+        this.vip = vip;
+        this.barrio = barrio;
+        this.calle = calle;
+        this.numero = numero;
+        this.casa = casa;
+        this.municipio = municipio;
+    }
 
     public UserClient(String nombre_client, Long numero_cliente, Boolean vip, String barrio, String calle, String numero,
             Boolean casa, String municipio) {
@@ -24,7 +38,6 @@ public class UserClient implements Serializable{
         this.casa = casa;
         this.municipio = municipio;
     }
-
 
     public UserClient(){
 
@@ -108,6 +121,16 @@ public class UserClient implements Serializable{
 
     public void setMunicipio(String municipio) {
         this.municipio = municipio;
+    }
+
+
+    public Long getUserId() {
+        return userId;
+    }
+
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
     
 }

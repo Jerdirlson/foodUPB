@@ -6,14 +6,14 @@ import entidades.estructuras.doublee.linked.DoubleLinkedList;
 
 public class Pedido implements Serializable{
     
-    private static DoubleLinkedList<Producto> productos;
+    private DoubleLinkedList<Producto> productos;
     private UserClient cliente;
 
     public Pedido(){
         
     }
 
-    public static DoubleLinkedList getProductos() {
+    public DoubleLinkedList getProductos() {
         return productos;
     }
 

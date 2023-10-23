@@ -4,17 +4,19 @@ import java.io.Serializable;
 
 public class Producto implements Serializable{
 
+    public Long idProducto;
     public String nombre_producto;
     public Long precio_unitario;
     public String uri_img;
-    public int  tiempoDeCocion;
-    public int  numeroFogonDondeSeEstaCocinando;
+    public Long tiempoDeCocion;
+    public int numeroFogonDondeSeEstaCocinando;
 
     public Producto(){
 
     }
 
-    public Producto(String nombre_producto, Long precio_unitario, String uri_img, int tiempoDeCocion) {
+    public Producto(Long idProducto, String nombre_producto, Long precio_unitario, String uri_img, Long tiempoDeCocion) {
+        this.idProducto = idProducto;
         this.nombre_producto = nombre_producto;
         this.precio_unitario = precio_unitario;
         this.uri_img = uri_img;
@@ -48,11 +50,11 @@ public class Producto implements Serializable{
         this.uri_img = uri_img;
     }
    
-     public int getTiempoDeCocion(){
+     public Long getTiempoDeCocion(){
         return this.tiempoDeCocion;
      }
 
-     public void setTiempoDeCocion(int tiempoDeCocion){
+     public void setTiempoDeCocion(Long tiempoDeCocion){
         this.tiempoDeCocion=tiempoDeCocion;
      }
      public int getNumeroFogonDondeSeEstaCocinando(){
@@ -61,7 +63,16 @@ public class Producto implements Serializable{
 
      public void setNumeroFogonDondeSeEstaCocinando(int numeroFogonDondeSeEstaCocinando){
         this.numeroFogonDondeSeEstaCocinando= numeroFogonDondeSeEstaCocinando;
+        
      }
+
+    public Long getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
+    }
     
 
 

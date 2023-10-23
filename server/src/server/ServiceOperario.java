@@ -92,5 +92,28 @@ public class ServiceOperario extends UnicastRemoteObject implements SkeletonOper
         }
     }
 
+    @Override
+    public boolean registrarPedido(Pedido pedido) throws RemoteException {
+         try {
+            return Conection.registrarPedido(pedido);
+
+        } catch (Exception e) {
+            System.out.println("Error, no se pudo registrar el pedido en la base de datos" + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Producto[] getProductosRecientes(UserClient client) throws RemoteException {
+       Producto[] productosRecientes = null;
+        try {
+            productosRecientes = Conection.getProductosRecientes(client);
+        } catch (Exception e) {
+            System.out.println("Error" + e.getMessage());
+        }
+        return productosRecientes;
+    }
+
     
 }

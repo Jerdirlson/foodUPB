@@ -82,6 +82,7 @@ public class CocinaModel implements SkeletonCocina{
     }
     @Override
     public void CocinarPedido(Pedido order) throws RemoteException{
+        String clientName = order.getCliente().getNombre_client();
         System.out.println(order.getCliente().getNombre_client());
         StringBuilder string1= new StringBuilder();
         Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
@@ -91,8 +92,10 @@ public class CocinaModel implements SkeletonCocina{
             string1.append(iterador.next().getObject().nombre_producto+ "\n");
         }
 
+        String mensaje = "Pedido a cocinar del usuario " + clientName + ":\n" + string1.toString();
+
         System.out.println("    El pedido llego hasta aqui" + order.getProductos().size());
-          JOptionPane.showMessageDialog(null, "Pedido a cocinar:\n "+ string1);
+          JOptionPane.showMessageDialog(null,mensaje);
     }
 
     @Override

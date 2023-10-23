@@ -35,8 +35,6 @@ public class AdministradorView extends JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel panelOperario;
-    private javax.swing.JPanel panelCliente;
     
     
     private javax.swing.JPanel panelProduct;
@@ -51,7 +49,7 @@ public class AdministradorView extends JFrame {
     * Constructs a new `Administrador` object.
     */
     public AdministradorView(){
-        setTitle("Login");
+        setTitle("Administrador");
         setSize(580, 420);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -66,9 +64,7 @@ public class AdministradorView extends JFrame {
         jButton2 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        panelOperario = new javax.swing.JPanel();
-        panelCliente = new javax.swing.JPanel();
-        
+
         
         panelProduct = new javax.swing.JPanel();
         panelProductosPanel1 = new javax.swing.JPanel();
@@ -82,15 +78,6 @@ public class AdministradorView extends JFrame {
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(1920, 1080));
-
-
-        panelOperario.setBackground(new java.awt.Color(0, 0, 0));
-        panelOperario.setForeground(new java.awt.Color(255, 255, 255));
-        panelOperario.setPreferredSize(new java.awt.Dimension(1920, 1080));
-
-        panelCliente.setBackground(new java.awt.Color(0, 0, 0));
-        panelCliente.setForeground(new java.awt.Color(255, 255, 255));
-        panelCliente.setPreferredSize(new java.awt.Dimension(1920, 1080));
 
         jLabel1.setFont(new java.awt.Font("Monospaced", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 0, 51));
@@ -106,8 +93,10 @@ public class AdministradorView extends JFrame {
         // jButton2.setBorder(100);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPanel1.setVisible(false);
-                panelProduct.setVisible(true);
+                setVisible(false);
+                OpcionesProducto opcionesProducto = new OpcionesProducto();
+                opcionesProducto.initComponents();
+                opcionesProducto.setVisible(true);
             }
         });
 
@@ -117,20 +106,11 @@ public class AdministradorView extends JFrame {
         // jButton5.setBorder(100);
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPanel1.setVisible(false);
-                panelOperario.setVisible(true);
-                inicializarPanelProducto();
-            }
-        });
-
-        jButton6.setBackground(new java.awt.Color(255, 204, 51));
-        jButton6.setFont(new java.awt.Font("Liberation Sans", 1, 36)); // NOI18N
-        jButton6.setText("Agregar o eliminar cliente");
-        // jButton6.setBorder(100);
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPanel1.setVisible(false);
-                panelCliente.setVisible(true);
+                setVisible(false);
+                OpcionesOperarioView agregarOperarioFrame = new OpcionesOperarioView();
+                // Hacer que el nuevo frame sea visible
+                agregarOperarioFrame.initComponents();
+                agregarOperarioFrame.setVisible(true);
             }
         });
 
@@ -148,7 +128,6 @@ public class AdministradorView extends JFrame {
                 .addContainerGap(690, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(669, 669, 669))
         );
@@ -162,7 +141,6 @@ public class AdministradorView extends JFrame {
                 .addGap(138, 138, 138)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(73, 73, 73)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(59, 59, 59)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(201, Short.MAX_VALUE))
@@ -281,12 +259,4 @@ public class AdministradorView extends JFrame {
         });
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new AdministradorView().setVisible(true);
-            }
-        });
-    }
 }

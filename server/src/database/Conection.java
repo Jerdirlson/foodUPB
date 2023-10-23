@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,6 +12,8 @@ import app.ConfigLoader;
 
 import entidades.*;
 // import java.sql.Connection;
+import entidades.estructuras.doublee.linked.DoubleLinkedList;
+import entidades.estructuras.nodes.DoubleLinkedNode;
 
 /**
  * A class representing a connection for the database.
@@ -98,7 +101,7 @@ public class Conection {
         UserClient userClient = new UserClient();
         try {
             c = getConecction();
-            cstm = c.prepareCall("SELECT tbl_cliente.nombre_cliente, tbl_cliente.numero_cliente, tbl_cliente.vip, tbl_direccion.barrio, tbl_direccion.calle, tbl_direccion.numero, tbl_direccion.casa, tbl_direccion.municipio\n" + //
+            cstm = c.prepareCall("SELECT  tbl_cliente.idtbl_cliente ,tbl_cliente.nombre_cliente, tbl_cliente.numero_cliente, tbl_cliente.vip, tbl_direccion.barrio, tbl_direccion.calle, tbl_direccion.numero, tbl_direccion.casa, tbl_direccion.municipio\n" + //
                     "FROM tbl_cliente\n" + //
                     "INNER JOIN tbl_direccion ON tbl_cliente.direccion_cliente = tbl_direccion.idtbl_direccion\n" + //
                     "WHERE tbl_cliente.numero_cliente = ?;");
@@ -106,6 +109,7 @@ public class Conection {
             ResultSet rs = cstm.executeQuery();
 
             if (rs.next()) {
+                userClient.setUserId(rs.getLong("idtbl_cliente"));
                 userClient.setNombre_client(rs.getString("nombre_cliente"));
                 userClient.setNumero_cliente(rs.getLong("numero_cliente"));
                 userClient.setVip(rs.getBoolean("vip"));
@@ -141,9 +145,11 @@ public class Conection {
 
         while (rs.next()) {
             Producto producto = new Producto();
+            producto.setIdProducto(rs.getLong("idtbl_producto"));
             producto.setNombre_producto(rs.getString("nombre_producto"));
             producto.setUri_img(rs.getString("uri_img")); 
             producto.setPrecio_unitario(rs.getLong("precio_unitario"));
+            producto.setTiempoDeCocion(rs.getLong("tiempo_coccion"));
             listaProductos.add(producto);
         }
 
@@ -213,5 +219,129 @@ public class Conection {
         
 
         return result;
+    }
+
+    public static boolean registrarPedido(Pedido pedido){
+        boolean result = false;
+
+        try {
+            c = getConecction();
+
+            String insertDireccionSQL = "INSERT INTO tbl_pedido (tbl_cliente_idtbl_cliente) VALUES (?)";
+
+            try (PreparedStatement direccionPS = c.prepareStatement(insertDireccionSQL, Statement.RETURN_GENERATED_KEYS)) {
+                direccionPS.setLong(1, pedido.getCliente().getUserId());
+
+                int rowsAffected = direccionPS.executeUpdate();
+                if (rowsAffected == 1) {
+                    // La inserción en tbl_direccion fue exitosa, obten el ID generado
+                    ResultSet generatedKeys = direccionPS.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        int idPedido = generatedKeys.getInt(1);
+                        String insertClienteSQL = "INSERT INTO tbl_pedido_producto (tbl_pedido_idtbl_pedido, tbl_pedido_tbl_cliente_idtbl_cliente, tbl_producto_idtbl_producto) VALUES (?, ?, ?)";
+
+                        Iterator iterador = pedido.getProductos().iterator();
+
+                        while (iterador.hasNext()){
+                            DoubleLinkedNode<Producto> currentNode = (DoubleLinkedNode<Producto>)iterador.next();
+                            
+                            try (PreparedStatement clientePS = c.prepareStatement(insertClienteSQL)) {
+                                clientePS.setLong(1, idPedido);
+                                clientePS.setLong(2,pedido.getCliente().getUserId());
+                                clientePS.setLong(3, currentNode.getObject().idProducto);
+    
+                                rowsAffected = clientePS.executeUpdate();
+                                if (rowsAffected == 1) {
+                                    System.out.println("Inserción exitosa en tbl_pedido_producto");
+                                    result = true;
+                                } else {
+                                    System.out.println("No se pudo insertar el registro en tbl_pedido_producto");
+                                }
+                            }catch(Exception e){
+    
+                            }
+                            
+                        }
+                        
+                    } else {
+                        System.out.println("No se pudo obtener el ID del pedido generado.");
+                    }
+                } else {
+                    System.out.println("No se pudo insertar la dirección en tbl_pedido_producto");
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            // TODO: handle exception
+            return false;
+        }
+    }
+
+
+    public static Producto[] getProductosRecientes(UserClient client) {
+        Producto[] productos = null;
+        Connection c = null;
+        CallableStatement cstm = null;
+    
+        try {
+            c = getConecction();
+            cstm = c.prepareCall("SELECT tbl_producto_idtbl_producto, COUNT(*) AS total_pedidos " +
+            "FROM tbl_pedido_producto " +
+            "WHERE tbl_pedido_tbl_cliente_idtbl_cliente = ? " +
+            "GROUP BY tbl_producto_idtbl_producto " + // Agregar espacio aquí
+            "ORDER BY total_pedidos DESC " +
+            "LIMIT 5");
+
+            cstm.setLong(1, client.getUserId()); // Reemplaza client.getId() con el método adecuado para obtener el ID del cliente.
+    
+            ResultSet rs = cstm.executeQuery();
+    
+            List<Long> productoIds = new ArrayList<>();
+    
+            while (rs.next()) {
+                long productoId = rs.getLong("tbl_producto_idtbl_producto");
+                productoIds.add(productoId);
+            }
+    
+            // Crea una lista de productos con la información de tbl_producto
+            List<Producto> listaProductos = new ArrayList<>();
+    
+            for (Long productoId : productoIds) {
+                PreparedStatement productoStmt = c.prepareStatement("SELECT * FROM tbl_producto WHERE idtbl_producto = ?");
+                productoStmt.setLong(1, productoId);
+                ResultSet productoRs = productoStmt.executeQuery();
+    
+                if (productoRs.next()) {
+                    Producto producto = new Producto();
+                    producto.setIdProducto(productoRs.getLong("idtbl_producto"));
+                    producto.setNombre_producto(productoRs.getString("nombre_producto"));
+                    producto.setUri_img(productoRs.getString("uri_img"));
+                    producto.setPrecio_unitario(productoRs.getLong("precio_unitario"));
+                    producto.setTiempoDeCocion(productoRs.getLong("tiempo_coccion"));
+                    listaProductos.add(producto);
+                }
+    
+                productoRs.close();
+                productoStmt.close();
+            }
+    
+            // Convierte la lista de productos en un array
+            productos = listaProductos.toArray(new Producto[0]);
+    
+            rs.close();
+            cstm.close();
+        } catch (Exception e) {
+            System.out.println("Error en obtener los productos " + e.getMessage());
+        } finally {
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    // Manejo de excepciones en caso de errores al cerrar la conexión.
+                }
+            }
+        }
+    
+        return productos;
     }
 }

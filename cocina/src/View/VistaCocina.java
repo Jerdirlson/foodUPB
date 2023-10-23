@@ -62,7 +62,7 @@ public class VistaCocina extends JFrame {
                 try {
                     cocinaModel.getClientesVip();
                     cocinaModel.getClientesNoVip();
-                    cocinaModel.CocinarPedido(CocinaModel.getPedidoACocinar()); // Asegúrate de obtener el pedido de alguna manera
+                    cocinaModel.CocinarPedido(CocinaModel.getPedidoACocinar());
                 } catch (RemoteException e1) {
                     e1.printStackTrace();
                 }

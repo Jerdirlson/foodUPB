@@ -20,4 +20,8 @@ public interface SkeletonOperario extends Remote{
 
     public boolean insertarCliente(UserClient client) throws RemoteException;
     
+    public boolean registrarPedido(Pedido pedido) throws RemoteException;
+
+    public Producto[] getProductosRecientes(UserClient client) throws RemoteException;
+    
 }

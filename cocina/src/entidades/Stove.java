@@ -53,3 +53,4 @@ import entidades.estructuras.queue.QueueArray;
         return this.fogonNumero;
     }
 }
+

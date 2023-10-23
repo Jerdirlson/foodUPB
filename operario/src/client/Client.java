@@ -99,4 +99,30 @@ public class Client implements SkeletonOperario{
             return false;
         }
     }
+
+    @Override
+    public boolean registrarPedido(Pedido pedido) throws RemoteException {
+        try {
+            service = (SkeletonOperario) Naming.lookup(url);
+            return service.registrarPedido(pedido);
+            
+        } catch (MalformedURLException | RemoteException | NotBoundException e) {
+            System.err.println("Error en registrar el pedido");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Producto[] getProductosRecientes(UserClient client) throws RemoteException {
+        try {
+            service = (SkeletonOperario) Naming.lookup(url);
+            return service.getProductosRecientes(client);
+            
+        } catch (MalformedURLException | RemoteException | NotBoundException e) {
+            System.err.println("Error en traer los productos recientes");
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

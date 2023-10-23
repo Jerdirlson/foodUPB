@@ -1,5 +1,10 @@
 package app;
+import controller.ControllerAdministrator;
+import controller.ControllerLogin;
+import model.ModelAdministrator;
 import server.Server;
+import view.AdministradorView;
+import view.LoginView;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -10,7 +15,7 @@ public class App {
             Server serverOperario = new Server( IP_OPERARIO,PORT_OPERARIO,SERVICENAMEOPERARIO);
             serverOperario.deploy(true);
             System.out.println("Servicio en linea de Operario");
-
+            
             String IP_COCINA = ConfigLoader.getProperty("IP_COCINA");
             String PORT_COCINA = ConfigLoader.getProperty("PORT_COCINA");
             String SERVICENAMECOCINA = ConfigLoader.getProperty("SERVICENAMECOCINA");
@@ -18,8 +23,8 @@ public class App {
             servercocina.deploy(false);
             System.out.println("Servicio en linea de Cocina");
 
-
-            // ControllerLogin loginController = new ControllerLogin(new LoginView(), new ModelLogin());
+        
+            ControllerAdministrator controller = new ControllerAdministrator(new AdministradorView(), new ModelAdministrator());
             
         } catch (Exception e) {
             System.out.println("Error al intentar conectar el servidor "+ e.getMessage());

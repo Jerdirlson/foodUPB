@@ -33,6 +33,7 @@ public class ControllerDashboardMain implements ActionListener{
     public DoubleLinkedList<Producto> productosElegidos = new DoubleLinkedList<>();
     public Pedido pedido;
     boolean registroClienteExitoso = false;
+    public Producto[] productosRecientes;
 
     /**
      * Constructs a new ControllerDashboard object with the specified view.
@@ -84,6 +85,15 @@ public class ControllerDashboardMain implements ActionListener{
                 enviarPedido();
             }
         });
+
+        view.jButton3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limpiarDashboard();
+            }
+        });
+
+
     }
     
     
@@ -153,6 +163,28 @@ public class ControllerDashboardMain implements ActionListener{
         return productPanel;
     }
 
+    private JPanel createProductComponentReciente(Producto producto) {
+        JPanel productPanel = new JPanel();
+        productPanel.setLayout(new BorderLayout());
+
+
+        JPanel innerPanel = new JPanel();
+        innerPanel.setLayout(new BorderLayout());
+        innerPanel.setPreferredSize(new Dimension(200, 100));
+
+        JLabel nameLabel = new JLabel(producto.getNombre_producto());
+        innerPanel.add(nameLabel, BorderLayout.NORTH);
+
+        JLabel priceLabel = new JLabel("Precio: $" + producto.getPrecio_unitario());
+        innerPanel.add(priceLabel, BorderLayout.SOUTH);
+
+        productPanel.add(innerPanel, BorderLayout.CENTER);
+        
+        productPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        return productPanel;
+    }
+
     /**
      * Method to create a new product panel
      * @param productPanel
@@ -197,8 +229,11 @@ public class ControllerDashboardMain implements ActionListener{
             this.cliente = model.getUserClient(numeroCliente);
 
             if(this.cliente.nombre_client != null) {
+                productosRecientes = model.getProductosRecientes(this.cliente);
+                for (Producto producto : productosRecientes) {
+                    addProductRecomendado(producto);
+                }
                 view.actualizarCamposUsuario(this.cliente);
-                System.out.println("Se actualizo el cliente");
             }else{
                 JOptionPane.showMessageDialog(null, "El usuario no está registrado ", "Mensaje", JOptionPane.ERROR_MESSAGE);
             }
@@ -218,10 +253,16 @@ public class ControllerDashboardMain implements ActionListener{
         view.jScrollPane1.revalidate();
     }
 
+    public void addProductRecomendado(Producto product) {
+        JPanel productPanelPedidoReciente = createProductComponentReciente(product);
+        view.productosRecientes.add(productPanelPedidoReciente);
+        view.jScrollPane2.setViewportView(view.productosRecientes);
+        view.jScrollPane2.revalidate();
+    }
+
     public void enviarPedido(){
         if (!productosElegidos.isEmpty()) {
             if (cliente.getNombre_client() == null) {
-                System.out.println("Aquí llegar");
                 ClienteInputDialog dialog = new ClienteInputDialog();
                 UserClient clienteData = dialog.showDialog();
                 if (clienteData != null) {
@@ -235,8 +276,30 @@ public class ControllerDashboardMain implements ActionListener{
                 pedido.setCliente(cliente);
                 pedido.setProductos(productosElegidos);
                 model.enviarPedido(pedido);
+                model.registrarPedido(pedido);
         }else
         JOptionPane.showMessageDialog(null, "Debe agregar productos antes de continuar.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void limpiarDashboard(){
+        productosElegidos.clear();
+        Component[] componentArray = view.selectedProductsPanel.getComponents();
+        for (Component component : componentArray) {
+            view.selectedProductsPanel.remove(component);
+        }
+        Component[] componentArray2 = view.productosRecientes.getComponents();
+        for (Component component : componentArray2) {
+            view.productosRecientes.remove(component);
+        }
+
+        view.jScrollPane1.setViewportView(view.selectedProductsPanel);
+        view.jScrollPane1.revalidate();
+        view.jScrollPane2.setViewportView(view.productosRecientes);
+        view.jScrollPane2.revalidate();
+        cliente = new UserClient();
+        view.jLabel2.setText("Es VIP?");
+        view.jLabel3.setText("Nombre cliente");
+        view.jLabel4.setText("Información Cliente");
     }
     
 }

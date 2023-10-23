@@ -68,4 +68,29 @@ public class ModelDashboard {
         }
     }
 
+    public static boolean registrarPedido(Pedido pedido){
+        
+        Client cliente = new Client(IP, PORT, SERVICENAMEOPERARIO);
+
+        try {
+            return cliente.registrarPedido(pedido);
+        } catch (Exception e) {
+            System.out.println("Error registrando el pedido en la base de datos" + e.getMessage());
+            return false;
+        }
+
+    }
+
+    public static  Producto[] getProductosRecientes(UserClient user){
+
+            Client cliente = new Client(IP, PORT, SERVICENAMEOPERARIO);
+
+        try {
+            return cliente.getProductosRecientes(user);
+        } catch (Exception e) {
+            System.out.println("Error registrando el pedido en la base de datos" + e.getMessage());
+            return null;
+        }
+    }
+
 }
