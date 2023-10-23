@@ -14,8 +14,8 @@ public interface SkeletonCocina extends Remote{
     public void addOrder(Pedido order) throws RemoteException;
     void prepararPedido(Producto producto) throws RemoteException;
     void finishCooking(int numeroFogonDondeSeEstaCocinando) throws RemoteException;
-    public void CocinarPedido(Pedido order) throws RemoteException;
-    public void asignarFogon( Producto producto) throws RemoteException;
+    public void CocinarPedido(Producto order) throws RemoteException;
+    public boolean asignarFogon( Producto producto) throws RemoteException;
     public void mostrarPedido(entidades.Stove stove) throws RemoteException;
     public QueueList getClientesVip() throws RemoteException;
     public QueueList getClientesNoVip() throws RemoteException;

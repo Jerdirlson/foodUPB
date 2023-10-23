@@ -11,24 +11,22 @@ import entidades.Producto;
 import entidades.UserClient;
 import entidades.estructuras.doublee.linked.DoubleLinkedList;
 import interfaces.SkeletonDomicilio;
+import model.DomiclioModel;
+import view.FacturaView;
 
 public class ControllerFactura {
     private SkeletonDomicilio skeletonDomicilio;
     private DefaultListModel<Producto> facturaListModel;
     private JList<Producto> facturaList;
     private Pedido currentPedido;
+    public DomiclioModel model;
+    public FacturaView view;
 
-    public ControllerFactura(String serverIP, int serverPort, String serviceName,
-            DefaultListModel<Producto> facturaListModel, JList<Producto> facturaList) {
-        try {
-            Registry registry = LocateRegistry.getRegistry(serverIP, serverPort);
-            skeletonDomicilio = (SkeletonDomicilio) registry.lookup(serviceName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        this.facturaListModel = facturaListModel;
-        this.facturaList = facturaList;
+    public ControllerFactura(DomiclioModel model , FacturaView view) {
+        this.view = view;
+        this.model = model;
+        view.inicializar();
+        view.setVisible(true);
     }
 
     public UserClient getCurrentUser() {

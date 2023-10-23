@@ -1,6 +1,8 @@
 package view;
 
 import javax.swing.*;
+
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,13 +18,15 @@ public class FacturaView extends JFrame {
     private DefaultListModel<Producto> facturaListModel;
     private JList<Producto> facturaList;
 
-    public FacturaView(ControllerFactura controller) {
-        this.controller = controller;
+    public FacturaView() {
+    }
+
+    public void inicializar(){
         this.selectedClient = null;
 
         setTitle("Factura de Compra");
-        int anchoVentana = 800;
-        int altoVentana = 600;
+        int anchoVentana = 1920;
+        int altoVentana = 1080;
         setSize(anchoVentana, altoVentana);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -63,7 +67,7 @@ public class FacturaView extends JFrame {
                     if (selectedClient != null) {
                         Pedido pedido = new Pedido();
                         controller.addPedido(selectedClient);
-                        refreshFactura();
+                        // refreshFactura();
                     } else {
                         JOptionPane.showMessageDialog(FacturaView.this, "No se ha seleccionado un cliente válido.");
                     }
@@ -82,7 +86,7 @@ public class FacturaView extends JFrame {
                     if (selectedProducts != null) {
                         Pedido pedido = new Pedido();
                         pedido.setProductos(selectedProducts);
-                        refreshFactura();
+                        // refreshFactura();
                     } else {
                         JOptionPane.showMessageDialog(FacturaView.this, "Por favor, seleccione productos.");
                     }
@@ -113,30 +117,15 @@ public class FacturaView extends JFrame {
         setContentPane(panelPrincipal);
     }
 
-    private void refreshFactura() {
-        facturaListModel.clear();
-        if (selectedClient != null) {
-            DoubleLinkedList<Producto> productos = Pedido.getProductos();
-            if (productos != null) {
-                for (Producto producto : productos) {
-                    facturaListModel.addElement(producto);
-                }
-            }
-        }
-    }
-    
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            String serverIP = "127.0.0.1"; // Reemplaza con la dirección IP del servidor
-            int serverPort = 1099; // Reemplaza con el puerto del servidor
-            String serviceName = "ServiceDomicilio"; // Reemplaza con el nombre del servicio
-    
-            DefaultListModel<Producto> facturaListModel = new DefaultListModel<>();
-            JList<Producto> facturaList = new JList<>(facturaListModel);
-    
-            ControllerFactura controller = new ControllerFactura(serverIP, serverPort, serviceName, facturaListModel, facturaList);
-            new FacturaView(controller).setVisible(true);
-        });
-    }
+    // private void refreshFactura() {
+    //     facturaListModel.clear();
+    //     if (selectedClient != null) {
+    //         DoubleLinkedList<Producto> productos = pedido.getProductos();
+    //         if (productos != null) {
+    //             for (Producto producto : productos) {
+    //                 facturaListModel.addElement(producto);
+    //             }
+    //         }
+    //     }
+    // }
 }

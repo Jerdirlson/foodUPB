@@ -38,29 +38,65 @@ public class Server {
      *
      * @return true if the service is deployed successfully, false otherwise
      */
-    public boolean deploy(boolean isOperario) {
+    public boolean deployOperario() {
     boolean bool = false;
-    try {
-        if (ip == null || port == null || serviceName == null) {
-            return bool;
+        try {
+            if (ip == null || port == null || serviceName == null) {
+                return bool;
+            }
+            
+            System.setProperty("java.rmi.server.hostname", ip);
+            
+                SkeletonOperario service = new ServiceOperario();
+                LocateRegistry.createRegistry(Integer.parseInt(port));
+                Naming.rebind(uri, service);
+            
+            bool = true;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        
-        System.setProperty("java.rmi.server.hostname", ip);
-        
-        if (isOperario) {
-            SkeletonOperario service = new ServiceOperario();
-            LocateRegistry.createRegistry(Integer.parseInt(port));
-            Naming.rebind(uri, service);
-        } else {
-            SkeletonCocina service = new ServiceCocina();
-            LocateRegistry.createRegistry(Integer.parseInt(port));
-            Naming.rebind(uri, service);
-        }
-        
-        bool = true;
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
     return bool;
 }
+
+    public boolean deployCocina() {
+    boolean bool = false;
+        try {
+            if (ip == null || port == null || serviceName == null) {
+                return bool;
+            }
+            
+            System.setProperty("java.rmi.server.hostname", ip);
+            
+                SkeletonCocina service = new ServiceCocina();
+                LocateRegistry.createRegistry(Integer.parseInt(port));
+                Naming.rebind(uri, service);
+            
+            bool = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bool;
+    }
+
+
+    public boolean deployDomicilio() {
+    boolean bool = false;
+        try {
+            if (ip == null || port == null || serviceName == null) {
+                return bool;
+            }
+            
+            System.setProperty("java.rmi.server.hostname", ip);
+            
+                SkeletonDomicilio service = new ServiceDomicilio();
+                LocateRegistry.createRegistry(Integer.parseInt(port));
+                Naming.rebind(uri, service);
+            
+            bool = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bool;
+    }
+
 }

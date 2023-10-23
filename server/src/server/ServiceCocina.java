@@ -18,19 +18,19 @@ import entidades.Stove;
 
 public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina{
 
-    private static QueueList<Pedido> ClientesNormales;
-    private static QueueList<Pedido> ClientesVIP;
+    private static QueueList<Producto> ClientesNormales;
+    private static QueueList<Producto> ClientesVIP;
     static Stove[] stoves;
     protected static Object estadoLabel;
     private static int fogonNumero;
 
     protected ServiceCocina() throws RemoteException {
         super();
-        stoves = new Stove[16];
+        stoves = new Stove[17];
         ClientesNormales = new QueueList<>(); // Inicializa ClientesNormales
         ClientesVIP = new QueueList<>(); // Inicializa ClientesVIP
 
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 17; i++) {
             if (i < 4) {
                 stoves[i] = new Stove("Cocción Lenta",(fogonNumero=i));
                
@@ -44,45 +44,40 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
     @Override
     public void addOrder(Pedido order) throws RemoteException {
         System.out.println("ESTO ES LO QUE LLEGA EN VIP " + order.getCliente().getVip());
+         Iterator<NodeInterface<Producto>> iterador = order.getProductos().iterator();
+         DoubleLinkedNode<Producto> currentNode ;
+         while(iterador.hasNext()) {
+             currentNode = (DoubleLinkedNode<Producto>) iterador.next();
+             currentNode.getObject().setUsuarioCliente(order.getCliente());
          if (order.getCliente().getVip() == true) {
-            ClientesVIP.push(order);
+            ClientesVIP.push(currentNode.getObject());
             System.out.println(ClientesVIP.size());
             System.out.println("SI HACE EL PUSH");      
               
         } else  {
-            ClientesNormales.push(order);
+            ClientesNormales.push(currentNode.getObject());
         }
     }
-
-   public void CocinarPedido(Pedido order) throws RemoteException{
-    System.out.println(order.getCliente().getNombre_client());
-            try {
-            Iterator<NodeInterface<Producto>> iterador = order.getProductos().iterator();
-            DoubleLinkedNode<Producto> currentNode ;
-            int count = 0;
-            while(iterador.hasNext()) {
-                System.out.println("Iteracion " + count + 1);
-                currentNode = (DoubleLinkedNode<Producto>) iterador.next();
-                System.out.println("currenNode : " + currentNode.getObject().getNombre_producto());
-                asignarFogon(currentNode.getObject());
-                // System.out.println("Entra aqui" + currentNode.getObject().getNombre_producto());
-            }
-            
-            if(order.getCliente().getVip() == true) {
+    }
+      @Override
+       public void CocinarPedido(Producto order) throws RemoteException{
+       System.out.println(order.getUsuarioCliente().getNombre_client());
+             
+            asignarFogon(order);
+             if(order.getUsuarioCliente().getVip() == true) {
                 ClientesVIP.pop();
             }else{
                 ClientesNormales.pop();
             }
             
-        } catch (Exception e) {
-            System.out.println("El error esta en CocinarPedido " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+        } 
     
 
+    
 
-    public void asignarFogon(Producto currentProducto) throws RemoteException {
+    @Override
+    public boolean asignarFogon(Producto currentProducto) throws RemoteException {
+        boolean asignarFogon= false;
         try {
         System.out.println("Antes de entrar al if");
         if (currentProducto.tiempoDeCocion >= 20) {
@@ -94,10 +89,10 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
                     stoves[i].setAvailable(false);
                     System.out.println("El pedido se asigno en el fogon " + i + currentProducto.getNombre_producto());
                     currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
-                    return;
+                    asignarFogon= true;
                 }
             }
-        } else {
+        } else if(currentProducto.tiempoDeCocion < 20) {
             System.out.println("ENTRA AL ELSE");
             for (int i = 5; i < 17; i++) {
             System.out.println("ENTRA AL FOR DEL ELSE");
@@ -107,15 +102,20 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
                 stoves[i].setAvailable(false);
                 System.out.println("El pedido se asigno en el fogon " + i + getPedidosPreparandose(i).nombre_producto);
                 currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
-                break;
+                asignarFogon=true;
             }
         }
          }
-        }catch(Exception e){
-        
+         else{
+            asignarFogon=false;
          }
+         return asignarFogon;
+        }catch(Exception e){
+           System.out.println("error al asignar fogon"+ e.getMessage());
+           return asignarFogon=false;
+         }
+        
    }
-  
   
     @Override
     public void finishCooking(int numeroFogonDondeSeEstaCocinando) throws RemoteException {
@@ -133,8 +133,8 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
         stove.getPedidoPreparandose();
     }
 
-    public static Pedido getPedidoACocinar() throws RemoteException{
-        Pedido pedidoActual;
+    public static Producto getPedidoACocinar() throws RemoteException{
+        Producto pedidoActual;
         if(!ClientesVIP.isEmpty()){
             pedidoActual=ClientesVIP.pop();
         }else{

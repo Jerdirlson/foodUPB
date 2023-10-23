@@ -1,6 +1,8 @@
 package app;
 
 import client.ClienteDomicilio;
+import controller.ControllerFactura;
+import model.DomiclioModel;
 import view.FacturaView;
 
 public class App {
@@ -11,6 +13,6 @@ public class App {
         ClienteDomicilio clienteDomicilio = new ClienteDomicilio(IP, PORT, SERVICEDOMICILIO);
         System.out.println("El cliente esta conectado? " +  clienteDomicilio.isConnected());
 
-        // FacturaView.main(args);
+        ControllerFactura controller = new ControllerFactura(new DomiclioModel(), new FacturaView());
     }
 }
