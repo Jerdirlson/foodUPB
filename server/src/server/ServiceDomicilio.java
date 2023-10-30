@@ -42,6 +42,7 @@ public class ServiceDomicilio extends UnicastRemoteObject implements SkeletonDom
     }
     @Override
     public QueueList generarPedido() throws RemoteException {
+        System.out.println("Entra aqui");
         
         try {
 
@@ -87,6 +88,8 @@ public class ServiceDomicilio extends UnicastRemoteObject implements SkeletonDom
         } catch (Exception e) {
             System.out.println("Error en generar Pedidos: " + e.getMessage());
         }
+
+        pedidos.iterateStack();
 
         return pedidos;
 

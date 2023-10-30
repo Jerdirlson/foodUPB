@@ -19,7 +19,7 @@ public interface SkeletonDomicilio  extends Remote{
 
     double calcularTotalPorPedido(Pedido pedido) throws RemoteException;
 
-    void generarFactura(Pedido pedido) throws RemoteException;
+    public void generarFactura(Pedido pedido) throws RemoteException;
 
     double getMontoTotal() throws RemoteException;
 
