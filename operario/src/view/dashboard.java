@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.*;
+import java.net.URL;
 
 import javax.swing.*; 
 
@@ -15,6 +16,7 @@ public class dashboard extends JFrame {
     Imagenes fondo;
 
     public dashboard() {
+        setVentanaIcono();
     }
 
     /**
@@ -42,6 +44,20 @@ public class dashboard extends JFrame {
 
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private void setVentanaIcono() {
+        
+        URL resource = getClass().getResource("/view/Imagenes/Frame3.png");
+
+        if (resource != null) {
+            ImageIcon icono = new ImageIcon(resource);
+
+            // Establece el ícono de la ventana
+            setIconImage(icono.getImage());
+        } else {
+            System.err.println("No se pudo cargar la imagen del ícono.");
+        }
     }
 
 }

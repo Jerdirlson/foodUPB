@@ -21,10 +21,10 @@ public class CocinaController {
     }
 
     public void iniciarPedido(int fogonNumero) throws RemoteException{
-        vista.setEstadoLabel(fogonNumero, "Cocinando pedido");
+        vista.setEstadoLabel(fogonNumero, "Cocinando "+ modelo.getStove(fogonNumero).getPedidoPreparandose().getNombre_producto());
         int i= fogonNumero;
          modelo.prepararPedido(modelo.getStove(fogonNumero).getPedidoPreparandose());
-         System.out.println("El pedido que se va a preparar es : "+modelo.getStove(fogonNumero).getPedidoPreparandose());
+         System.out.println("El pedido que se va a preparar es : "+modelo.getStove(fogonNumero).getPedidoPreparandose().getNombre_producto());
     }
 
     public void terminarPedido(int fogonNumero) throws RemoteException {
