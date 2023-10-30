@@ -4,6 +4,7 @@ import javax.swing.*;
 import controller.ControllerDashboardMain;
 
 import java.awt.*;
+import java.net.URL;
 
 import entidades.User;
 import entidades.UserClient;
@@ -38,6 +39,7 @@ public class dashboadMainPageView extends JFrame{
     
     public void inicializar(User user){
         /*Info panel */
+        setVentanaIcono();
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         inicializarPanelInfo(user);
@@ -360,6 +362,20 @@ public class dashboadMainPageView extends JFrame{
         jLabel2.setText("Es VIP: " + (usuario.getVip() ? "Sí" : "No"));
         jLabel3.setText(usuario.getNombre_client());
         jLabel4.setText("Dirección: " + usuario.getBarrio()+ "calle " + usuario.getCalle() + "Numero " + usuario.getNumero());
+    }
+
+    private void setVentanaIcono() {
+        
+        URL resource = getClass().getResource("/view/Imagenes/Frame3.png");
+
+        if (resource != null) {
+            ImageIcon icono = new ImageIcon(resource);
+
+            // Establece el ícono de la ventana
+            setIconImage(icono.getImage());
+        } else {
+            System.err.println("No se pudo cargar la imagen del ícono.");
+        }
     }
     
 }
