@@ -1,18 +1,21 @@
 package controller;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import entidades.Pedido;
 import entidades.Producto;
 import entidades.UserClient;
 import entidades.estructuras.doublee.linked.DoubleLinkedList;
+import entidades.estructuras.queue.QueueList;
 import interfaces.SkeletonDomicilio;
 import model.DomiclioModel;
 import view.FacturaView;
+import javax.swing.Timer;
+
 
 public class ControllerFactura {
     private SkeletonDomicilio skeletonDomicilio;
@@ -21,12 +24,19 @@ public class ControllerFactura {
     private Pedido currentPedido;
     public DomiclioModel model;
     public FacturaView view;
+    public Timer timer;
+    public int segundosRestantes = 300;
+    private JLabel timerLabel;
+    public DoubleLinkedList pedidosAMostrar;
 
     public ControllerFactura(DomiclioModel model , FacturaView view) {
         this.view = view;
         this.model = model;
         view.inicializar();
+        view.setController(this);
         view.setVisible(true);
+        empezarContador();
+        pedidosAMostrar = new DoubleLinkedList<>();
     }
 
     public UserClient getCurrentUser() {
@@ -35,6 +45,41 @@ public class ControllerFactura {
         currentUser.setMunicipio("Municipio del Cliente");
 
         return currentUser;
+    }
+
+    public void empezarContador() {
+        timerLabel = view.timerLabel;
+    
+        if (segundosRestantes == 0) {
+            segundosRestantes = 300; // Reiniciar los segundos
+        }
+    
+        timer = new Timer(1000, e -> {
+            segundosRestantes--;
+            int minutos = segundosRestantes / 60;
+            int segundos = segundosRestantes % 60;
+            String tiempoRestante = String.format("%02d:%02d", minutos, segundos);
+    
+            SwingUtilities.invokeLater(() -> {
+                view.timerLabel.setText(tiempoRestante);
+            });
+    
+            if (segundosRestantes <= 0) {
+                timer.stop();
+                JOptionPane.showMessageDialog(view, "El temporizador ha expirado.");
+            }
+        });
+    
+        timer.setRepeats(true);
+        timer.start();
+    }
+
+    public void pararTimer(){
+        if (timer != null && timer.isRunning()) {
+            timer.stop();
+            segundosRestantes = 0;
+            view.timerLabel.setText("00:00");
+        }
     }
 
     public void addPedido(UserClient cliente) {
@@ -66,7 +111,7 @@ public class ControllerFactura {
         if (currentPedido != null) {
             // Agrega la lógica para entregar el pedido, por ejemplo, a través de RMI
             try {
-                skeletonDomicilio.entregarPedido(currentPedido);
+                skeletonDomicilio.generarPedido();
                 currentPedido = null; // Marca el pedido como entregado
             } catch (Exception e) {
                 e.printStackTrace();
@@ -96,6 +141,20 @@ public class ControllerFactura {
 
     public Pedido getCurrentPedido() {
         return currentPedido;
+    }
+
+    public void generarPedido(){
+        try {
+            QueueList pedidos = model.generarPedido();
+
+            for (int i = 0; i < pedidos.size(); i++) {
+                pedidosAMostrar.add(pedidos.pop());
+            }
+
+            System.out.println("Se han adicionado los pedidos a mostrar con exito.");
+        } catch (Exception e) {
+            System.out.println("Error en generarPedido " + e.getMessage());
+        }
     }
 
 }

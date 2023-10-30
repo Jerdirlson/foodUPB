@@ -8,6 +8,7 @@ import entidades.Producto;
 import entidades.UserClient;
 import entidades.estructuras.nodes.DoubleLinkedNode;
 import entidades.estructuras.priorityQueue.PriorityQueueList;
+import entidades.estructuras.queue.QueueList;
 
 public interface SkeletonDomicilio  extends Remote{
     
@@ -29,7 +30,7 @@ public interface SkeletonDomicilio  extends Remote{
     void agregarPedido(Pedido pedido) throws RemoteException;
 
     void entregarPedidos() throws RemoteException;
-
-    void entregarPedido(Pedido pedido);
+    
+    public QueueList generarPedido() throws RemoteException;
     
 }

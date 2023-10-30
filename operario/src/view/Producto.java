@@ -1,33 +1,79 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package view;
+package entidades;
 
-/**
- *
- * @author 57314
- */
-public class Producto {
-    private String nombre;
-    private int precio;
-    private int cantidad;
+import java.io.Serializable;
 
-    public Producto(String nombre, int precio, int cantidad) {
-        this.nombre = nombre;
-        this.precio = precio;
-        this.cantidad = cantidad;
+public class Producto implements Serializable{
+
+    public Long idProducto;
+    public String nombre_producto;
+    public Long precio_unitario;
+    public String uri_img;
+    public Long tiempoDeCocion;
+    public int numeroFogonDondeSeEstaCocinando;
+
+    public Producto(){
+
     }
 
-    public String getNombre() {
-        return nombre;
+    public Producto(Long idProducto, String nombre_producto, Long precio_unitario, String uri_img, Long tiempoDeCocion) {
+        this.idProducto = idProducto;
+        this.nombre_producto = nombre_producto;
+        this.precio_unitario = precio_unitario;
+        this.uri_img = uri_img;
+        this.tiempoDeCocion=tiempoDeCocion;
+        this.numeroFogonDondeSeEstaCocinando=17; 
     }
 
-    public int getPrecio() {
-        return precio;
+
+
+    public String getNombre_producto() {
+        return nombre_producto;
     }
 
-    public int getCantidad() {
-        return cantidad;
+    public void setNombre_producto(String nombre_producto) {
+        this.nombre_producto = nombre_producto;
     }
+
+    public Long getPrecio_unitario() {
+        return precio_unitario;
+    }
+
+    public void setPrecio_unitario(Long precio_unitario) {
+        this.precio_unitario = precio_unitario;
+    }
+
+    public String getUri_img() {
+        return uri_img;
+    }
+
+    public void setUri_img(String uri_img) {
+        this.uri_img = uri_img;
+    }
+   
+     public Long getTiempoDeCocion(){
+        return this.tiempoDeCocion;
+     }
+
+     public void setTiempoDeCocion(Long tiempoDeCocion){
+        this.tiempoDeCocion=tiempoDeCocion;
+     }
+     public int getNumeroFogonDondeSeEstaCocinando(){
+        return this.numeroFogonDondeSeEstaCocinando;
+     }
+
+     public void setNumeroFogonDondeSeEstaCocinando(int numeroFogonDondeSeEstaCocinando){
+        this.numeroFogonDondeSeEstaCocinando= numeroFogonDondeSeEstaCocinando;
+        
+     }
+
+    public Long getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
+    }
+    
+
+
 }

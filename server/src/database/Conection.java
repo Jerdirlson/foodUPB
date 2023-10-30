@@ -80,8 +80,6 @@ public class Conection {
             if (rs.next()) {
                 user.setNombre(rs.getString("name"));
                 user.setCorreo(rs.getString("email"));
-                user.setTelefono(rs.getLong("phone"));
-                user.setDireccion(rs.getString("adress"));
                 user.setPassword(rs.getString("password"));
             }
     
@@ -147,7 +145,6 @@ public class Conection {
             Producto producto = new Producto();
             producto.setIdProducto(rs.getLong("idtbl_producto"));
             producto.setNombre_producto(rs.getString("nombre_producto"));
-            producto.setUri_img(rs.getString("uri_img")); 
             producto.setPrecio_unitario(rs.getLong("precio_unitario"));
             producto.setTiempoDeCocion(rs.getLong("tiempo_coccion"));
             listaProductos.add(producto);
@@ -315,7 +312,6 @@ public class Conection {
                     Producto producto = new Producto();
                     producto.setIdProducto(productoRs.getLong("idtbl_producto"));
                     producto.setNombre_producto(productoRs.getString("nombre_producto"));
-                    producto.setUri_img(productoRs.getString("uri_img"));
                     producto.setPrecio_unitario(productoRs.getLong("precio_unitario"));
                     producto.setTiempoDeCocion(productoRs.getLong("tiempo_coccion"));
                     listaProductos.add(producto);

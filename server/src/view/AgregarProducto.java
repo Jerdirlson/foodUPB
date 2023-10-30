@@ -27,7 +27,6 @@ public class AgregarProducto extends JFrame {
     }
 
     public void initComponents() {
-        // Crear un JPanel que cubra toda la ventana y configurar su color de fondo a negro
         panelAgregarOperario = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -55,7 +54,6 @@ public class AgregarProducto extends JFrame {
 
         labelNombre.setFont(new Font("Liberation Sans", Font.BOLD, 36));
         labelCorreo.setFont(new Font("Liberation Sans", Font.BOLD, 36));
-        labelContraseña.setFont(new Font("Liberation Sans", Font.BOLD, 36));
 
         textFieldNombre.setFont(new Font("Liberation Sans", Font.PLAIN, 36));
         textFieldCorreo.setFont(new Font("Liberation Sans", Font.PLAIN, 36));
@@ -101,7 +99,6 @@ public class AgregarProducto extends JFrame {
         panelAgregarOperario.add(labelCorreo);
         panelAgregarOperario.add(textFieldCorreo);
 
-        panelAgregarOperario.add(labelContraseña);
         panelAgregarOperario.add(passwordField);
 
         panelAgregarOperario.add(botonGuardar);

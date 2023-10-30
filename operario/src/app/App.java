@@ -17,7 +17,7 @@ public class App {
      */
     public static void main(String[] args) throws Exception {
         try {
-            String IP = ConfigLoader.getProperty("IP_OPERARIO");
+            String IP = ConfigLoader.getProperty("IP");
             String PORT = ConfigLoader.getProperty("PORT_OPERARIO");
             String SERVICENAMEOPERARIO = ConfigLoader.getProperty("SERVICENAMEOPERARIO");
 

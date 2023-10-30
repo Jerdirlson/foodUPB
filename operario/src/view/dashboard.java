@@ -24,13 +24,13 @@ public class dashboard extends JFrame {
      * @return None
      */
     public void inicializar(){
-        fondo = new Imagenes("operario/assets/Bienvenida.jpg");
+        fondo = new Imagenes("assets/Bienvenida.jpg");
 
         this.setContentPane(fondo);
 
         setTitle("Dashboard - Operario");
 
-        setSize(580, 420);
+        setSize(1920, 1080);
 
         setLocationRelativeTo(null);
 

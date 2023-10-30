@@ -36,8 +36,8 @@ import entidades.estructuras.queue.QueueArray;
         order.setCooked(true);*/
     }
 
-    public void finishCooking() {
-        this.pedidosPreparandose.pop();
+    public Producto finishCooking() {
+        return this.pedidosPreparandose.pop();
     }
 
     public Producto getPedidoPreparandose(){

@@ -16,6 +16,22 @@ public class QueueArray<T extends Serializable> implements StackInterface<T>,Ser
     int head = 0;
     int tail = 0;
 
+    public int getHead() {
+        return head;
+    }
+
+    public void setHead(int head) {
+        this.head = head;
+    }
+
+    public int getTail() {
+        return tail;
+    }
+
+    public void setTail(int tail) {
+        this.tail = tail;
+    }
+
     public QueueArray(int maxSize) {
         this.maxSize = maxSize;
         array = new Object[maxSize];

@@ -38,7 +38,7 @@ public class CocinaModel implements SkeletonCocina{
         }
     }
 
-    String IP = ConfigLoader.getProperty("IP_COCINA");
+    String IP = ConfigLoader.getProperty("IP");
     String PORT = ConfigLoader.getProperty("PORT_COCINA");
     String SERVICENAMECOCINA = ConfigLoader.getProperty("SERVICENAMECOCINA");
 

@@ -1,3 +1,5 @@
+package app;
+
 import java.io.FileInputStream;
 
 import java.io.IOException;
@@ -16,7 +18,7 @@ public class ConfigLoader {
 
     static {
 
-        try (FileInputStream file = new FileInputStream("C:\\Users\\57314\\Documents\\Estructuras\\foodUPB\\server\\config.properties")) {
+        try (FileInputStream file = new FileInputStream("config.properties")) {
 
             config.load(file);
 

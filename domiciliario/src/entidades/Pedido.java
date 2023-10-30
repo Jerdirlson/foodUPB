@@ -10,7 +10,7 @@ public class Pedido implements Serializable{
     private UserClient cliente;
 
     public Pedido(){
-        
+        productos = new DoubleLinkedList();
     }
 
     public DoubleLinkedList getProductos() {
