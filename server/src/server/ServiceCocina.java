@@ -64,6 +64,7 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
        System.out.println(order.getUsuarioCliente().getNombre_client());
              
             asignarFogon(order);
+            stoves[order.getNumeroFogonDondeSeEstaCocinando()].setAvailable(false);
              if(order.getUsuarioCliente().getVip() == true) {
                 ClientesVIP.pop();
             }else{
@@ -73,49 +74,66 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
         } 
     
 
-    
+        public boolean asignarFogon(Producto currentProducto) throws RemoteException {
+            System.out.println("Antes de entrar al if");
+            if (currentProducto.tiempoDeCocion >= 20) {
+                System.out.println("Entro al if");
+                for (int i = 1; i < 5; i++) {
+                    if (i < stoves.length && stoves[i].isAvailable()) {
+                        System.out.println("ENTRA AL IF DEL PRIMER FOR");
+                        stoves[i].setPedidosPreparandose(currentProducto);
+                        System.out.println("El pedido se asigno en el fogon " + i + currentProducto.getNombre_producto());
+                        currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
+                        System.out.println(currentProducto.getNumeroFogonDondeSeEstaCocinando());
+                        return true;
+                    }
+                }
+            } else if(currentProducto.tiempoDeCocion < 20) {
+                System.out.println("ENTRA AL ELSE");
+                for (int i = 5; i < 17; i++) {
+                    System.out.println("ENTRA AL FOR DEL ELSE");
+                    if (stoves[i].isAvailable()) {
+                        System.out.println("ENTRA AL IF DEL FOR DEL ELSE");
+                        stoves[i].setPedidosPreparandose(currentProducto);
+                        
+                        System.out.println("El pedido se asigno en el fogon " + i + getPedidosPreparandose(i).nombre_producto);
+                        currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
+                        System.out.println(i);
+                        System.out.println(stoves[i].isAvailable());
 
-    @Override
-    public boolean asignarFogon(Producto currentProducto) throws RemoteException {
-        boolean asignarFogon= false;
-        try {
-        System.out.println("Antes de entrar al if");
-        if (currentProducto.tiempoDeCocion >= 20) {
-            System.out.println("Entro al if");
-            for (int i = 1; i < 5; i++) {
-                if (i < stoves.length && stoves[i].isAvailable()) {
-                    System.out.println("ENTRA AL IF DEL PRIMER FOR");
-                    stoves[i].setPedidosPreparandose(currentProducto);
-                    stoves[i].setAvailable(false);
-                    System.out.println("El pedido se asigno en el fogon " + i + currentProducto.getNombre_producto());
-                    currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
-                    asignarFogon= true;
+                        return true;
+                        
+                    }
+
                 }
             }
-        } else if(currentProducto.tiempoDeCocion < 20) {
-            System.out.println("ENTRA AL ELSE");
+            return false;
+        }
+
+   /*  @Override
+    public boolean asignarFogon(Producto currentProducto) throws RemoteException {
+        if (currentProducto.tiempoDeCocion >= 20) {
+            for (int i = 1; i < 5; i++) {
+                if (stoves[i].isAvailable()) {
+                    stoves[i].setPedidosPreparandose(currentProducto);
+                    stoves[i].setAvailable(false);
+                    currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
+                    return true;  
+                }
+            }
+        } else {
             for (int i = 5; i < 17; i++) {
-            System.out.println("ENTRA AL FOR DEL ELSE");
-            if (stoves[i] != null && stoves[i].isAvailable()) {
-                System.out.println("ENTRA AL IF DEL FOR DEL ELSE");
-                stoves[i].setPedidosPreparandose(currentProducto);
-                stoves[i].setAvailable(false);
-                System.out.println("El pedido se asigno en el fogon " + i + getPedidosPreparandose(i).nombre_producto);
-                currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
-                asignarFogon=true;
+                if (stoves[i].isAvailable()) {
+                    stoves[i].setPedidosPreparandose(currentProducto);
+                    currentProducto.setNumeroFogonDondeSeEstaCocinando(i);
+                    return true;  
+                }
             }
         }
-         }
-         else{
-            asignarFogon=false;
-         }
-         return asignarFogon;
-        }catch(Exception e){
-           System.out.println("error al asignar fogon"+ e.getMessage());
-           return asignarFogon=false;
-         }
-        
-   }
+        return false;  // No se asignó a ningún fogón. 
+    }*/
+         
+   
   
     @Override
     public void finishCooking(int numeroFogonDondeSeEstaCocinando) throws RemoteException {
