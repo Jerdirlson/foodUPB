@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.*;
+import java.net.URL;
 
 import javax.swing.*; 
 
@@ -15,7 +16,7 @@ public class LoginView extends JFrame{
     public JButton loginButton = new JButton("Login");
     
     public LoginView(){
-        
+        setVentanaIcono();
     }
     /**
      * Initializes the login window.
@@ -61,4 +62,20 @@ public class LoginView extends JFrame{
         this.setContentPane(mainPanel);
         this.setVisible(true);
     }
+
+    private void setVentanaIcono() {
+        
+        URL resource = getClass().getResource("/view/Imagenes/Frame3.png");
+
+        if (resource != null) {
+            ImageIcon icono = new ImageIcon(resource);
+
+            // Establece el ícono de la ventana
+            setIconImage(icono.getImage());
+        } else {
+            System.err.println("No se pudo cargar la imagen del ícono.");
+        }
+    }
+
+    
 }
