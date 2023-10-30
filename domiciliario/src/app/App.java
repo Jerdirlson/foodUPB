@@ -7,7 +7,7 @@ import view.FacturaView;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        String IP = ConfigLoader.getProperty("IP_DOMICILIO");
+        String IP = ConfigLoader.getProperty("IP");
         String PORT = ConfigLoader.getProperty("PORT_DOMICILIO");
         String SERVICEDOMICILIO = ConfigLoader.getProperty("SERIVENAMEDOMICILIO");
         ClienteDomicilio clienteDomicilio = new ClienteDomicilio(IP, PORT, SERVICEDOMICILIO);

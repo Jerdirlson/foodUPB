@@ -8,6 +8,7 @@ import java.rmi.RemoteException;
 import entidades.Pedido;
 import entidades.Producto;
 import entidades.UserClient;
+import entidades.estructuras.queue.QueueList;
 import interfaces.SkeletonDomicilio;
 
 public class ClienteDomicilio implements SkeletonDomicilio {
@@ -136,17 +137,17 @@ public class ClienteDomicilio implements SkeletonDomicilio {
         throw new UnsupportedOperationException("Unimplemented method 'entregarPedidos'");
     }
 
-    @Override
-    public void entregarPedido(Pedido pedido) {
-       try {
-            service = (SkeletonDomicilio) Naming.lookup(url);
-            service.entregarPedido(pedido);
-        } catch (Exception e) {
-            System.err.println("Error en enviar el pedido");
-            e.printStackTrace();
-        }
-        throw new UnsupportedOperationException("Unimplemented method 'entregarPedido'");
-    }
+    // @Override
+    // public void entregarPedido(Pedido pedido) {
+    //    try {
+    //         service = (SkeletonDomicilio) Naming.lookup(url);
+    //         service.entregarPedido(pedido);
+    //     } catch (Exception e) {
+    //         System.err.println("Error en enviar el pedido");
+    //         e.printStackTrace();
+    //     }
+    //     throw new UnsupportedOperationException("Unimplemented method 'entregarPedido'");
+    // }
 
     public boolean isConnected() throws RemoteException{
         try{
@@ -156,6 +157,17 @@ public class ClienteDomicilio implements SkeletonDomicilio {
         } catch (MalformedURLException | RemoteException | NotBoundException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public QueueList generarPedido() throws RemoteException {
+        try {
+            service = (SkeletonDomicilio) Naming.lookup(url);
+            return service.generarPedido();
+        } catch (Exception e) {
+            System.out.println("Error en generarPedido ClienteDomicilio");
+            return null;
         }
     }
 

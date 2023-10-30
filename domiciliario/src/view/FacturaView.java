@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import controller.ControllerFactura;
 import entidades.Pedido;
 import entidades.Producto;
@@ -17,12 +18,14 @@ public class FacturaView extends JFrame {
     private UserClient selectedClient;
     private DefaultListModel<Producto> facturaListModel;
     private JList<Producto> facturaList;
+    public JLabel timerLabel;
 
     public FacturaView() {
     }
 
     public void inicializar(){
         this.selectedClient = null;
+        int tamañoGrid = 3;
 
         setTitle("Factura de Compra");
         int anchoVentana = 1920;
@@ -48,17 +51,59 @@ public class FacturaView extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = tamañoGrid;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
         tituloPanel.setBackground(Color.BLACK);
         panelPrincipal.add(tituloPanel, gbc);
 
         gbc.gridy = 1;
+        gbc.gridx = 0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weighty = 1.0;
         panelPrincipal.add(new JScrollPane(facturaList), gbc);
 
-        JButton agregarPedidoButton = new JButton("Agregar Pedido");
+
+        timerLabel = new JLabel("00:00");
+        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        timerLabel.setFont(new Font("ADLaM Display", Font.BOLD, 36));
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        panelPrincipal.add(timerLabel, gbc);
+
+        JButton empezarTimer = new JButton("Empezar Timer");
+        empezarTimer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    System.out.println("Se va a iniciar el temporizador ");
+                    if (controller.segundosRestantes > 0) {
+                        controller.timer.stop(); // Detener el temporizador si está en marcha
+                    }
+                    controller.segundosRestantes = 300; // Reiniciar los segundos
+                    controller.timer.start();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        JButton pararTimer = new JButton("Parar Timer");
+        pararTimer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    System.out.println("Se va a parar el timer");
+                        controller.pararTimer();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        
+        JButton agregarPedidoButton = new JButton("Actualizar pedido");
         agregarPedidoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -94,12 +139,12 @@ public class FacturaView extends JFrame {
             }
         });
 
-        JButton entregarPedidosButton = new JButton("Entregar Pedidos");
+        JButton entregarPedidosButton = new JButton("Entregar pedido");
         entregarPedidosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    controller.deliverPedido();
+                    controller.generarPedido();
                     JOptionPane.showMessageDialog(FacturaView.this, "Los pedidos han sido entregados.");
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -107,14 +152,31 @@ public class FacturaView extends JFrame {
             }
         });
 
-        gbc.gridy = 2;
-        panelPrincipal.add(agregarPedidoButton, gbc);
-        gbc.gridy = 3;
-        panelPrincipal.add(agregarProductoButton, gbc);
         gbc.gridy = 4;
+        gbc.gridx = 1;
+        panelPrincipal.add(empezarTimer,gbc);
+
+        gbc.gridy = 4;
+        gbc.gridx = 2;
+        panelPrincipal.add(pararTimer, gbc);
+
+
+        gbc.gridy = 5;
+        gbc.gridx = 0;
+        panelPrincipal.add(agregarPedidoButton, gbc);
+        gbc.gridy = 5;
+        gbc.gridx = 1;
+        // panelPrincipal.add(agregarProductoButton, gbc);
+        gbc.gridy = 5;
+        gbc.gridx = 2;
         panelPrincipal.add(entregarPedidosButton, gbc);
 
         setContentPane(panelPrincipal);
+    }
+
+
+    public void setController(ControllerFactura controller) {
+        this.controller = controller;
     }
 
     // private void refreshFactura() {

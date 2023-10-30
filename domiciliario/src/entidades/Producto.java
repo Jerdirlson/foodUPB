@@ -10,6 +10,7 @@ public class Producto implements Serializable{
     public String uri_img;
     public Long tiempoDeCocion;
     public int numeroFogonDondeSeEstaCocinando;
+    public UserClient usuarioCliente;
 
     public Producto(){
 
@@ -72,6 +73,14 @@ public class Producto implements Serializable{
 
     public void setIdProducto(Long idProducto) {
         this.idProducto = idProducto;
+    }
+
+    public UserClient getUsuarioCliente() {
+        return usuarioCliente;
+    }
+
+    public void setUsuarioCliente(UserClient usuarioCliente) {
+        this.usuarioCliente = usuarioCliente;
     }
     
 

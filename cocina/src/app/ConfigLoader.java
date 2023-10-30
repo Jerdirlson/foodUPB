@@ -17,7 +17,7 @@ public class ConfigLoader {
 
     static {
 
-        try (FileInputStream file = new FileInputStream("C:\\Users\\dafel\\Downloads\\foodUPB\\server\\config.properties")) {
+        try (FileInputStream file = new FileInputStream("config.properties")) {
 
             config.load(file);
 

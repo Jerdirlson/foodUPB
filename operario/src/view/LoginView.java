@@ -26,7 +26,7 @@ public class LoginView extends JFrame{
     public void inicializar(){
 
         setTitle("Login");
-        setSize(580, 420);
+        setSize(1920, 1080);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -35,7 +35,7 @@ public class LoginView extends JFrame{
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Etiqueta de imagen de fondo
-        ImageIcon backgroundImage = new ImageIcon("operario/assets/Operador.jpg");
+        ImageIcon backgroundImage = new ImageIcon("assets/Operador.jpg");
         JLabel backgroundLabel = new JLabel(backgroundImage);
         mainPanel.add(backgroundLabel, BorderLayout.CENTER);
 

@@ -1,8 +1,8 @@
 package model;
 
 import java.rmi.RemoteException;
-import java.util.List;
 
+import app.ConfigLoader;
 import client.ClienteDomicilio;
 import entidades.Pedido;
 import entidades.UserClient;
@@ -10,6 +10,7 @@ import entidades.estructuras.doublee.linked.DoubleLinkedList;
 import entidades.estructuras.nodes.DoubleLinkedNode;
 import entidades.estructuras.queue.QueueList;
 import interfaces.SkeletonDomicilio;
+import controller.ControllerFactura;
 
 public class DomiclioModel implements SkeletonDomicilio {
     private Persona cliente;
@@ -19,6 +20,10 @@ public class DomiclioModel implements SkeletonDomicilio {
     private Pedido currentPedido;
 
     private double impuestoFijo = 0.08;
+
+    public static String IP = ConfigLoader.getProperty("IP");
+    public static String PORT = ConfigLoader.getProperty("PORT_DOMICILIO");
+    public static String SERVICENAMEDOMICILIO = ConfigLoader.getProperty("SERVICENAMEDOMICILIO");
 
     public DomiclioModel() {
         productos = new DoubleLinkedList<>();
@@ -45,7 +50,6 @@ public class DomiclioModel implements SkeletonDomicilio {
             }
         }
 
-        throw new RemoteException("Pedido no encontrado: " + pedido);
     }
 
     @Override
@@ -163,7 +167,7 @@ public class DomiclioModel implements SkeletonDomicilio {
         pedidosParaLlevar.clear();
     }
 
-    @Override
+    // @Override
     public void entregarPedido(Pedido pedido) {
         if (pedido != null) {
             try {
@@ -176,7 +180,19 @@ public class DomiclioModel implements SkeletonDomicilio {
                 e.printStackTrace();
             }
         }
-        throw new UnsupportedOperationException("Unimplemented method 'entregarPedido'");
+    }
+
+    @Override
+    public QueueList generarPedido() throws RemoteException {
+        QueueList pedidos = null;
+        ClienteDomicilio cliente = new ClienteDomicilio(IP,PORT,SERVICENAMEDOMICILIO);
+
+        try {
+            pedidos = cliente.generarPedido();
+        } catch (Exception e) {
+            System.out.println("Error en generarPedido MODEL ");
+        }
+        return pedidos;
     }
 
 

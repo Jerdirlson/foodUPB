@@ -2,20 +2,94 @@ package server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Iterator;
+
 import entidades.Pedido;
 import entidades.Producto;
 import entidades.UserClient;
 import entidades.estructuras.doublee.linked.DoubleLinkedList;
 import entidades.estructuras.nodes.DoubleLinkedNode;
+import entidades.estructuras.queue.QueueArray;
 import entidades.estructuras.queue.QueueList;
 import interfaces.SkeletonDomicilio;
-
 public class ServiceDomicilio extends UnicastRemoteObject implements SkeletonDomicilio {
-    private QueueList<Pedido> pedidos = new QueueList<>();
+    public static QueueList productosParaEntregar = new QueueList<>();
+    private static QueueList pedidos = new QueueList<>();
     private double totalMonto = 0.0;
 
     public ServiceDomicilio() throws RemoteException {
         super();
+    }
+
+
+
+    public static void pushProducto(Producto producto) throws RemoteException {
+        try {
+            productosParaEntregar.push(producto);
+            System.out.println(productosParaEntregar.size());
+            if (productosParaEntregar.size() > 7) {
+                // Se debe hacer todo lo que se tenga que hacer a la hora de entregar el domicilio al domiciliario
+                
+                ServiceDomicilio service = new ServiceDomicilio(); // Crea una instancia de ServiceDomicilio
+                service.generarPedido();
+            }
+            
+            System.out.println("Tama;o de la cola " +productosParaEntregar.size());
+        } catch (Exception e) {
+            System.out.println("Error en pushProducto : " + e.getMessage());
+        }
+        
+    }
+    @Override
+    public QueueList generarPedido() throws RemoteException {
+        
+        try {
+
+            System.out.println("Entra a generar pedidos");
+        
+            boolean isEmpty = true;
+            Iterator iterador = productosParaEntregar.list.iterator();
+        
+            while (iterador.hasNext()){
+                DoubleLinkedNode<Producto> productoNode = (DoubleLinkedNode<Producto>) iterador.next();
+                Producto currentProducto = productoNode.getObject();
+                System.out.println("Produycto con dueño que llega " + currentProducto.getNombre_producto() + " " + currentProducto.getUsuarioCliente().getNombre_client());
+                Iterator iteradorPedidos = pedidos.list.iterator();
+                boolean encontro = false;
+                if (pedidos.isEmpty()) {                    
+                    //Solo entra aqui siempre y cuando la lista de pedidos este vacia, osea este sera el primer pedido
+                    Pedido pedido = new Pedido();
+                    pedido.getProductos().add(currentProducto);
+                    pedido.setCliente(currentProducto.getUsuarioCliente());
+                    productosParaEntregar.pop();
+                    pedidos.push(pedido);
+                    encontro = true;
+                }
+                while (iteradorPedidos.hasNext()){
+                    DoubleLinkedNode<Pedido> pedidoNode = (DoubleLinkedNode<Pedido>) iteradorPedidos.next();
+                    Pedido currentNodePedidos = pedidoNode.getObject();
+                    if(currentProducto.getUsuarioCliente().getUserId() == currentNodePedidos.getCliente().getUserId()){
+                        currentNodePedidos.getProductos().add(currentProducto);
+                        productosParaEntregar.pop();
+                        encontro = true;
+                        break;
+                    }
+                }
+
+                if (!encontro) {
+                        Pedido nuevoPedido = new Pedido();
+                        nuevoPedido.getProductos().add(currentProducto);
+                        nuevoPedido.setCliente(currentProducto.getUsuarioCliente());
+                        productosParaEntregar.pop();
+                        pedidos.push(nuevoPedido);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error en generar Pedidos: " + e.getMessage());
+        }
+
+        return pedidos;
+
     }
 
     public double calcularTotalPorPedido(Pedido pedido) throws RemoteException {
@@ -23,11 +97,12 @@ public class ServiceDomicilio extends UnicastRemoteObject implements SkeletonDom
         double totalPedido = 0.0;
         for (DoubleLinkedNode<Producto> node = productos.getHead(); node != null; node = node.getNext()) {
             Producto producto = node.getObject();
-            totalPedido += producto.getPrecio_unitario() ;
+            totalPedido += producto.getPrecio_unitario();
         }
 
         return totalPedido;
     }
+
 
     public void generarFactura(Pedido pedido) throws RemoteException {
         double totalPedido = calcularTotalPorPedido(pedido);
@@ -85,6 +160,27 @@ public class ServiceDomicilio extends UnicastRemoteObject implements SkeletonDom
     }
 
 
-    
+
+    @Override
+    public void agregarPedido(Pedido pedido) throws RemoteException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'agregarPedido'");
+    }
+
+
+
+    @Override
+    public void entregarPedidos() throws RemoteException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'entregarPedidos'");
+    }
+
+
+
+    // @Override
+    // public void entregarPedido(Pedido pedido) {
+    //     // TODO Auto-generated method stub
+    //     throw new UnsupportedOperationException("Unimplemented method 'entregarPedido'");
+    // }    
 
 }

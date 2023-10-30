@@ -4,14 +4,12 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 
-import javax.swing.JOptionPane;
 
 
 import entidades.Pedido;
 import entidades.Producto;
 import entidades.estructuras.interfaces.node.NodeInterface;
 import entidades.estructuras.nodes.DoubleLinkedNode;
-import entidades.estructuras.queue.QueueArray;
 import entidades.estructuras.queue.QueueList;
 import interfaces.SkeletonCocina;
 import entidades.Stove;
@@ -121,8 +119,10 @@ public class ServiceCocina extends UnicastRemoteObject implements SkeletonCocina
     public void finishCooking(int numeroFogonDondeSeEstaCocinando) throws RemoteException {
     
             stoves[numeroFogonDondeSeEstaCocinando].setAvailable(true);
-            stoves[numeroFogonDondeSeEstaCocinando].finishCooking();
+            Producto productoTerminado = stoves[numeroFogonDondeSeEstaCocinando].finishCooking();
             System.out.println(" El estado de esta estufa es: "+  stoves[numeroFogonDondeSeEstaCocinando].isAvailable());
+
+            ServiceDomicilio.pushProducto(productoTerminado);
     }
 
     @Override

@@ -5,7 +5,7 @@ import client.Client;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        String IP = ConfigLoader.getProperty("IP_COCINA");
+        String IP = ConfigLoader.getProperty("IP");
         String PORT = ConfigLoader.getProperty("PORT_COCINA");
         String SERVICENAMECOCINA = ConfigLoader.getProperty("SERVICENAMECOCINA");
         Client clienteCocina = new Client(IP, PORT, SERVICENAMECOCINA);
