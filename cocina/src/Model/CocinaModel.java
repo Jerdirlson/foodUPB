@@ -175,17 +175,17 @@ public class CocinaModel implements SkeletonCocina{
     }
 
 
-    @Override
-    public int getNumeroFogonDondeSeEstaCocinando(Producto order) throws RemoteException {
-    try {
-            Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
-            return clienteCocina.getNumeroFogonDondeSeEstaCocinando(order);
+    // @Override
+    // public int getNumeroFogonDondeSeEstaCocinando(Producto order) throws RemoteException {
+    // try {
+    //         Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
+    //         return clienteCocina.getNumeroFogonDondeSeEstaCocinando(order);
 
-        } catch (Exception e) {
-            System.out.println("Error en getStoves " + e.getMessage());
-        }
-        return 0;
-    }
+    //     } catch (Exception e) {
+    //         System.out.println("Error en getStoves " + e.getMessage());
+    //     }
+    //     return 0;
+    // }
 
 
 }
