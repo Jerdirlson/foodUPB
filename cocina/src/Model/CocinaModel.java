@@ -87,14 +87,16 @@ public class CocinaModel implements SkeletonCocina{
         System.out.println(order.getUsuarioCliente().getNombre_client());
         Client clienteCocina1= new Client(IP, PORT, SERVICENAMECOCINA);
        
-        if(clienteCocina1.asignarFogon(order)==true){
+        if(clienteCocina1.asignarFogon(order)){
             clienteCocina1.CocinarPedido(order);
-            JOptionPane.showMessageDialog(null,"Cocinando pedido de: "+order.getUsuarioCliente().getNombre_client()+"'\n"+order.getNombre_producto());
+           System.out.println( order.getNumeroFogonDondeSeEstaCocinando());
+            JOptionPane.showMessageDialog(null,"El pedido a cocinar es " +order.getNombre_producto()+ "\nde" +order.getUsuarioCliente().getNombre_client());
         }else{
             JOptionPane.showMessageDialog(null, "Todos los fogones estan ocupados, por favor espere para poder cocinar el pedido"+ order.getNombre_producto()+" de "+order.getUsuarioCliente());
         }
 
         System.out.println("    El pedido llego hasta aqui" + order.getUsuarioCliente().getNombre_client()+order.getNombre_producto());
+        System.out.println(order.getNumeroFogonDondeSeEstaCocinando());
     }
 
     @Override
@@ -172,6 +174,18 @@ public class CocinaModel implements SkeletonCocina{
         }
     }
 
+
+    @Override
+    public int getNumeroFogonDondeSeEstaCocinando(Producto order) throws RemoteException {
+    try {
+            Client clienteCocina= new Client(IP, PORT, SERVICENAMECOCINA);
+            return clienteCocina.getNumeroFogonDondeSeEstaCocinando(order);
+
+        } catch (Exception e) {
+            System.out.println("Error en getStoves " + e.getMessage());
+        }
+        return 0;
+    }
 
 
 }

@@ -21,5 +21,6 @@ public interface SkeletonCocina extends Remote{
     public QueueList getClientesNoVip() throws RemoteException;
     public Producto getPedidosPreparandose( int fogonNumero) throws RemoteException;
     public Stove[] getStoves() throws RemoteException;
+    public int getNumeroFogonDondeSeEstaCocinando(Producto order) throws RemoteException;
 
 }
