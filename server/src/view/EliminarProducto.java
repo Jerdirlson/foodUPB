@@ -1,6 +1,9 @@
 package view;
 
 import javax.swing.*;
+
+import database.Conection;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,8 +64,12 @@ public class EliminarProducto extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String busqueda = textFieldBusqueda.getText();
-                // Realizar acciones para eliminar el operario
-                // Aquí debes implementar la lógica para buscar y eliminar los datos del operario en tu modelo.
+
+                if(Conection.eliminarProducto(busqueda)){
+                    JOptionPane.showMessageDialog(null, "Eliminación exitosa", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                }else{
+                    JOptionPane.showMessageDialog(null, "No se pudo realizar la eliminación", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 

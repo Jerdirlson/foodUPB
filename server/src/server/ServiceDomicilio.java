@@ -65,19 +65,24 @@ public class ServiceDomicilio extends UnicastRemoteObject implements SkeletonDom
                     productosParaEntregar.pop();
                     pedidos.push(pedido);
                     encontro = true;
+                    isEmpty = false;
                 }
                 while (iteradorPedidos.hasNext()){
                     DoubleLinkedNode<Pedido> pedidoNode = (DoubleLinkedNode<Pedido>) iteradorPedidos.next();
                     Pedido currentNodePedidos = pedidoNode.getObject();
-                    if(currentProducto.getUsuarioCliente().getUserId() == currentNodePedidos.getCliente().getUserId()){
+                    if (currentProducto.getUsuarioCliente().getUserId().equals(currentNodePedidos.getCliente().getUserId())) {
                         currentNodePedidos.getProductos().add(currentProducto);
                         productosParaEntregar.pop();
                         encontro = true;
                         break;
+                    }else{
+                        System.out.println("primer condicion " + currentProducto.getUsuarioCliente().getUserId());
+                        System.out.println("segunda condicion " + currentNodePedidos.getCliente().getUserId());
+                        System.out.println(currentProducto.getUsuarioCliente().getUserId() == currentNodePedidos.getCliente().getUserId());
                     }
                 }
 
-                if (!encontro) {
+                if (!encontro ^ isEmpty) {
                         Pedido nuevoPedido = new Pedido();
                         nuevoPedido.getProductos().add(currentProducto);
                         nuevoPedido.setCliente(currentProducto.getUsuarioCliente());

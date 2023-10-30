@@ -218,6 +218,115 @@ public class Conection {
         return result;
     }
 
+    public static boolean insertarProducto(String nombre_producto, Long precio_unitario, Long tiempo_coccion) {
+        boolean result = false;
+        Connection c = null;
+        PreparedStatement direccionPS = null;
+        
+        try {
+            c = getConecction();
+            
+            String insertProductoSQL = "INSERT INTO tbl_producto (nombre_producto, precio_unitario, tiempo_coccion) VALUES (?, ?, ?)";
+            direccionPS = c.prepareStatement(insertProductoSQL, Statement.RETURN_GENERATED_KEYS);
+            direccionPS.setString(1, nombre_producto);
+            direccionPS.setLong(2, precio_unitario);
+            direccionPS.setLong(3, tiempo_coccion);
+
+            direccionPS.executeUpdate();
+
+            result = true;
+            return result;
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            return result;
+
+        } finally {
+            try {
+                if (direccionPS != null) {
+                    direccionPS.close();
+                }
+                if (c != null) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public static boolean insertarOperario(String nombre_producto, String correo, String contrasena ) {
+        boolean result = false;
+        Connection c = null;
+        PreparedStatement direccionPS = null;
+        
+        try {
+            c = getConecction();
+            
+            String insertProductoSQL = "INSERT INTO tbl_usuario (name, email, password) VALUES (?, ?, ?)";
+            direccionPS = c.prepareStatement(insertProductoSQL, Statement.RETURN_GENERATED_KEYS);
+            direccionPS.setString(1, nombre_producto);
+            direccionPS.setString(2, correo);
+            direccionPS.setString(3, contrasena);
+
+            direccionPS.executeUpdate();
+
+            result = true;
+            return result;
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            return result;
+
+        } finally {
+            try {
+                if (direccionPS != null) {
+                    direccionPS.close();
+                }
+                if (c != null) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static boolean eliminarProducto(String nombre_producto) {
+        boolean result = false;
+        Connection c = null;
+        PreparedStatement direccionPS = null;
+        
+        try {
+            c = getConecction();
+            
+            String insertProductoSQL = "DELETE FROM tbl_producto WHERE nombre_producto = ?";
+            direccionPS = c.prepareStatement(insertProductoSQL, Statement.RETURN_GENERATED_KEYS);
+            direccionPS.setString(1, nombre_producto);
+            
+            direccionPS.executeUpdate();
+
+            result = true;
+            return result;
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            return result;
+
+        } finally {
+            try {
+                if (direccionPS != null) {
+                    direccionPS.close();
+                }
+                if (c != null) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+
+
     public static boolean registrarPedido(Pedido pedido){
         boolean result = false;
 
